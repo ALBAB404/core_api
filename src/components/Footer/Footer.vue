@@ -1,0 +1,241 @@
+<script setup>
+// All Import File  Code Is Here......................................................................................................
+import { onMounted, ref } from "vue";
+import { storeToRefs } from 'pinia';
+import {useSetting} from '@/stores'
+import axiosInstance from "@/services/axiosService.js";
+// All Variable  Code Is Here.....................................................................................................
+const setting = useSetting();
+const { settings } = storeToRefs(setting);
+
+const email = ref()
+const logo = ref()
+const address = ref()
+const phone = ref()
+const description = ref()
+const facebook = ref()
+const whatsapp = ref()
+
+const fbPageUrl = ref('https://www.facebook.com/maxfitfood1')
+
+// social Icons start
+const socialShares = ref("");
+// social Icons end
+
+// API Calling Code Is Here.....................................................................................................
+
+
+// All Function  Code Is Here.....................................................................................................
+
+
+
+const getSettingsData = async() => {
+  const settingData = await setting.getData();
+  settingData.map((ele)=> {
+    if (ele.key == "email" ) {
+      email.value = ele
+    } 
+    if (ele.key == "facebook" ) {
+      facebook.value = ele
+    } 
+    if (ele.key == "address" ) {
+      address.value = ele
+    } 
+    if (ele.key == "phone" ) {
+      phone.value = ele
+    } 
+    if (ele.key == "description" ) {
+      description.value = ele
+    } 
+    if (ele.key == "logo" ) {
+      logo.value = ele
+    } 
+    if (ele.key == "whatsapp" ) {
+      whatsapp.value = ele
+    } 
+  })
+}
+
+
+
+// social media link  start
+
+const socialMedia = async () => {
+  try {
+    const res = await axiosInstance.get("/social-medias");
+    socialShares.value = res.data.result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const socialIcons = (socialType) => {
+  const iconMapping = {
+    Facebook: "fab fa-facebook-f",
+    Twitter: "fab fa-twitter",
+    Whatsapp: "fab fa-whatsapp",
+    Messenger: "fab fa-facebook-messenger",
+    Linkedin: "fab fa-linkedin",
+    Instagram: "fab fa-instagram",
+    Phone: "fas fa-phone",
+  };
+  return iconMapping[socialType] || "default-icon-class";
+};
+
+const socialURL = (socialType, socialUrl) => {
+  const iconMapping = {
+    Facebook: `https://www.facebook.com/${socialUrl}/`,
+    Twitter: `https://www.twitter.com/${socialUrl}/`,
+    Whatsapp: `https://wa.me/+88${socialUrl}?text=Hello!`,
+    Messenger: `https://www.messenger.com/t/${socialUrl}/`,
+    Linkedin: `https://www.linkedin.com/${socialUrl}/`,
+    Instagram: `https://www.instagram.com/${socialUrl}/`,
+    Phone: `https://m.me/+88${socialUrl}`,
+  };
+  return iconMapping[socialType] || "default-icon-class";
+};
+
+// social media link  end
+
+
+
+onMounted(() => {
+    getSettingsData(); 
+    socialMedia();
+    // Load the Facebook SDK script here
+    const script = document.createElement('script');
+        script.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v18.0';
+        script.async = true;
+        script.defer = true;
+        script.crossOrigin = 'anonymous';
+        script.nonce = 'isN1HXTF';
+
+        // Append the script to the document's body
+        document.body.appendChild(script);
+})
+</script>
+
+<template>
+  <div>
+ <footer class="mt-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 col-xl-3">
+            <div class="footer-widget">
+              <router-link :to="{ name: 'homePage'}" class="footer-logo" href="#">
+                <img :src="logo?.logo" alt="logo" />
+              </router-link>
+              <p class="footer-desc ">{{ description?.value }}</p>
+              <ul class="footer-social" v-show="socialShares.length > 0">
+                <li v-for="(socialShare, index) in socialShares" :key="index">
+                  <a :href="socialURL(socialShare.type, socialShare.contact)" target="_blank" title="">
+                    <i :class="socialIcons(socialShare.type)"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xl-3">
+            <div class="footer-widget contact">
+              <h3 class="footer-title ">contact us</h3>
+              <ul class="footer-contact ">
+                <li>
+                  <i class="icofont-ui-email"></i>
+                  <p>
+                    <span>{{ email?.value }}</span>
+                  </p>
+                </li>
+                <li>
+                  <i class="icofont-ui-touch-phone"></i>
+                  <p>
+                    <span>+88{{ phone?.value }}</span>
+                  </p>
+                </li>
+                <li>
+                  <i class="icofont-phone-circle"></i>
+                  <p>
+                    <span>+88{{ whatsapp?.value }}</span>
+                  </p>
+                </li>
+                <li>
+                  <i class="icofont-location-pin"></i>
+                  <p>{{ address?.value }}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="footer-widget">
+                <h3 class="footer-title ">quick Links</h3>
+                <div class="footer-links">
+                    <ul>
+                        <li><router-link :to="{ name: 'TermsConditions' }" class="">Terms & Conditions</router-link></li>
+                        <li><router-link :to="{ name: 'aboutPage' }" class="">About us</router-link></li>
+                        <li><router-link :to="{ name: 'PrivacyPolicy' }" class="">privacy policy</router-link></li>
+                        <li><router-link :to="{ name: 'ReturnRefund' }" class="">Return & Refund</router-link></li>
+                    </ul>
+                    <ul>
+                        <li><a href="https://www.facebook.com/maxfitfood1/" target="_blank" class="">Facebook</a></li>
+                        <li><router-link :to="{ name: 'contactPage' }" class="">contact us</router-link></li>
+                        <li><router-link :to="{ name: 'shopPage' }" class="">Shop page</router-link></li>
+                        <li><router-link :to="{ name: 'shopPage', query: {top: 'top-product'}}" class="">Top product</router-link></li>
+                        <li><router-link :to="{ name: 'shopPage', query: {recent: 'recent-product'}}" class="">New Arrivals</router-link></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+          
+          <div class="col-sm-6 col-xl-3">
+            <div class="footer-widget">
+                <h3 class="footer-title">Let's Connect</h3>
+                <p class="footer-desc">
+                    <div id="fb-root"></div>
+                    <div class="fb-page" :data-href="fbPageUrl" data-tabs="timeline" data-width="" data-height="130" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+                        <blockquote :cite="fbPageUrl" class="fb-xfbml-parse-ignore">
+                        <a :href="fbPageUrl">Maxfit Food</a>
+                        </blockquote>
+                    </div>
+                </p>
+            </div>
+          </div>
+          <div class="row">
+              <div class="col-12">
+                  <div class="footer-bottom">
+                      <p class="text-center footer-copytext">&copy;  2024 Maxfit Food </p>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</template>
+
+<style>
+
+.footer-part{
+  background-color: #2c150f;
+}
+
+
+.footer-logo img {
+    width: 100px !important;
+}
+
+.footer-copytext a {
+    color: #000000 !important;
+}
+
+@media (max-width: 767px){
+.footer-bottom {
+  padding: 13px 2px 11px 15px;
+ }
+}
+@media (max-width: 425px){
+  .footer-widget {
+     margin-bottom: 2px; 
+}
+}
+
+</style>
