@@ -63,6 +63,9 @@ export const useProduct = defineStore("product", {
         const res = await axiosInstance.get(`/products/variations`, {
           params: {
             "product_id": productVariationData.product_id,
+            "attribute_id_1": productVariationData.attribute_id_1,
+            "attribute_id_2": productVariationData.attribute_id_2,
+            "attribute_id_3": productVariationData.attribute_id_3,
             "attribute_value_id_1": productVariationData.attribute_value_id_1,
             "attribute_value_id_2": productVariationData.attribute_value_id_2,
             "attribute_value_id_3": productVariationData.attribute_value_id_3

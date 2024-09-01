@@ -13,23 +13,26 @@ const route         = useRoute();
 const shop          = useShop();
 const { products }  = storeToRefs(shop);
 
-const cart         = useCart();
+const cart        = useCart();
 const { loading } = storeToRefs(cart);
-const notify       = useNotification();
-const price        = ref();
+const notify      = useNotification();
+const price       = ref();
 
 const quantityInput = ref(1);
 const categoryId    = ref([]);
 
 // product variations start
-const productVariations    = ref([]);
-const attribute_value_id_1 = ref(null);
-const attribute_value_id_2 = ref(null);
-const attribute_value_id_3 = ref(null);
-const productVariationData = ref('');
+const productVariations     = ref([]);
+const attribute_id_1  = ref(null);
+const attribute_id_2  = ref(null);
+const attribute_id_3  = ref(null);
+const attribute_value_id_1  = ref(null);
+const attribute_value_id_2  = ref(null);
+const attribute_value_id_3  = ref(null);
+const productVariationData  = ref('');
 const productVariationPrice = ref('');
-const resetBtns = ref(false);
-const activeBtns = ref(false);
+const resetBtns             = ref(false);
+const activeBtns            = ref(false);
 // const variationRemoveBtn = ref(false);
 const activeAttributes = ref({
     0: [],
@@ -48,8 +51,9 @@ const relatedProducts = ref('');
 // image working start
   
     const thumbnailImage = ref(null);
-    const activeImage = ref(0);
-    const images = ref([]);
+    const activeImage    = ref(0);
+    const images         = ref([]);
+
     const changeImage = (img, index) => {
         thumbnailImage.value = img;
         activeImage.value = index;
@@ -58,75 +62,95 @@ const relatedProducts = ref('');
 
 // get products start
   const productByid = async () => {
-    singleProduct.value = await product.productById(route.params.slug);      
+    singleProduct.value     = await product.productById(route.params.slug);
     productVariations.value = singleProduct.value?.variations?.attributes
   };
 // get products end
 // get products variation working start
 
    async function getProductVariation(productId,attributeValue, index) {
+    
+        resetBtns.value = true;
 
-        resetBtns.value =true;
+        // variation selected section start
+            if (activeAttributes.value[index] === attributeValue.attribute_value_id) {
+                // যদি ক্লিক করা ভ্যালুটি ইতিমধ্যেই সক্রিয় থাকে, তাহলে নিষ্ক্রিয় করুন
+                activeAttributes.value[index] = null;
+            } else {
+                // যদি ক্লিক করা ভ্যালুটি সক্রিয় না থাকে, তাহলে এটিকে সক্রিয় করুন এবং অন্যান্য সক্রিয়গুলো নিষ্ক্রিয় করুন
+                activeAttributes.value[index] = attributeValue.attribute_value_id;
+            }
+        // variation selected section end
 
-    // variation section start
-        const attrIndex = activeAttributes.value[index].indexOf(attributeValue.attribute_value_id);
-        
-        if (attrIndex > -1) {
-            // If the value is already active, remove it
-            activeAttributes.value[index].splice(attrIndex, 1);
-        } else {
-            // If the value is not active, add it
-            activeAttributes.value[index].push(attributeValue.attribute_value_id);
-        }
-    // variation section end
        
        if (index === 0) {
-           attribute_value_id_1.value = attributeValue.attribute_value_id
-            productVariationData.value = {
-                "product_id": productId,
-                "attribute_value_id_1": attribute_value_id_1.value == null ?  '' : attribute_value_id_1.value,
-                "attribute_value_id_2": attribute_value_id_2.value == null ?  '' : attribute_value_id_2.value,
-                "attribute_value_id_3": attribute_value_id_3.value == null ?  '' : attribute_value_id_3.value,
-            }
+           attribute_id_1.value = attributeValue.attribute_id;
+           attribute_value_id_1.value = attributeValue.attribute_value_id;
+           productVariationData.value = {
+                "product_id"          : productId,
+                "attribute_id_1"      : attribute_id_1.value || '',
+                "attribute_value_id_1": attribute_value_id_1.value || '',
+                "attribute_id_2"      : '',
+                "attribute_value_id_2": attribute_value_id_2.value || '',
+                "attribute_id_3"      : '',
+                "attribute_value_id_3": attribute_value_id_3.value || ''
+            };
        } 
        
        if (index === 1) {
+            attribute_id_2.value = attributeValue.attribute_id;
             attribute_value_id_2.value = attributeValue.attribute_value_id
             productVariationData.value = {
-                "product_id": productId,
-                "attribute_value_id_1": attribute_value_id_1.value == null ?  '' : attribute_value_id_1.value,
-                "attribute_value_id_2": attribute_value_id_2.value == null ?  '' : attribute_value_id_2.value,
-                "attribute_value_id_3": attribute_value_id_3.value == null ?  '' : attribute_value_id_3.value,
-            }
+                "product_id"          : productId,
+                "attribute_id_1"      : '',
+                "attribute_value_id_1": attribute_value_id_1.value || '',
+                "attribute_id_2"      : attribute_id_2.value || '',
+                "attribute_value_id_2": attribute_value_id_2.value || '',
+                "attribute_id_3"      : '',
+                "attribute_value_id_3": attribute_value_id_3.value || ''
+            };
        } 
        if (index === 2) {     
+           attribute_id_3.value = attributeValue.attribute_id;
            attribute_value_id_3.value = attributeValue.attribute_value_id
-            productVariationData.value = {
-                "product_id": productId,
-                "attribute_value_id_1": attribute_value_id_1.value == null ?  '' : attribute_value_id_1.value,
-                "attribute_value_id_2": attribute_value_id_2.value == null ?  '' : attribute_value_id_2.value,
-                "attribute_value_id_3": attribute_value_id_3.value == null ?  '' : attribute_value_id_3.value,
-            }
+           productVariationData.value = {
+                "product_id"          : productId,
+                "attribute_id_1"      : '',
+                "attribute_value_id_1": attribute_value_id_1.value || '',
+                "attribute_id_2"      : '',
+                "attribute_value_id_2": attribute_value_id_2.value || '',
+                "attribute_id_3"      : attribute_id_3.value || '',
+                "attribute_value_id_3": attribute_value_id_3.value || ''
+            };
        } 
+       
 
        const variations =  await product.productVariations(productVariationData.value); 
+       
        productVariations.value =  variations.attributes;
+             
+       
+
+       // price jodi backend theke dubble na hoy eitar code start 
        
        if ((Object.keys(productVariations.value).length == 1) && (attribute_value_id_1.value != null)) {
           productVariationPrice.value = variations.variation_price[0];
-          activeBtns.value = true;         
+          activeBtns.value            = true;
        }
        if ((Object.keys(productVariations.value).length == 2) && (attribute_value_id_2.value != null && attribute_value_id_1.value != null)) {
           productVariationPrice.value = variations.variation_price[0];
-          activeBtns.value = true;  
+          activeBtns.value            = true;
        }
        if ((Object.keys(productVariations.value).length == 3) && (attribute_value_id_3.value != null && attribute_value_id_2.value != null && attribute_value_id_1.value != null)) {
           productVariationPrice.value = variations.variation_price[0];         
           activeBtns.value = true; 
        }
        
+       // price jodi backend theke dubble na hoy eitar code end 
+       
        
     }
+
 
     const removeAllVariation = () => {
         // Reset the product variations
@@ -156,6 +180,7 @@ const relatedProducts = ref('');
         productVariations.value = singleProduct.value?.variations?.attributes
 
         resetBtns.value =false;
+
     };
 
 
@@ -186,7 +211,12 @@ onMounted(() => {
                                 <img :src="thumbnailImage" alt="shoe image" v-else />
                             </div>
                         </div>
-                        <div class="img-select">
+                        <!-- <div class="img-select">
+                            <div class="img-item" v-for="(img, index) in singleProduct?.images" :key="index" :class="[activeImage == index ? 'active-thumb' : '']" >
+                                <img :src="img.image" alt="shoe image" @click.prevent="changeImage(img.image, index)" />
+                            </div>
+                        </div> -->
+                        <div class="image-gallery">
                             <div class="img-item" v-for="(img, index) in singleProduct?.images" :key="index" :class="[activeImage == index ? 'active-thumb' : '']" >
                                 <img :src="img.image" alt="shoe image" @click.prevent="changeImage(img.image, index)" />
                             </div>
@@ -200,6 +230,8 @@ onMounted(() => {
                       <div class="details-meta">
                           <p>SKU:<span>1234567</span></p>
                           <p v-if="singleProduct?.brand">BRAND:<a href="#">{{ singleProduct?.brand?.name }}</a></p>
+                      </div>
+                      <div class="details-meta">
                           <p v-if="singleProduct?.category">Category:<a href="#">{{ singleProduct?.category?.name }}</a></p>
                           <p v-if="singleProduct?.sub_category">Sub Category:<a href="#">{{ singleProduct?.sub_category?.name }}</a></p>
                       </div>
@@ -236,14 +268,21 @@ onMounted(() => {
                       <!-- Product Variation Price Section start -->
 
                         <span v-if="singleProduct?.variations?.data.length > 0">
-                            <div class="details-list-group"  v-for="(attribute, key, index) in productVariations" :key="index">
+                            <div class="details-list-group" v-for="(attribute, key, index) in productVariations" :key="index">
                                 <label class="details-list-title">{{ key }}:</label>
                                 <ul class="details-tag-list">
-                                    <li v-for="(attributeValue, key, indexAttributeValue) in attribute" :key="indexAttributeValue" @click.prevent="getProductVariation(singleProduct.id,attributeValue, index)"><a href="#"  :class="{ 'is-active': activeAttributes[index].includes(attributeValue.attribute_value_id) }">{{ attributeValue.attribute_value }}</a></li>
+                                    <li v-for="(attributeValue, indexAttributeValue) in attribute" :key="indexAttributeValue">
+                                        <a href="#" 
+                                        :class="{ 'is-active': activeAttributes[index] === attributeValue.attribute_value_id }"
+                                        @click.prevent="getProductVariation(singleProduct.id, attributeValue, index)">
+                                        {{ attributeValue.attribute_value }}
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <button class="variationRemoveBtn" v-show="resetBtns" @click.prevent="removeAllVariation()">X clear</button>
                         </span>
+                    
 
                       <!-- Product Variation Price Section end -->
 
@@ -256,31 +295,51 @@ onMounted(() => {
                               <li><a href="#" class="icofont-instagram" title="Instagram"></a></li>
                           </ul>
                       </div>
+                      <div class="details-list-group mt-3">
+                        <div class="quantity">
+                            <button class="minus" aria-label="Decrease">&minus;</button>
+                            <input type="number" class="input-box" value="1" min="1" max="10">
+                            <button class="plus" aria-label="Increase">&plus;</button>
+                        </div>
+                      </div>
                       <div class="details-add-group">
-                        <div class="row">
+                        <div class="row" v-if="singleProduct?.variations?.data.length > 0">
                             <div class="col-md-6 mt-lg-0 mt-3">
-                                <div class="product-action">
-                                    <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
-                                    <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
-                                    <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mt-lg-0 mt-3">
-                                <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart" disabled  @click.prevent="addToCart(singleProduct)">
+                                <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, 1, productVariationData, productVariationPrice)">
                                     <i :class="loading == singleProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
                                     <span>add to cart</span>
+                                </button>
+                            </div>
+                            <div class="col-md-6 mt-lg-0 mt-3">
+                                <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, 1, productVariationData, productVariationPrice)">
+                                    <i :class="loading == singleProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-cart-plus'"></i>
+                                    <span>Order Now</span>
+                                </button>
+                            </div>
+                        </div>    
+                        <div class="row" v-else>
+                            <div class="col-md-6 mt-lg-0 mt-3">
+                                <button class="product-add"  title="Add to Cart"   @click.prevent="addToCart(singleProduct)">
+                                    <i :class="loading == singleProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
+                                    <span>add to cart</span>
+                                </button>
+                            </div>
+                            <div class="col-md-6 mt-lg-0 mt-3">
+                                <button class="product-add"  title="Add to Cart"   @click.prevent="addToCart(singleProduct)">
+                                    <i :class="loading == singleProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-cart-plus'"></i>
+                                    <span>Order Now</span>
                                 </button>
                             </div>
                         </div>    
                       </div>
                       <div class="details-action-group">
                           <a class="details-wish wish" href="#" title="Add Your Wishlist">
-                              <i class="icofont-heart"></i>
-                              <span>add to wish</span>
+                              <i class="fas fa-phone-alt"></i>
+                              <span>Phone</span>
                           </a>
                           <a class="details-compare" href="compare.html" title="Compare This Item">
-                              <i class="fas fa-random"></i>
-                              <span>Compare This</span>
+                              <i class="fab fa-whatsapp"></i>
+                              <span>Whats App</span>
                           </a>
                       </div>
                   </div>
@@ -493,6 +552,9 @@ img {
   width: 100%;
   display: block;
 }
+
+
+
 .img-display {
   overflow: hidden;
 }
@@ -522,6 +584,13 @@ img {
   border: 2px solid #119744;
 }
 
+.image-gallery{
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 5px;
+}
+
 .is-active{
     color: var(--white) !important;
     background: var(--primary) !important;
@@ -533,11 +602,10 @@ img {
     border: 0;
     cursor: pointer;
     padding: 1em;
-}
-.singleProductBtn[disabled]{
     opacity: 0.5;
     cursor: not-allowed;
 }
+
 
 .variationRemoveBtn{
     padding: 1px 10px;
@@ -551,5 +619,56 @@ img {
     color: white;
     border: 2px solid rgb(255, 0, 0);
 }
+
+.is-disabled {
+    pointer-events: none; 
+    opacity: 0.5;
+  }
+
+
+  .quantity {
+    display: flex;
+    border: 2px solid #3498db;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .quantity button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    width: 30px;
+    height: auto;
+    text-align: center;
+    transition: background-color 0.2s;
+  }
+  
+  .quantity button:hover {
+    background-color: #2980b9;
+  }
+  
+  .input-box {
+    width: 40px;
+    text-align: center;
+    border: none;
+    padding: 8px 10px;
+    font-size: 16px;
+    outline: none;
+  }
+  
+  /* Hide the number input spin buttons */
+  .input-box::-webkit-inner-spin-button,
+  .input-box::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  .input-box[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
 
 </style>

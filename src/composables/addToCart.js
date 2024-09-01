@@ -1,24 +1,24 @@
 import { ref } from 'vue'
 import { useCart, useNotification } from "@/stores";
 
-export function addToCart(tProduct, quantity = 1) {
-  console.log(tProduct);
-  
+export function addToCart(tProduct, quantity = 1, variationProduct = null, productVariationPrice = 0) {
     const cart           = useCart();
-    const notify         = useNotification();  
-
-    if(tProduct.variations.length > 0){
-      // cart.addToCart({
-      //   item_id      : tProduct.id,
-      //   name         : tProduct.name,
-      //   slug         : tProduct.slug,
-      //   mrp          : sizeMrp,
-      //   offer_price  : sizeOfferPrice,
-      //   image        : tProduct.image,
-      //   size_id      : sizeId.value,
-      //   quantity     : quantity,
-      //   free_shipping: tProduct.free_shipping,
-      // });
+    const notify         = useNotification();
+  
+    if(variationProduct){
+      cart.addToCart({
+        product_id            : tProduct.id,
+        name                  : tProduct.name,
+        slug                  : tProduct.slug,
+        mrp                   : productVariationPrice.mrp,
+        offer_price           : productVariationPrice.offer_price,
+        image                 : tProduct.image,
+        attribute_value_id_1  : variationProduct.attribute_value_id_1,
+        attribute_value_id_2  : variationProduct.attribute_value_id_2,
+        attribute_value_id_3  : variationProduct.attribute_value_id_3,
+        quantity              : quantity,
+        free_shipping         : tProduct.free_shipping,
+      });
       
     }else{
       cart.addToCart({
@@ -28,7 +28,7 @@ export function addToCart(tProduct, quantity = 1) {
         mrp          : tProduct.mrp,
         offer_price  : tProduct.offer_price,
         image        : tProduct.image,
-        size_id      : '',
+        variations   : '',
         quantity     : quantity,
         free_shipping: tProduct.free_shipping,
       });

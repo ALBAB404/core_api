@@ -38,44 +38,89 @@ export const useCart = defineStore("cart", {
   actions: {
     // API Calling Code Is Here.....................................................................................................
 
+    // async addToCart(product) {
+    //   this.campaignId = product.campaign_id;
+    //   this.loading = product.product_id;
+    //   let item = product;
+    //   console.log(item);
+      
+    //   if (this.cartItem.length > 0) {
+        
+    //     // if (item.size_id) {
+    //     //   let boolean = this.cartItem.some((i) => i.product_id === item.product_id && i.size_id === item.size_id );
+    //     //   if (boolean) {
+    //     //     let index = this.cartItem.findIndex((i) => i.product_id === item.product_id && i.size_id === item.size_id);
+    //     //     this.cartItem[index]["quantity"] += item.quantity;
+    //     //   } else {
+    //     //     this.cartItem.push(item);
+    //     //   }
+    //     // } else {
+    //     //   let boolean = this.cartItem.some((i) => i.product_id === item.product_id);
+    //     //   if (boolean) {
+    //     //     let index = this.cartItem.findIndex((i) => i.product_id === item.product_id);
+    //     //     this.cartItem[index]["quantity"] += item.quantity;
+    //     //   } else {
+    //     //     this.cartItem.push(item);
+    //     //   }
+    //     // }
+    //   } else {
+    //     this.cartItem.push(item);
+    //   }
+
+    //   setTimeout(() => {
+    //     this.loading = false;
+    //   }, 1000);
+
+    // },
+
     async addToCart(product) {
-      this.campaignId = product.campaign_id;
-      this.loading = product.product_id;
-      let item = product;
+        this.campaignId = product.campaign_id;
+        this.loading = product.product_id;
+    
+        // let index = this.cartItem.findIndex((i) =>
+        //     i.product_id === product.product_id &&
+        //     ((!product.attribute_value_id_1 || i.attribute_value_id_1 === product.attribute_value_id_1) &&
+        //     (!product.attribute_value_id_2 || i.attribute_value_id_2 === product.attribute_value_id_2) &&
+        //     (!product.attribute_value_id_3 || i.attribute_value_id_3 === product.attribute_value_id_3))
+        // );
 
-      if (this.cartItem.length > 0) {
-        if (item.size_id) {
-          let boolean = this.cartItem.some(
-            (i) =>
-              i.product_id === item.product_id &&
-              i.size_id === item.size_id
-          );
-          if (boolean) {
-            let index = this.cartItem.findIndex(
-              (i) =>
-                i.product_id === item.product_id &&
-                i.size_id === item.size_id
-            );
-            this.cartItem[index]["quantity"] += item.quantity;
-          } else {
-            this.cartItem.push(item);
-          }
+        let index = this.cartItem.findIndex((i) => {
+            if (i.product_id !== product.product_id) {
+                return false;
+            }
+    
+            // সমস্ত attribute_value_id গুলো চেক করা হচ্ছে
+            for (let key in product) {
+                if (key.startsWith('attribute_value_id_')) {
+                    // যদি attribute_value_id থাকে এবং মেলে না, তাহলে false রিটার্ন করবে
+                    if (product[key] && i[key] !== product[key]) {
+                        return false;
+                    }
+                }
+            }
+    
+            return true; 
+        });
+    
+        if (index !== -1) {
+            this.cartItem[index]["quantity"] += product.quantity;
         } else {
-          let boolean = this.cartItem.some((i) => i.product_id === item.product_id);
-          if (boolean) {
-            let index = this.cartItem.findIndex((i) => i.product_id === item.product_id);
-            this.cartItem[index]["quantity"] += item.quantity;
-          } else {
-            this.cartItem.push(item);
-          }
+            this.cartItem.push(product);
         }
-      } else {
-        this.cartItem.push(item);
-      }
+    
+        setTimeout(() => {
+            this.loading = false;
+        }, 1000);
 
-      setTimeout(() => {
-        this.loading = false;
-      }, 1000);
+
+        // let index = this.cartItem.findIndex((i) => 
+        //   console.log(product.attribute_value_id_1)
+          
+        // );
+
+        // console.log(index);
+        
+
 
     },
 

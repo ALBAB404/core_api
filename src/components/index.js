@@ -5,6 +5,7 @@ export { default as MobileMenu } from "@/components/Navbar/MobileMenu.vue";
 export { default as CategorySideBar } from "@/components/Category/CategorySideBar.vue";
 export { default as CategoryCarousel } from "@/components/Category/CategoryCarousel.vue";
 export { default as CartSideBar } from "@/components/CartSideBar/CartSideBar.vue";
+export { default as AddtoCartIcon } from "@/components/CartSideBar/AddtoCartIcon.vue";
 export { default as ProductView } from "@/components/Modal/ProductView.vue";
 export { default as Modal } from "@/components/Modal/Modal.vue";
 export { default as Banner } from "@/components/Banner/Banner.vue";

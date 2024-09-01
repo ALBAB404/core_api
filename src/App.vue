@@ -1,6 +1,6 @@
 <script setup>
 // import { RouterLink, RouterView } from 'vue-router'
-import { TopHeader, Navbar,  Footer,  Newsletter, ChatIcon } from '@/components'
+import { TopHeader, Navbar,  Footer,  Newsletter, ChatIcon, AddtoCartIcon } from '@/components'
 
 
 </script>
@@ -12,7 +12,9 @@ import { TopHeader, Navbar,  Footer,  Newsletter, ChatIcon } from '@/components'
 
     <!-- <ChatIcon /> -->
 
-    <!-- <TopHeader /> -->
+    <AddtoCartIcon />
+
+    <TopHeader />
 
     <Navbar />
 

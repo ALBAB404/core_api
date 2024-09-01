@@ -47,7 +47,7 @@ export const useFlashDeal = defineStore('flashDeal', {
           return res?.data?.result[0].key 
          
        } catch (error) {
-         console.log(error);
+         
        } 
     }
 
