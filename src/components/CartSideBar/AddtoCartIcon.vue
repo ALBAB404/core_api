@@ -7,7 +7,10 @@ const { cartItemCount, totalPrice } = storeToRefs(cart);
 
 <template>
     <div>
-        <div class="addtocart-main-section">
+
+        
+
+        <div class="addtocart-main-section cart-btn">
             <div class="top-section text-center">
                 <i class="fas fa-cart-arrow-down"></i>
                 <p><span class="me-2">{{ cartItemCount }}</span><span>ITEMS</span></p>
@@ -28,6 +31,7 @@ const { cartItemCount, totalPrice } = storeToRefs(cart);
     right: 0%;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     z-index: 9;    
+    cursor: pointer;
 }
 
 .top-section{

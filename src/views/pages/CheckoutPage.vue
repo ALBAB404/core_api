@@ -22,7 +22,7 @@ const phoneNumber         = ref(auth?.user?.user?.phone_number);
 const district            = ref("");
 const address             = ref("");
 const payment_gateway_id  = ref(1);
-const delivery_gateway_id = ref();
+const delivery_gateway_id = ref(1);
 const deliverCharge       = ref();
 const deliveryInfo        = ref([]);
 const payment_gateways    = ref([]);
@@ -57,8 +57,8 @@ const getDeliveryGateway = async () => {
       delivery_gateway_id.value = 0;
       deliverCharge.value = 0;
     } else {
-      delivery_gateway_id.value = res.data.result[0].id;
-      deliverCharge.value = res.data.result[0].delivery_fee;
+      delivery_gateway_id.value = res.data.result.data[0].id;
+      deliverCharge.value = res.data.result.data[0].delivery_fee;
     }
   } catch (error) {
     console.log(error);
@@ -234,7 +234,7 @@ onMounted(() => {
     
      <ProductView @orderSubmitted="handleOrderSubmitted"/>
 
-    <div class="container my-5">
+    <div class="container my-5 checkoutBorder">
         <div class="row">
             <div class="col-lg-8">
                 <div class="table-responsive">
@@ -319,12 +319,12 @@ onMounted(() => {
                       <div class="line"></div>
                       <div class="d-flex justify-content-between my-2">
                         <p class="text-danger">Total</p>
-                        <p class="text-danger"><span class="flag-discount mr-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
+                        <p class="text-danger"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
                       </div>
                     </div>
                 <div class="text-note">
                   <p class="text-danger">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
-                    <textarea name="" id="" cols="50" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
+                    <textarea class="p-2" name="" id="" cols="50" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
                 </div>
                 </div>
             </div>
@@ -374,7 +374,7 @@ onMounted(() => {
                       <span class="text-danger" v-if="errors.address">{{ errors.address }}</span>
                     </div>
                     <h6 class="delivary-charge text-center mb-3" >ডেলিভারি চার্জ</h6>
-                    <div class="formRadioControl" v-for="(delivery, index) in deliveryInfo" :key="index">
+                    <div class="formRadioControl" v-for="(delivery, index) in deliveryInfo.data" :key="index">
                       <input
                         class="form-check-input me-2"
                         type="radio"
@@ -387,12 +387,12 @@ onMounted(() => {
                       <label class="form-check-label" :for="'deliveryGateway_' + index">{{ delivery.name + ' - ' + Number(delivery.delivery_fee) }} টাকা </label>
                     </div>
                 </div>
-                <div class="secend-box border p-2 bg-light mt-3">
+                <div class="secend-box p-2 bg-light mt-3">
                     <div class="d-flex justify-content-between">
                       <div class="left-text"><h5 class="text-wrap">পেমেন্ট মেথড সিলেক্ট করুন</h5></div>
                       <div class="right-text"><i class="fa-solid fa-lock"></i>সম্পূর্ণ নিরাপদ পেমেন্ট</div>
                     </div>
-                        <div class="formRadioControl" v-for="(payment_gateway, index) in payment_gateways" :key="index">
+                        <div class="formRadioControl" v-for="(payment_gateway, index) in payment_gateways.data" :key="index">
                           <input
                             class="form-check-input me-2"
                             type="radio"
@@ -418,7 +418,7 @@ onMounted(() => {
 </template>
 
 
-<style scope>
+<style>
 @import "@/assets/css/checkout.css";
 
 .formRadioControl{
@@ -429,22 +429,35 @@ onMounted(() => {
 }
 
 .text-note textarea {
-    border-color: red;
+    border-color: var(--primary);
     border-radius: 5px;
 }
 
 .form-control.PlaceHolderColorChange::placeholder {
-    color: #ff0000 !important;
+    color: var(--primary) !important;
 }
 
-.orderBTN{
-  background-color: #ff0000;
+.orderBTN {
+  background-color: var(--primary);
+  border-top: 3px solid var(--primary);
+  border-left: 3px solid var(--primary);
+  border-bottom: 3px solid var(--primary);
+  border-right: 3px solid var(--primary);
   color: #fff;
   padding: 10px;
+  border-top-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+  transition: .3s ease-in-out;
+  font-weight: 500;
+  font-size: 23px;
 }
 .orderBTN:hover{
-  background-color: #dd0707;
-  color: #fff;
+  background-color: var(--secend-primary);
+  border-top: 3px solid var(--secend-primary);
+  border-left: 3px solid var(--secend-primary);
+  border-bottom: 3px solid var(--secend-primary);
+  border-right: 3px solid var(--secend-primary);
+  color: #000000;
 }
 
 .img{
@@ -454,17 +467,21 @@ onMounted(() => {
     border-radius: 0% !important;
 }
 
-.left{
-    border: 1px solid #ff6868;
-    padding: 15px;
-   
-  border-radius: 5px;
+.left {
+  border: 1px solid var(--primary);
+  padding: 15px;
+  border-top: 4px solid var(--primary) !important;
+  border-left: 4px solid var(--primary) !important;
+  border-bottom: 1px solid var(--primary) !important;
+  border-right: 2px solid var(--primary) !important;
+  border-top-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
 }
 
 .delivary-charge {
     padding: 7px 0px;
     border: 1px solid black;
-    color: red;
+    color: var(--primary);
 }
 .left-text h5{
   font-weight: 800;
@@ -472,29 +489,36 @@ onMounted(() => {
 }
 
 .line{
-  border-bottom: 2px solid #ff0000;
+  border-bottom: 2px solid var(--primary);
 }
 
 .secend-box{
   box-shadow: 3px 5px 9px -3px rgba(0,0,0,0.7);
 -webkit-box-shadow: 3px 5px 9px -3px rgba(0,0,0,0.7);
 -moz-box-shadow: 3px 5px 9px -3px rgba(0,0,0,0.7);
-  border-radius: 5px;
+padding: 15px;
+border-top: 4px solid var(--primary) !important;
+border-left: 4px solid var(--primary) !important;
+border-bottom: 1px solid var(--primary) !important;
+border-right: 2px solid var(--primary) !important;
+border-top-left-radius: 20px !important;
+border-bottom-right-radius: 20px !important;
+border: 1px solid var(--primary) !important;
 }
 
 .right-text i {
   margin: 0px 5px;
-  border: 1px solid rgb(255, 0, 0);
+  border: 1px solid var(--primary);
   padding: 5px;
   border-radius: 50%;
-  background-color: red;
+  background-color: var(--primary);
   color: white;
 }
 .payment-text i {
-  border: 1px solid rgb(255, 0, 0);
+  border: 1px solid var(--primary);
   padding: 2px;
   border-radius: 50%;
-  background-color: red;
+  background-color: var(--primary);
   color: white;
   font-size: 12px;
   margin-right: 6px;
@@ -506,7 +530,7 @@ onMounted(() => {
     display: block;
     float: left;
     padding: 0px 5px;
-    background: #ff0000;
+    background: var(--primary);
     font-size: 15px;
     font-weight: 400;
     position: relative;
@@ -524,12 +548,12 @@ onMounted(() => {
 .flag-discount::before {
     top: 0;
     border-width: 22px 15px 0 0;
-    border-color: #ff0000 transparent transparent transparent;
+    border-color: var(--primary) transparent transparent transparent;
 }
 .flag-discount::after {
     bottom: 0;
     border-width: 0 15px 22px 0;
-    border-color: transparent transparent #ff0000 transparent;
+    border-color: transparent transparent var(--primary) transparent;
 }
 
 
@@ -600,6 +624,14 @@ onMounted(() => {
 
 #btnGroupAddon{
   cursor: pointer;
+}
+
+.checkoutBorder{
+    padding: 20px;
+    border: 1px solid var(--primary);
+    border-top: 7px solid var(--primary);
+    border-bottom: 7px solid var(--primary);
+    border-radius: 15px;
 }
 
 </style>

@@ -73,114 +73,10 @@ onMounted(() => {
 
 <template>
   <div>
-    <!-- <div class="product-card" :class="product?.current_stock == 0 ? 'product-disable' : ''">
-      <div class="product-media">
-        <div class="product-label">
-          <label class="label-text off">-{{ product?.offer_percent }}%</label>
-          <label class="label-text" :class="product?.type === 'feature-product'
-              ? 'feat'
-              : product?.type === 'top-product'
-                ? 'sale'
-                : product?.type === 'recent-product'
-                  ? 'new'
-                  : ''
-            ">{{ product?.type }}</label>
-        </div>
-        <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}" class="product-image">
-          <img :src="product?.image ? product?.image : 'http://127.0.0.1:8000/images/default.png'"/>
-        </router-link>
-        <div class="product-widget" v-show="product?.video_url">
-          <a title="Product Video" :href="product?.video_url" class="venobox fas fa-play" data-vbtype="video"
-            data-autoplay="true"></a>
-        </div>
-      </div>
-      <div class="product-content">
-        <h6 class="product-name">
-          <router-link :to="{
-            name: 'productDetailsPage',
-            params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },
-          }">{{ product?.name }}</router-link>
-        </h6>
-        <h6 class="product-price" v-if="product?.product_prices.length > 0">
-          <template v-if="sizeOfferPrice == 0">
-            <span>{{ sizeMrp }}</span>
-          </template>
-          <template v-else>
-            <del>{{ sizeMrp }}</del>
-            <span>{{ sizeOfferPrice }}</span>
-          </template>
-        </h6>
-
-
-        <h6 class="product-price" v-else>
-          <span v-html="$filters.productPrice(product)"></span>
-        </h6>
-
-        <span class="text-danger" v-if="isButtonDisabled===true && product?.product_prices.length > 0">প্রথমে ওয়েট সিলেক্ট করুন</span>
-
-          <label class="details-list-title d-block fw-bold" v-if="product?.product_prices.length > 0">Weight:</label>
-        <div class="details-list-group  mb-3" v-show="product?.product_prices.length > 0">
-          <ul class="details-tag-list text-center">
-              <li v-for="(size, index) in product?.product_prices" :key="index" id="main">
-                <template v-if="size.pivot">
-                    <a  href="#" :class="{selectedSizeColor: size.pivot.size_id === sizeId,}" @click.prevent="sizeByPrice(size.pivot.mrp, size.pivot.offer_price, size.pivot.size_id)">{{ size.name }}</a>
-                </template>
-                <template v-else>
-                    <a  href="#" :class="{selectedSizeColor: size.size_id === sizeId,}" @click.prevent="sizeByPrice(size.mrp, size.offer_price, size.size_id)">{{ size.name }}</a>
-                </template>
-              </li>
-          </ul>
-        </div> 
-        
-        <template v-if="product?.product_prices.length > 0">
-          <div class="row">
-            <div class="col-xl-6 col-lg-12 col-12 mt-2">
-              <button  class="product-add btnColorOrder" :disabled="isButtonDisabled" title="Add to Cart" @click.prevent="addToCart(product)">
-                <template v-if="cart.loading === product?.id">
-                  <pulse-loader :loading="isloading" :color="color" :size="size"></pulse-loader>
-                </template>
-                <template v-else>
-                  <i class="fas fa-shopping-cart"></i>
-                </template>
-                <span>Add Cart</span>
-              </button>
-            </div>
-            <div class="col-xl-6 col-lg-12 col-12 mt-2">
-              <router-link :to="{ name: 'checkoutPage' }"  class="product-add standard-wishs" :class="isButtonDisabled ? 'disabled btn border-danger' : ''" @click.prevent="addToCart(product)">
-                <i class="fas fa-shopping-basket"></i>
-                <span>Order Now</span>
-              </router-link>
-            </div>
-          </div>
-        </template>
-        <template v-else>
-          <div class="row">
-            <div class="col-xl-6 col-lg-12 col-12 mt-2">
-              <button  class="product-add btnColorOrder"  title="Add to Cart" @click.prevent="addToCart(product)">
-                <template v-if="cart.loading === product?.id">
-                  <pulse-loader :loading="isloading" :color="color" :size="size"></pulse-loader>
-                </template>
-                <template v-else>
-                  <i class="fas fa-shopping-cart"></i>
-                </template>
-                <span>Add Cart</span>
-              </button>
-            </div>
-            <div class="col-xl-6 col-lg-12 col-12 mt-2">
-              <router-link :to="{ name: 'checkoutPage' }" class="product-add standard-wishs " @click.prevent="addToCart(product)">
-                <i class="fas fa-shopping-bag"></i>
-                <span>Order Now</span>
-              </router-link>
-            </div>
-          </div>
-        </template>
-      </div>
-    </div> -->
-
     <div class="product-card" :class="product?.current_stock == 0 ? 'product-disable' : ''">
       <div class="product-media">
         <div class="product-label">
-            <label class="label-text off">-{{ product?.offer_percent }}%</label>
+            <label class="label-text off"  v-if="product?.offer_percent !== 0.00">-{{ product?.offer_percent }}%</label>
             <label class="label-text" :class="product?.type === 'feature-product'? 'feat': product?.type === 'top-product'? 'sale': product?.type === 'recent-product'? 'new': ''">{{ product?.type }}</label>
           </div>
           <button class="product-wish wish">
@@ -205,18 +101,16 @@ onMounted(() => {
           <h6 class="product-name">
               <a href="product-video.html">{{ product?.name }}</a>
           </h6>
-          <!-- <h6 class="product-price" v-if="product?.product_prices.length > 0">
-            <template v-if="sizeOfferPrice == 0">
-              <span>{{ sizeMrp }}</span>
-            </template>
-            <template v-else>
-              <del>{{ sizeMrp }}</del>
-              <span>{{ sizeOfferPrice }}</span>
-            </template>
-          </h6> -->
-          <h6 class="product-price">
+
+
+          <h6 class="product-price" v-if="product?.variations?.data?.length > 0">
+            <span>{{ product?.variation_price_range.min_price }} - {{ product?.variation_price_range.max_price }}</span>
+          </h6>
+          <h6 class="product-price" v-else>
             <span v-html="$filters.productPrice(product)"></span>
           </h6>
+
+
           <button class="product-add" title="Add to Cart" @click.prevent="addToCart(product)">
               <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
               <span>add</span>

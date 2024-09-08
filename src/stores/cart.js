@@ -137,12 +137,13 @@ export const useCart = defineStore("cart", {
     },
 
     async removeAllItems() {
-      // Assuming this.cartItems is your array
       this.cartItem.splice(0, this.cartItem.length);
     },
+
     async increment(index) {
       this.cartItem[index]["quantity"] += 1;
     },
+
   },
 });
 // All Function  Code Is Here.....................................................................................................

@@ -33,6 +33,7 @@
   --border: #e8e8e8;
   --heading: #39404a;
   --primary: #ff0000;
+  --secend-primary: #9dff00;
   --sub-heading: #565765;
   --green-chalk: #ddffd5;
   --green-dark: #072f17;
@@ -1756,6 +1757,10 @@ tbody tr td:last-child {
   -moz-transition: all linear .3s;
   -ms-transition: all linear .3s;
   -o-transition: all linear .3s;
+  border-color: var(--primary);
+  border-top: 4px solid var(--primary);
+  border-bottom: 4px solid var(--primary);
+  box-shadow: #0000003d 0 3px 8px;
 }
 
 .product-card:hover {

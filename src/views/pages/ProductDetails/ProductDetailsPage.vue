@@ -12,20 +12,18 @@ const singleProduct = ref('');
 const route         = useRoute();
 const shop          = useShop();
 const { products }  = storeToRefs(shop);
-
-const cart        = useCart();
-const { loading } = storeToRefs(cart);
-const notify      = useNotification();
-const price       = ref();
-
+const cart          = useCart();
+const { loading }   = storeToRefs(cart);
+const notify        = useNotification();
+const price         = ref();
 const quantityInput = ref(1);
 const categoryId    = ref([]);
 
 // product variations start
 const productVariations     = ref([]);
-const attribute_id_1  = ref(null);
-const attribute_id_2  = ref(null);
-const attribute_id_3  = ref(null);
+const attribute_id_1        = ref(null);
+const attribute_id_2        = ref(null);
+const attribute_id_3        = ref(null);
 const attribute_value_id_1  = ref(null);
 const attribute_value_id_2  = ref(null);
 const attribute_value_id_3  = ref(null);
@@ -33,7 +31,7 @@ const productVariationData  = ref('');
 const productVariationPrice = ref('');
 const resetBtns             = ref(false);
 const activeBtns            = ref(false);
-// const variationRemoveBtn = ref(false);
+const variationRemoveBtn    = ref(false);
 const activeAttributes = ref({
     0: [],
     1: [],
@@ -126,7 +124,7 @@ const relatedProducts = ref('');
        
 
        const variations =  await product.productVariations(productVariationData.value); 
-       
+
        productVariations.value =  variations.attributes;
              
        
@@ -155,6 +153,7 @@ const relatedProducts = ref('');
     const removeAllVariation = () => {
         // Reset the product variations
         productVariations.value = [];
+        quantityInput.value = 1;
         
         // Reset the attribute value IDs
         attribute_value_id_1.value = null;
@@ -183,18 +182,36 @@ const relatedProducts = ref('');
 
     };
 
-
-
 // get products variation working end
 
-onMounted(() => {
-  productByid();
-})
+    const incrementCartItem = () => {        
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        // if (sizeId.value !== null) {
+        // }
+    };
+    const decrementCartItem = () => {
+        if (quantityInput.value != 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+    };
+
+    onMounted(() => {
+        productByid();
+    })
 
 </script>
 
 <template>
   <div>
+
+    <!--=====================================
+                CART SIDEBAR PART START
+    =======================================-->
+    <CartSideBar />
+    <!--=====================================
+                    CART SIDEBAR PART END
+    =======================================-->
+
     <section class="inner-section mt-5">
       <div class="container">
           <div class="row">
@@ -248,7 +265,7 @@ onMounted(() => {
                       <!-- Product Variation Price Section start -->
                         <span v-if="singleProduct?.variations?.data.length > 0">
                             <h3 class="details-price" v-if="productVariationPrice == ''">
-                                <span>{{  $filters.currencySymbol(singleProduct.variation_price.min_price) }} - {{  $filters.currencySymbol(singleProduct.variation_price.max_price) }}</span> 
+                                <span>{{  $filters.currencySymbol(singleProduct.variation_price_range.min_price) }} - {{  $filters.currencySymbol(singleProduct.variation_price_range.max_price) }}</span> 
                             </h3>
                             <h3 class="details-price" v-else>
                                 <span>{{  $filters.currencySymbol(productVariationPrice.sell_price) }}</span> 
@@ -296,39 +313,39 @@ onMounted(() => {
                           </ul>
                       </div>
                       <div class="details-list-group mt-3">
-                        <div class="quantity">
-                            <button class="minus" aria-label="Decrease">&minus;</button>
-                            <input type="number" class="input-box" value="1" min="1" max="10">
-                            <button class="plus" aria-label="Increase">&plus;</button>
+                        <div class="quantity" :class="{'quantity-disabled' : activeBtns === false}">
+                            <button class="minus" :disabled="activeBtns === false"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>
+                            <input type="number" class="input-box"  min="1" max="10" v-model="quantityInput">
+                            <button class="plus" :disabled="activeBtns === false" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
                         </div>
                       </div>
                       <div class="details-add-group">
                         <div class="row" v-if="singleProduct?.variations?.data.length > 0">
                             <div class="col-md-6 mt-lg-0 mt-3">
-                                <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, 1, productVariationData, productVariationPrice)">
+                                <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, quantityInput, productVariationData, productVariationPrice)">
                                     <i :class="loading == singleProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
                                     <span>add to cart</span>
                                 </button>
                             </div>
                             <div class="col-md-6 mt-lg-0 mt-3">
-                                <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, 1, productVariationData, productVariationPrice)">
-                                    <i :class="loading == singleProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-cart-plus'"></i>
-                                    <span>Order Now</span>
-                                </button>
+                                <router-link :to="{ name: 'checkoutPage' }" class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, quantityInput, productVariationData, productVariationPrice)">
+                                    <i class="fas fa-cart-plus"></i>
+                                    <span>অর্ডার করুন</span>
+                                </router-link>
                             </div>
                         </div>    
                         <div class="row" v-else>
                             <div class="col-md-6 mt-lg-0 mt-3">
-                                <button class="product-add"  title="Add to Cart"   @click.prevent="addToCart(singleProduct)">
+                                <button class="product-add"  title="Add to Cart"   @click.prevent="addToCart(singleProduct, quantityInput)">
                                     <i :class="loading == singleProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
                                     <span>add to cart</span>
                                 </button>
                             </div>
                             <div class="col-md-6 mt-lg-0 mt-3">
-                                <button class="product-add"  title="Add to Cart"   @click.prevent="addToCart(singleProduct)">
-                                    <i :class="loading == singleProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-cart-plus'"></i>
-                                    <span>Order Now</span>
-                                </button>
+                                <router-link :to="{ name: 'checkoutPage' }" class="product-add" title="Add to Cart" @click.prevent="addToCart(singleProduct, quantityInput)" >
+                                    <i class="fas fa-cart-plus"></i>
+                                    <span>অর্ডার করুন</span>
+                                </router-link>
                             </div>
                         </div>    
                       </div>
@@ -628,14 +645,22 @@ img {
 
   .quantity {
     display: flex;
-    border: 2px solid #3498db;
+    border: 2px solid var(--primary);
     border-radius: 4px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
+
+  .quantity-disabled{
+    background: rgb(199, 40, 40);
+    color: white;
+    cursor: pointer;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   
   .quantity button {
-    background-color: #3498db;
+    background-color: var(--primary);
     color: #fff;
     border: none;
     cursor: pointer;
@@ -647,7 +672,8 @@ img {
   }
   
   .quantity button:hover {
-    background-color: #2980b9;
+    background-color: rgb(172, 16, 16);
+    color: white;
   }
   
   .input-box {
