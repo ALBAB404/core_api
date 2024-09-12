@@ -69,7 +69,7 @@ const cartIncrement = (index) => {
           <li
             class="cart-item"
             v-for="(cart, index) in cartItem"
-            :key="cart.id"
+            :key="cart.product_id"
           >
             <div class="cart-media">
               <a href="#"> <img :src="cart.image" alt="product" /></a>
@@ -162,7 +162,6 @@ const cartIncrement = (index) => {
 .list-leave-active {
   transition: all 0.5s ease;
 }
-
 .list-enter-from,
 .list-leave-to {
   opacity: 0;

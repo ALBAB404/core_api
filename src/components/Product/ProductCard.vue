@@ -76,7 +76,7 @@ onMounted(() => {
     <div class="product-card" :class="product?.current_stock == 0 ? 'product-disable' : ''">
       <div class="product-media">
         <div class="product-label">
-            <label class="label-text off"  v-if="product?.offer_percent !== 0.00">-{{ product?.offer_percent }}%</label>
+            <label class="label-text off"  v-if="product?.offer_percent != 0.00">-{{ product?.offer_percent }}%</label>
             <label class="label-text" :class="product?.type === 'feature-product'? 'feat': product?.type === 'top-product'? 'sale': product?.type === 'recent-product'? 'new': ''">{{ product?.type }}</label>
           </div>
           <button class="product-wish wish">
@@ -123,6 +123,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.product-image:hover{
+  transition: ease-in-out 2s linear !important;
+}
 
 .product-name a {
   width: 204px !important;
