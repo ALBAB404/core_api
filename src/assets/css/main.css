@@ -1843,7 +1843,7 @@ tbody tr td:last-child {
   color: var(--primary);
 }
 
-.product-image img {
+.product-image figure img {
   width: 100%;
   height: auto;
 }

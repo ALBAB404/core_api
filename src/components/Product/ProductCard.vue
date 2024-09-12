@@ -82,9 +82,17 @@ onMounted(() => {
           <button class="product-wish wish">
               <i class="fas fa-heart"></i>
           </button>
-          <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}" class="product-image">
+          <!-- <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}" class="product-image">
             <img :src="product?.image" />
-          </router-link>
+          </router-link> -->
+
+
+          <div class="hover14 column hover01 column">
+            <div class="product-image">
+              <figure><img :src="product?.image"></figure>
+            </div>
+          </div>
+
           <div class="product-widget" v-show="product?.video_url">
             <a title="Product Video" :href="product?.video_url" class="venobox fas fa-play" data-vbtype="video" data-autoplay="true"></a>
           </div>
@@ -124,9 +132,51 @@ onMounted(() => {
 
 <style scoped>
 
-.product-image:hover{
-  transition: ease-in-out 2s linear !important;
+/* Shine */
+.hover14 figure {
+	position: relative;
 }
+.hover14 figure::before {
+	position: absolute;
+	top: 0;
+	left: -75%;
+	z-index: 2;
+	display: block;
+	content: '';
+	width: 50%;
+	height: 100%;
+	background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+	background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+	-webkit-transform: skewX(-25deg);
+	transform: skewX(-25deg);
+}
+.hover14 figure:hover::before {
+	-webkit-animation: shine .75s;
+	animation: shine .75s;
+}
+@-webkit-keyframes shine {
+	100% {
+		left: 125%;
+	}
+}
+@keyframes shine {
+	100% {
+		left: 125%;
+	}
+}
+
+/* Zoom In #1 */
+.hover01 figure img {
+	-webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+.hover01 figure:hover img {
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
+}
+
 
 .product-name a {
   width: 204px !important;
