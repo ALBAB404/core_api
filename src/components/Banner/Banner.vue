@@ -79,7 +79,7 @@ onMounted(() => {
             <div class="banner-category">
               <div class="banner-category-head">
                 <i class="fas fa-bars"></i>
-                <span>top categories</span>
+                <span>Categories</span>
               </div>
               <ul class="banner-category-list">
                 <template v-if="!categories.data">

@@ -313,10 +313,10 @@ const relatedProducts = ref('');
                           </ul>
                       </div>
                       <div class="details-list-group mt-3">
-                        <div class="quantity" :class="{'quantity-disabled' : activeBtns === false}">
-                            <button class="minus" :disabled="activeBtns === false"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>
+                        <div class="quantity" :class="{'quantity-disabled' : (activeBtns === false) && (singleProduct?.variations?.data.length > 0)}">
+                            <button class="minus" :disabled="(activeBtns === false) && (singleProduct?.variations?.data.length > 0)"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>
                             <input type="number" class="input-box"  min="1" max="10" v-model="quantityInput">
-                            <button class="plus" :disabled="activeBtns === false" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
+                            <button class="plus" :disabled="(activeBtns === false) && (singleProduct?.variations?.data.length > 0)" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
                         </div>
                       </div>
                       <div class="details-add-group">

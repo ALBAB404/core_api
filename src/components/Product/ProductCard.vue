@@ -82,16 +82,12 @@ onMounted(() => {
           <button class="product-wish wish">
               <i class="fas fa-heart"></i>
           </button>
-          <!-- <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}" class="product-image">
-            <img :src="product?.image" />
-          </router-link> -->
 
-
-          <div class="hover14 column hover01 column">
+          <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}" class="hover14 column hover01 column">
             <div class="product-image">
               <figure><img :src="product?.image"></figure>
             </div>
-          </div>
+          </router-link>
 
           <div class="product-widget" v-show="product?.video_url">
             <a title="Product Video" :href="product?.video_url" class="venobox fas fa-play" data-vbtype="video" data-autoplay="true"></a>
@@ -104,10 +100,10 @@ onMounted(() => {
               <i class="active icofont-star"></i>
               <i class="active icofont-star"></i>
               <i class="icofont-star"></i>
-              <a href="product-video.html">(3)</a>
+              <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}">(3)</router-link>
           </div>
           <h6 class="product-name">
-              <a href="product-video.html">{{ product?.name }}</a>
+              <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}" >{{ product?.name }}</router-link>
           </h6>
 
 
