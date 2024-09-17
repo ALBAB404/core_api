@@ -25,6 +25,9 @@ import {
 } from "@/views/pages";
 import NProgress from "nprogress";
 import {useAuth} from '@/stores'
+import axiosInstance from "@/services/axiosService.js";
+
+let brandName = "Maxfit Food";
 
 const routes = [
   // Auth Pages
@@ -32,31 +35,31 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
-    meta: { title: "Maxfit Food | Login", guest: true },
+    meta: { title: " Login", guest: true },
   },
   {
     path: "/registration",
     name: "Registration",
     component: Registration,
-    meta: { title: "Maxfit Food | Registration", guest: true },
+    meta: { title: " Registration", guest: true },
   },
   {
     path: "/OtpLogin",
     name: "OtpLogin",
     component: OtpLogin,
-    meta: { title: "Maxfit Food | Otp-Code", guest: true },
+    meta: { title: " Otp-Code", guest: true },
   },
   {
     path: "/profile",
     name: "Profile",
     component: Profile,
-    meta: { title: "Maxfit Food | Profile", requiresAuth: true },
+    meta: { title: " Profile", requiresAuth: true },
   },
   {
     path: "/order-list",
     name: "OrderList",
     component: OrderList,
-    meta: { title: "Maxfit Food | OrderList", requiresAuth: true },
+    meta: { title: " OrderList", requiresAuth: true },
   },
 
   // Other pages
@@ -64,85 +67,85 @@ const routes = [
     path: "/",
     name: "homePage",
     component: HomePage,
-    meta: { title: "Maxfit Food | Home Page" },
+    meta: { title: " Home Page" },
   },
   {
     path: "/shop-page",
     name: "shopPage",
     component: ShopPage,
-    meta: { title: "Maxfit Food | Shop Page" },
+    meta: { title: " Shop Page" },
   },
   {
     path: "/product-details/:slug?",
     name: "productDetailsPage",
     component: ProductDetailsPage,
-    meta: { title: "Maxfit Food | Product Details" },
+    meta: { title: " Product Details" },
   },
   {
     path: "/checkout-page",
     name: "checkoutPage",
     component: CheckoutPage,
-    meta: { title: "Maxfit Food | Checkout Page" },
+    meta: { title: " Checkout Page" },
   },
   {
     path: "/OldCheckoutPage",
     name: "OldCheckoutPage",
     component: OldCheckoutPage,
-    meta: { title: "Maxfit Food | OldCheckoutPage Page" },
+    meta: { title: " OldCheckoutPage Page" },
   },
   {
     path: "/your-order-submited",
     name: "thankYou.page",
     component: thankyou,
-    meta: { title: "Maxfit Food | Thank You" },
+    meta: { title: " Thank You" },
   },
   {
     path: "/about-us",
     name: "aboutPage",
     component: AboutPage,
-    meta: { title: "Maxfit Food | About US" },
+    meta: { title: " About US" },
   },
   {
     path: "/contact-us",
     name: "contactPage",
     component: ContactPage,
-    meta: { title: "Maxfit Food | Contact US" },
+    meta: { title: " Contact US" },
   },
   {
     path: "/flash-deal",
     name: "flashDealPage",
     component: FlashDealPage,
-    meta: { title: "Maxfit Food | Flash Deals" },
+    meta: { title: " Flash Deals" },
   },
   {
     path: "/flash-deal-details/:campaignId/:productId",
     name: "FlashDealDetailsPage",
     component: FlashDealDetailsPage,
-    meta: { title: "Maxfit Food | Flash Deals Details" },
+    meta: { title: " Flash Deals Details" },
   },
   {
     path: "/campaign-page",
     name: "campaignPage",
     component: campaignPage,
-    meta: { title: "Maxfit Food | Campaign Page" },
+    meta: { title: " Campaign Page" },
   },
   {
     path: "/campaign-details-page/:campaignId/:productId",
     name: "campaignDetailsPage",
     component: campaignDetailsPage,
-    meta: { title: "Maxfit Food | Campaign Details Page" },
+    meta: { title: " Campaign Details Page" },
   },
   {
     path: "/blog-page",
     name: "blogPage",
     component: BlogPage,
-    meta: { title: "Maxfit Food | Blog Page" },
+    meta: { title: " Blog Page" },
   },
   {
     path: "/blog-details-page/:postId",
     name: "blogDetailsPage",
     component: BlogDetailsPage,
-    meta: { title: "Maxfit Food | Blog Details Page" },
+    meta: { title: " Blog Details Page" },
   },
   {
     path: "/terms-and-conditions",
@@ -176,9 +179,29 @@ const router = createRouter({
 
 const DEFAULT_TITLE = "404";
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // dynamiclly page title start
-  document.title = to.meta.title || DEFAULT_TITLE;
+
+    try {
+
+      const response = await axiosInstance.get('/settings', {
+        params: {
+          key:"title",
+          is_paginate: 0
+        }
+      });
+      
+      const campaignTitle = response.data.result.data[0].value; 
+
+      const staticTitle = to.meta.title || DEFAULT_TITLE;
+      document.title = `${campaignTitle} | ${staticTitle}`;
+
+    } catch (error) {
+      console.error('Error fetching campaign details:', error);
+      // Use fallback title if there's an error
+      document.title = to.meta.title;
+    }
+
   // dynamiclly page title end
 
   //dynamiclly scroll behavior start

@@ -33,7 +33,7 @@
   --border: #e8e8e8;
   --heading: #39404a;
   --primary: #ff0000;
-  --secend-primary: #9dff00;
+  --secend-primary: #000000;
   --sub-heading: #565765;
   --green-chalk: #ddffd5;
   --green-dark: #072f17;
@@ -209,7 +209,7 @@ button:focus {
 
 .section-heading {
   text-align: center;
-  margin-bottom: 80px;
+  margin-bottom: 65px;
 }
 
 .section-btn-50 {
@@ -1778,8 +1778,8 @@ tbody tr td:last-child {
 }
 
 .product-card:hover .product-add {
-  color: var(--black);
-  background: var(--border);
+  color: var(--white);
+  background: var(--secend-primary);
 }
 
 .product-media {

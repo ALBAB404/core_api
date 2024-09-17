@@ -195,8 +195,24 @@ const relatedProducts = ref('');
         }
     };
 
+    
     onMounted(() => {
         productByid();
+        let imageZoom = document.getElementById('imageZoom');
+            imageZoom.addEventListener('mousemove', (event) => {
+                imageZoom.style.setProperty('--display', 'block');
+                let pointer = {
+                    x:  (event.offsetX * 100) / imageZoom.offsetWidth,
+                    y:  (event.offsetY * 100) / imageZoom.offsetHeight
+                }
+                imageZoom.style.setProperty('--zoom-x', pointer.x + '%');
+                imageZoom.style.setProperty('--zoom-y', pointer.y + '%');
+            })
+            imageZoom.addEventListener('mouseout', () => {
+                imageZoom.style.setProperty('--display', 'none');
+            })
+
+       
     })
 
 </script>
@@ -223,9 +239,12 @@ const relatedProducts = ref('');
                       </div>
                       <div class="product-imgs">
                         <div class="img-display">
-                            <div class="img-showcase">
+                            <!-- <div class="img-showcase">
                                 <img :src="singleProduct?.image" alt="shoe image" v-if="thumbnailImage == null" />
                                 <img :src="thumbnailImage" alt="shoe image" v-else />
+                            </div> -->
+                            <div id="imageZoom" style="--url: url(/src/assets/images/product/04.jpg); --zoom-x: 0%; --zoom-y: 0%; --display: none ">
+                                <img src="/src/assets/images/product/04.jpg" alt="">
                             </div>
                         </div>
                         <!-- <div class="img-select">
@@ -565,6 +584,31 @@ const relatedProducts = ref('');
 
 <style scoped>
 @import "@/assets/css/product-details.css";
+
+#imageZoom{
+    position: relative;
+}
+#imageZoom img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 0 0;
+}
+#imageZoom::after{
+    display: var(--display);
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    background-image: var(--url);
+    background-size: 200%;
+    background-position: var(--zoom-x) var(--zoom-y);
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+
 img {
   width: 100%;
   display: block;

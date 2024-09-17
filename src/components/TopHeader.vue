@@ -7,16 +7,18 @@ import axiosInstance from "@/services/axiosService.js";
 import { CategorySideBar  } from '@/components'
 
 // All Variable  Code Is Here.....................................................................................................
-const setting = useSetting();
-const { settings } = storeToRefs(setting);
-const cart = useCart();
+const setting                       = useSetting();
+const { settings }                  = storeToRefs(setting);
+const cart                          = useCart();
 const { cartItemCount, totalPrice } = storeToRefs(cart);
+const searchData                    = ref([]);
+const name                          = ref('');
+const logo                          = ref('');
+const primaryColor                  = ref('#ff0000')
+const secendPrimaryColor            = ref('#000000')
+const faviconFile                   = ref('maxfit.png')
+const gtmId                         = ref('GTM-TMP9GG8Q');
 
-
-const searchData = ref([]);
-const name = ref('');
-const logo = ref('');
-// API Calling Code Is Here.....................................................................................................
 
 
 // All Function  Code Is Here.....................................................................................................
@@ -48,6 +50,15 @@ const getSettingsData = async() => {
     if (ele.key == "logo" ) {
       logo.value = ele
     } 
+    if (ele.key == "primary-color" ) {
+        primaryColor.value = ele
+    } 
+    if (ele.key == "secend-primary-color" ) {
+        secendPrimaryColor.value = ele
+    } 
+    if (ele.key == "favicon" ) {
+        faviconFile.value = ele
+    } 
   })
 }
 //========================================
@@ -60,8 +71,6 @@ function categorySideBar(){
         $('.backdrop').fadeOut();
     });
 }
-
-
 //========================================
 //       RESPONSIVE SEARCH BAR
 //========================================
@@ -70,12 +79,63 @@ function searchFrom(){
     $(this).children('.fa-search').toggleClass('fa-times');
 }
 
+// get primary and secondary color start
 
+    const fetchPrimaryColor = () =>{
+        try {
+            updateCSSVariable(primaryColor.value, secendPrimaryColor.value);
+        } catch (error) {
+            console.error('Error fetching primary color:', error);
+        }
+    }
 
+    const updateCSSVariable = (primaryColor, secendPrimaryColor) => {
+      document.documentElement.style.setProperty('--primary', primaryColor);
+      document.documentElement.style.setProperty('--secend-primary', secendPrimaryColor);
+    }
 
+// get primary and secendary color end
+// get fav icons start
+
+   function changeFavicon() {
+
+    // faviconFile.value = 'maxfit.png';
+
+      // Prothome amra existing <link rel='icon'> element ta khujbo
+      const favicon = document.querySelector("link[rel='icon']") || document.createElement('link');
+      favicon.rel = 'icon';
+      // Dynamically favicon-er path set korbo
+      favicon.href = `/src/assets/f.png`; 
+      // Favicon tag jodi age theke na thake, tahole <head> section-e add korbo
+      document.getElementsByTagName('head')[0].appendChild(favicon);
+    }
+
+// get fav icons end
+
+// Add Google Tag Manager Script start
+    function addGTM() {
+        const gtmScript = document.createElement('script');
+        gtmScript.textContent = `
+            (function(w,d,s,l,i){
+            w[l]=w[l]||[];
+            w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','${gtmId.value}');
+        `;
+        document.head.appendChild(gtmScript);
+    }
+// Add Google Tag Manager Script end
 
 onMounted(() => {
     getSettingsData(); 
+    fetchPrimaryColor();
+    changeFavicon();
+    addGTM();
 })
 
 </script>
@@ -148,42 +208,6 @@ onMounted(() => {
         </div>
       </div>
     </header> 
-
-    <!-- <header class="header-part">
-            <div class="container">
-                <div class="header-content">
-                    <div class="header-media-group">
-                        <button class="header-user"><img src="@/assets/images/user.png" alt="user"></button>
-                        <a href="index.html"><img src="@/assets/images/logo.png" alt="logo"></a>
-                        <button class="header-src"><i class="fas fa-search"></i></button>
-                    </div>
-
-                    <router-link :to="{ name: 'homePage'}"><img src="@/assets/images/maxfit.png" class="w-50" alt="logo" /></router-link>
-                    <button class="header-src" @click.prevent="searchFrom()"><i class="fas fa-search"></i></button>
-
-                    <form class="header-form">
-                        <input type="text" placeholder="Search anything...">
-                        <button><i class="fas fa-search"></i></button>
-                    </form>
-
-                    <div class="header-widget-group">
-                        <a href="compare.html" class="header-widget" title="Compare List">
-                            <i class="fas fa-random"></i>
-                            <sup>0</sup>
-                        </a>
-                        <a href="wishlist.html" class="header-widget" title="Wishlist">
-                            <i class="fas fa-heart"></i>
-                            <sup>0</sup>
-                        </a>
-                        <button class="header-widget header-cart" title="Cartlist">
-                            <i class="fas fa-shopping-basket"></i>
-                            <sup>9+</sup>
-                            <span>total price<small>$345.00</small></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header> -->
 
   </div>
 </template>

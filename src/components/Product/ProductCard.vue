@@ -239,7 +239,7 @@ onMounted(() => {
 
 .selectedSizeColor {
   color: white !important;
-  background-color: #ff0000 !important;
+  background-color: var(--primary) !important;
 }
 
 .btnColorOrder{
