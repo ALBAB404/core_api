@@ -13,7 +13,7 @@ export const useSection = defineStore("section", {
                 try {
                     const res = await axiosInstance.get('/sections');
                     if(res.data.success){
-                        this.sections = res.data?.result              
+                        // this.sections = res.data?.result              
                         return res.data?.result
                     }
                 } catch (error) {

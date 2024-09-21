@@ -5,7 +5,7 @@
       <div class="ssc-line w-100"></div>
     </a> -->
     <!-- Slider Skeleton -->
-<div class="slider-skeleton" style="height: 320px; width: 965px;">
+<div class="slider-skeleton">
   <!-- Slide 1 -->
   <div class="slide">
     <div class="slide-content">
@@ -35,4 +35,56 @@
     width: 100%;
     height: 365px !important;
 }
+
+
+@media (max-width: 1399px) {
+  .ssc-square {
+    width: 100%;
+    height: 365px !important;
+  }
+}
+
+@media (max-width: 1199px) {
+  
+}
+
+
+@media (max-width: 1024px) {
+
+  
+
+
+}
+
+@media (max-width: 991px){
+  
+}
+
+
+@media (max-width: 768px) {
+
+  
+}
+
+
+
+
+@media (max-width: 425px) {
+  
+  .ssc-square {
+    width: 100%;
+    height: 160px !important;
+  }
+
+}
+
+@media (max-width: 375px) {
+
+}
+
+@media (max-width: 320px) {
+
+  
+}
+
 </style>

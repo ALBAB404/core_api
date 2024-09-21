@@ -88,20 +88,15 @@ onMounted(() => {
               <figure><img :src="product?.image"></figure>
             </div>
           </router-link>
-
-          <div class="product-widget" v-show="product?.video_url">
-            <a title="Product Video" :href="product?.video_url" class="venobox fas fa-play" data-vbtype="video" data-autoplay="true"></a>
+          
+          <div class="product-widget">
+            <a title="Product Video" href="https://youtu.be/9xzcVxSBbG8" class="venobox fas fa-play vbox-item" data-autoplay="true" data-vbtype="video"></a>
+            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view"></a>
+            <a title="Product Video" v-show="product?.video_url" :href="product?.video_url" class="venobox fas fa-play" data-vbtype="video" data-autoplay="true"></a>
           </div>
       </div>
       <div class="product-content">
-          <div class="product-rating">
-              <i class="active icofont-star"></i>
-              <i class="active icofont-star"></i>
-              <i class="active icofont-star"></i>
-              <i class="active icofont-star"></i>
-              <i class="icofont-star"></i>
-              <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}">(3)</router-link>
-          </div>
+          
           <h6 class="product-name">
               <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}" >{{ product?.name }}</router-link>
           </h6>
@@ -115,10 +110,39 @@ onMounted(() => {
           </h6>
 
 
-          <button class="product-add" title="Add to Cart" @click.prevent="addToCart(product)">
+          <!-- <button class="product-add" title="Add to Cart" @click.prevent="addToCart(product)">
               <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
               <span>add</span>
-          </button>
+          </button> -->
+
+          <div class="row" v-if="product?.variations?.data?.length > 0">
+            <div class="col-xl-6 col-lg-12 col-12 mt-2">
+              <button  class="product-add btnColorOrder" :disabled="isButtonDisabled" :class="isButtonDisabled ? 'disabled btn border-dark' : ''" title="Add to Cart" @click.prevent="addToCart(product)">
+                <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
+                <span>Add Cart</span>
+              </button>
+            </div>
+            <div class="col-xl-6 col-lg-12 col-12 mt-2">
+              <router-link :to="{ name: 'checkoutPage' }"  class="product-add standard-wishs" :class="isButtonDisabled ? 'disabled btn border-danger' : ''" @click.prevent="addToCart(product)">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Order Now</span>
+              </router-link>
+            </div>
+          </div>
+          <div class="row" v-else>
+            <div class="col-xl-6 col-lg-12 col-12 mt-2">
+              <button  class="product-add btnColorOrder"  title="Add to Cart" @click.prevent="addToCart(product)">
+                <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
+                <span>Add Cart</span>
+              </button>
+            </div>
+            <div class="col-xl-6 col-lg-12 col-12 mt-2">
+              <router-link :to="{ name: 'checkoutPage' }"  class="product-add standard-wishs" @click.prevent="addToCart(product)">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Order Now</span>
+              </router-link>
+            </div>
+          </div>
       </div>
   </div>
 
@@ -127,6 +151,15 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.product-widget a[title="Product View"], .product-widget a[title="Product Video"] {
+  background-color: var(--primary);
+  color: var(--white);
+}
+.product-widget a[title="Product View"]:hover, .product-widget a[title="Product Video"]:hover {
+  background-color: var(--secend-primary);
+  color: var(--white);
+}
 
 /* Shine */
 .hover14 figure {
@@ -243,13 +276,13 @@ onMounted(() => {
 }
 
 .btnColorOrder{
-  background-color: #000000 !important;
-  color: #fff !important;
+  background-color: var(--secend-primary) !important;
+  color: var(--white) !important;
 }
 
-.product-card:hover .btnColorOrder{
-  background-color: #e8e8e8 !important;
-  color: #000000 !important;
+.btnColorOrder:hover{
+  color: white !important;
+  background-color: var(--primary) !important;
 }
 /* product variation end */
 

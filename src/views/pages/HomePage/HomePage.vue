@@ -1,5 +1,5 @@
 <script setup>
-import { CategorySideBar, CartSideBar,ProductCard, NavSideBar, MobileMenu,  Blog, ProductView, PromoPart, Banner, IntroPart, NewItem, Brand } from '@/components'
+import { CategorySideBar, CartSideBar,ProductCard, NavSideBar, MobileMenu,  Blog, ProductView, PromoPart, Banner, IntroPart, NewItem, Brand, Footer } from '@/components'
 // product data fetch 
 import {useProduct, useSection} from '@/stores'
 import { storeToRefs } from 'pinia';
@@ -9,20 +9,22 @@ import axiosInstance from "@/services/axiosService.js";
 // All Variable  Code Is Here.....................................................................................................
 const product = useProduct();
 const section = useSection();
-const {sections} = storeToRefs(section);
+const sections = ref('');
 const bannerAllItems = ref({});
 // API Calling Code Is Here.....................................................................................................
 
-const banner = async() => {
-  const res = await axiosInstance.get("/banners");
-  bannerAllItems.value = res.data.result;
-}
 
 // All Function  Code Is Here.....................................................................................................
 
+const getSections = async () => {
+  sections.value = await section.getData();  
+}
+
+
 onMounted(() => {
-  banner();
-  section.getData();
+
+  getSections();
+  
 })
 
 
@@ -132,6 +134,7 @@ onMounted(() => {
     <!--=====================================
                       BLOG PART END
         =======================================-->
+
   </div>
 </template>
 
@@ -147,11 +150,22 @@ onMounted(() => {
     transition: all linear .2s;
 }
 
+.section-header-text:hover{
+    background-color: #f5f6f7;
+    border: 3px solid var(--secend-primary) !important;
+    border-top-width: 7px !important;
+    border-radius: 15px / 45px !important;
+    transition: all linear .2s;
+}
+
 .heading-line {
   width: 100%;
   background-color: var(--primary);
   height: 2px;
   margin-top: -25px;
+}
+.heading-line:hover {
+  background-color: var(--secend-primary);
 }
 
 </style>

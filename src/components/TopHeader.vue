@@ -4,7 +4,7 @@ import { onMounted, ref } from "vue";
 import { storeToRefs } from 'pinia';
 import {useCart, useSetting} from '@/stores'
 import axiosInstance from "@/services/axiosService.js";
-import { CategorySideBar  } from '@/components'
+import { CategorySideBar, NavSideBar  } from '@/components'
 
 // All Variable  Code Is Here.....................................................................................................
 const setting                       = useSetting();
@@ -14,12 +14,14 @@ const { cartItemCount, totalPrice } = storeToRefs(cart);
 const searchData                    = ref([]);
 const name                          = ref('');
 const logo                          = ref('');
-const primaryColor                  = ref('#ff0000')
-const secendPrimaryColor            = ref('#000000')
+const primaryColor                  = ref('')
+const secendPrimaryColor            = ref('')
 const faviconFile                   = ref('maxfit.png')
 const gtmId                         = ref('GTM-TMP9GG8Q');
-
-
+const headerTextOne                 = ref('');
+const headerTextTwo                 = ref('');
+const headerTextThree               = ref('');
+const isNavTrue                     = ref(false);
 
 // All Function  Code Is Here.....................................................................................................
 
@@ -46,7 +48,7 @@ const clearSearchBar = () =>{
 
 const getSettingsData = async() => {
   const settingData = await setting.getData(); 
-  settingData.map((ele)=> {
+  settingData.data.map((ele)=> {
     if (ele.key == "logo" ) {
       logo.value = ele
     } 
@@ -59,6 +61,15 @@ const getSettingsData = async() => {
     if (ele.key == "favicon" ) {
         faviconFile.value = ele
     } 
+    if (ele.key == "header-text" ) {
+        headerTextOne.value = ele
+    } 
+    if (ele.key == "header-text-two" ) {
+        headerTextTwo.value = ele
+    } 
+    if (ele.key == "header-text-three" ) {
+        headerTextThree.value = ele
+    } 
   })
 }
 //========================================
@@ -68,6 +79,18 @@ function categorySideBar(){
     $('.category-sidebar').addClass('active');
     $('.category-close').on('click', function(){
         $('.category-sidebar').removeClass('active');
+        $('.backdrop').fadeOut();
+    });
+}
+
+//========================================
+//        Nav SIDEBAR FUNCTION
+//========================================
+function navSideBar(){    
+
+    $('.nav-sidebar').addClass('active');
+    $('.nav-close').on('click', function(){
+        $('.nav-sidebar').removeClass('active');
         $('.backdrop').fadeOut();
     });
 }
@@ -150,18 +173,35 @@ onMounted(() => {
     <!--=====================================
                 CATEGORY SIDEBAR PART END
         =======================================-->
+        
+    <!--=====================================
+                Nav SIDEBAR PART START
+        =======================================-->
+      <NavSideBar />
+    <!--=====================================
+                Nav SIDEBAR PART END
+        =======================================-->
+
+    <div class="marqueTag" v-if="headerTextOne || headerTextTwo || headerTextThree">
+        <div class="container d-flex justify-content-between">
+            <marquee behavior="" direction=""><span>{{ headerTextOne.value }}</span><span>{{ headerTextTwo.value }}</span><span>{{ headerTextThree.value }}</span></marquee>
+        </div>
+    </div>
+
     <header class="header-part">
       <div class="container">
         <div class="header-content">
           <div class="header-media-group">
-            <button class="cate-btn" title="Category List" @click="categorySideBar()">
+            <button class="cate-btn" title="Category List" @click="navSideBar()">
                 <i class="fas fa-list"></i>
             </button>
-            <router-link :to="{ name: 'homePage'}"><img :src="logo?.logo" alt="logo" /></router-link>
+            <router-link :to="{ name: 'homePage'}">
+                <img :src="logo?.image" alt="logo" />
+            </router-link>
             <button class="header-src" @click.prevent="searchFrom()"><i class="fas fa-search"></i></button>
           </div>
           <router-link :to="{ name: 'homePage'}" class="header-logo">
-            <img :src="logo?.logo" alt="logo" />
+            <img :src="logo?.image" alt="logo" />
           </router-link>
 
           <form class="header-form">
@@ -200,9 +240,14 @@ onMounted(() => {
 
           <div class="header-widget-group">
             <button class="header-widget header-cart" title="Cartlist">
-              <i class="fas fa-shopping-cart"></i>
-              <sup>{{ cartItemCount }}+</sup>
-              <span>total price<small>{{ $filters.currencySymbol(totalPrice) }}</small></span>
+                <i class="fas fa-user"></i>
+              <span></span>
+            </button>
+          </div>
+          <div class="header-widget-group">
+            <button class="header-widget header-cart" title="Cartlist">
+                <i class="fas fa-heart"></i>
+              <span></span>
             </button>
           </div>
         </div>
@@ -213,6 +258,20 @@ onMounted(() => {
 </template>
 
 <style>
+
+.marqueTag{
+    background-color: var(--primary);
+    color: var(--white);
+    font-weight: 600;
+    padding: 5px;
+}
+
+.marqueTag marquee span {
+    display: inline-block;
+    margin-right: 200px;
+}
+
+
 .cate-btn{
   font-size:25px;
 }

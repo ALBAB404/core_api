@@ -24,7 +24,7 @@ import { TopHeader, Navbar,  Footer,  Newsletter, ChatIcon, AddtoCartIcon } from
       </transition>
     </router-view>
 
-    <!-- <Footer /> -->
+    <Footer /> 
 
   </div>
 </template>

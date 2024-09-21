@@ -187,8 +187,18 @@
   margin-right: 10px;
 }
 
+
 .banner-category-list {
-  padding: 0px 20px 20px;
+  position: absolute; 
+  background-color: white;
+  z-index: 1000; 
+  height: 0px;
+  transition: 0.5s;
+}
+.banner-category:hover .banner-category-list,
+.banner-category .banner-category-list:hover{
+  height: 600px;
+  transition: 0.5s;
 }
 
 .banner-category-item {

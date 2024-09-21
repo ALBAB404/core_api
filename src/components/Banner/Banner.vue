@@ -18,8 +18,8 @@ import {useSlider, useCategory, useBanner} from '@/stores'
 
 
 // All Variable  Code Is Here.....................................................................................................
-const newSlide = ref([Navigation])
-const modules = ref([Pagination,Autoplay]);
+
+const modules = ref([Pagination,Autoplay, Navigation]);
 
 // banner part start
 const banner = useBanner();
@@ -75,29 +75,7 @@ onMounted(() => {
     <section class="banner-part">
       <div class="container">
         <div class="row">
-          <div class="col-lg-3">
-            <div class="banner-category">
-              <div class="banner-category-head">
-                <i class="fas fa-bars"></i>
-                <span>Categories</span>
-              </div>
-              <ul class="banner-category-list">
-                <template v-if="!categories.data">
-                  <CategorySkeleton />
-                </template>
-                <template v-else>
-                  <li class="banner-category-item" v-for="(category, index) in categories.data" :key="index">
-                    <router-link :to="{ name: 'shopPage', query: { category: category.id }}">
-                      <i class="flaticon-vegetable"></i>
-                      <span>{{ category.name }}</span>
-                      <i class="fa-solid fa-arrow-right ms-auto fs-6" @click.prevent="toggleDropdown(index, category)" v-if="category.sub_category.length > 0"></i>
-                    </router-link>
-                  </li>
-                </template>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-9">
+          <div class="col-lg-12">
             <div class="row">
               <div class="col-lg-12">
                 <div class="home-grid-slider slider-dots">
@@ -112,7 +90,7 @@ onMounted(() => {
                       :pagination="{
                         clickable: true,
                       }"
-                      
+                      :navigation="true"
                       :modules="modules"
                       
                       class="mySwiper"
@@ -177,7 +155,6 @@ onMounted(() => {
 .home-grid-slider img {
   width: 100%;
   border-radius: 8px;
-  height: 333px;
 }
 
 .banner-category-list {
@@ -185,6 +162,8 @@ onMounted(() => {
   overflow-y: auto; 
   overflow-x: hidden; 
 }
+
+
 
 .banner-category-dropdown{
   z-index: 999999 !important;
@@ -194,14 +173,9 @@ onMounted(() => {
   width: 100%;
 }
 
-.banner-image{
-   max-height: 272px;
-}
 
 @media (max-width: 425px) {
-  .home-grid-slider img {
-  height: 170px;
-}
+  
 }
 
 </style>

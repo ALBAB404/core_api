@@ -1767,7 +1767,9 @@ tbody tr td:last-child {
 }
 
 .product-card:hover {
-  border-color: var(--primary);
+  border-color: var(--secend-primary);
+  border-top: 4px solid var(--secend-primary);
+  border-bottom: 4px solid var(--secend-primary);
   -webkit-box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.1);
           box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.1);
 }
@@ -1777,7 +1779,7 @@ tbody tr td:last-child {
   bottom: 15px;
 }
 
-.product-card:hover .product-add {
+.product-add:hover {
   color: var(--white);
   background: var(--secend-primary);
 }

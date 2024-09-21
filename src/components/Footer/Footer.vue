@@ -15,8 +15,9 @@ const phone = ref()
 const description = ref()
 const facebook = ref()
 const whatsapp = ref()
+const title = ref()
 
-const fbPageUrl = ref('https://www.facebook.com/maxfitfood1')
+const fbPageUrl = ref('https://www.facebook.com/servicekeybd')
 
 // social Icons start
 const socialShares = ref("");
@@ -31,12 +32,13 @@ const socialShares = ref("");
 
 const getSettingsData = async() => {
   const settingData = await setting.getData();
-  settingData.map((ele)=> {
+  settingData.data.map((ele)=> {
     if (ele.key == "email" ) {
       email.value = ele
     } 
     if (ele.key == "facebook" ) {
       facebook.value = ele
+      fbPageUrl.value = ele.value
     } 
     if (ele.key == "address" ) {
       address.value = ele
@@ -52,6 +54,9 @@ const getSettingsData = async() => {
     } 
     if (ele.key == "whatsapp" ) {
       whatsapp.value = ele
+    } 
+    if (ele.key == "title" ) {
+      title.value = ele
     } 
   })
 }
@@ -123,16 +128,16 @@ onMounted(() => {
           <div class="col-sm-6 col-xl-3">
             <div class="footer-widget">
               <router-link :to="{ name: 'homePage'}" class="footer-logo" href="#">
-                <img :src="logo?.logo" alt="logo" />
+                <img :src="logo?.image" alt="logo" />
               </router-link>
               <p class="footer-desc ">{{ description?.value }}</p>
-              <ul class="footer-social" v-show="socialShares.length > 0">
+              <!-- <ul class="footer-social" v-show="socialShares.length > 0">
                 <li v-for="(socialShare, index) in socialShares" :key="index">
                   <a :href="socialURL(socialShare.type, socialShare.contact)" target="_blank" title="">
                     <i :class="socialIcons(socialShare.type)"></i>
                   </a>
                 </li>
-              </ul>
+              </ul> -->
             </div>
           </div>
           <div class="col-sm-6 col-xl-3">
@@ -193,7 +198,7 @@ onMounted(() => {
                     <div id="fb-root"></div>
                     <div class="fb-page" :data-href="fbPageUrl" data-tabs="timeline" data-width="" data-height="130" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
                         <blockquote :cite="fbPageUrl" class="fb-xfbml-parse-ignore">
-                        <a :href="fbPageUrl">Maxfit Food</a>
+                        <a :href="fbPageUrl" target="_blank">{{ title?.value }}</a>
                         </blockquote>
                     </div>
                 </p>
@@ -202,7 +207,7 @@ onMounted(() => {
           <div class="row">
               <div class="col-12">
                   <div class="footer-bottom">
-                      <p class="text-center footer-copytext">&copy;  2024 Maxfit Food </p>
+                      <p class="text-center footer-copytext">&copy;  2024 {{ title?.value }} </p>
                   </div>
               </div>
           </div>
@@ -226,6 +231,7 @@ onMounted(() => {
 .footer-copytext a {
     color: #000000 !important;
 }
+
 
 @media (max-width: 767px){
 .footer-bottom {

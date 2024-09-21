@@ -70,9 +70,9 @@ function categorySideBar(){
         <i class="fas fa-store"></i>
         <span>Shop</span>
       </router-link>
-      <router-link title="Shop Page" :to="{ name: 'blogPage'}">
+      <router-link title="Shop Page" :to="{ name: 'blogPage'}" class="campaign-mobile-menu">
         <i class="fa-solid fa-blog"></i>
-        <span>Blog</span>
+        <span>Campaign</span>
       </router-link>
       <button title="Shop Page"  @click="cartBtn">
         <i class="fas fa-shopping-basket"></i>
@@ -84,5 +84,30 @@ function categorySideBar(){
 </template>
 
 <style>
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Base button styling */
+
+.campaign-mobile-menu{
+  animation: pulse 1s infinite; 
+}
+
+.campaign-mobile-menu *{
+  color: var(--primary) !important; 
+}
 
 </style>

@@ -437,6 +437,24 @@ onMounted(() => {
     color: var(--primary) !important;
 }
 
+/* Define the keyframes for the pulse animation */
+@keyframes pulse {
+  0% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+}
+
+/* Base button styling */
+
 .orderBTN {
   background-color: var(--primary);
   border-top: 3px solid var(--primary);
@@ -450,6 +468,7 @@ onMounted(() => {
   transition: .3s ease-in-out;
   font-weight: 500;
   font-size: 23px;
+  animation: pulse 1s infinite; 
 }
 .orderBTN:hover{
   background-color: var(--secend-primary);
@@ -457,7 +476,7 @@ onMounted(() => {
   border-left: 3px solid var(--secend-primary);
   border-bottom: 3px solid var(--secend-primary);
   border-right: 3px solid var(--secend-primary);
-  color: #000000;
+  color: var(--white);
 }
 
 .img{
