@@ -3,28 +3,33 @@ import axiosInstance from "@/services/axiosService.js";
 import { useAuth, useModal } from '@/stores';
 import { ref, onMounted } from 'vue';
 import {Modal} from "@/components"
-const auth = useAuth();
-const profileData = ref();
+import { storeToRefs } from "pinia";
 
-const modal    = useModal()
-const id     = ref()
-const name     = ref()
-const password = ref()
+const auth            = useAuth();
+const {backendErrors} = storeToRefs(auth)
+const profileData     = ref();
+const modal           = useModal()
+const id              = ref()
+const username        = ref()
+const currentPassword = ref()
+const newPassword     = ref()
+const confirmPassword = ref()
 
 const getData = async() => {
     profileData.value = await auth.profile()
     id.value          = profileData.value.id
-    name.value        = profileData.value.name
+    username.value    = profileData.value.username
 }
 
 const profileInfoUpdate = async () => {
-     const res =  await auth.profileUpdate(id.value, name.value, password.value)
-
+     const res =  await auth.profileUpdate(id.value, username.value, currentPassword.value, newPassword.value, confirmPassword.value)    
      if (res) {
         modal.Modalclose()
         getData();
+     }else{
+        console.log(res); 
      }
-     
+
 }
 
 onMounted(() => {
@@ -49,13 +54,22 @@ onMounted(() => {
                         </div>
                         <div class="form-group">
                             <label class="form-label">name</label>
-                            <input class="form-control" type="text" v-model="name">
+                            <input class="form-control" type="text" v-model="username">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Current Password</label>
+                            <input class="form-control" type="password" v-model="currentPassword">
+                            <span class="text-danger">{{ backendErrors }}</span>
                         </div>
                         <div class="form-group">
                             <label class="form-label">New Password</label>
-                            <input class="form-control" type="password" v-model="password">
+                            <input class="form-control" type="password" v-model="newPassword">
                         </div>
-                        <button class="form-btn" type="submit" @click.prevent="profileInfoUpdate()">Update profile info</button>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input class="form-control" type="password" v-model="confirmPassword">
+                        </div>
+                        <button class="form-btn" @click.prevent="profileInfoUpdate">Update profile info</button>
                     </form>    
                 </Modal>
 
@@ -72,7 +86,7 @@ onMounted(() => {
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label">name</label>
-                                            <input class="form-control" type="text" :value="profileData.name" disabled>
+                                            <input class="form-control" type="text" :value="profileData.username" disabled>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">

@@ -4825,20 +4825,21 @@ tbody tr td:last-child {
 }
 
 .cart-item {
-  padding: 15px 0px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  padding          : 15px 0px;
+  display          : -webkit-box;
+  display          : -ms-flexbox;
+  display          : flex;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-align   : center;
+  align-items      : center;
+  -webkit-box-pack : center;
+  -ms-flex-pack    : center;
+  justify-content  : center;
   -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  border-bottom: 1px solid var(--border);
+  -ms-flex-align   : start;
+  align-items      : flex-start;
+  margin-bottom    : 20px;
+
 }
 
 .cart-item:hover .cart-media button {

@@ -121,22 +121,23 @@ export const useAuth = defineStore("auth", {
     },
 
 
-    async profileUpdate(id, name, password) {
+    async profileUpdate(id, name, currentPassword, newPassword, confirmPassword) {      
       try {
-        const res = await axiosInstance.post("/profile",{
-          id: id,
-          name: name,
-          password: password,
+        const res = await axiosInstance.post("/users/change-password",{
+          id                       : id,
+          name                     : name,
+          current_password         : currentPassword,
+          new_password             : newPassword,
+          new_password_confirmation: confirmPassword,
         });
+
         if (res.status === 200) {
-          return res.data.result
+          return res.data.result;
         }else{
-          this.backendErrors = res.data.message
+          this.backendErrors = res.data.message;
         }
       } catch (error) {
-        if (error.response.data) {
-          // this.errors = error.response.data.errors;
-        }
+        this.backendErrors = error.response.data.message;        
       }
     }
 
