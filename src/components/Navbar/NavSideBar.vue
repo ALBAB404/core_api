@@ -13,13 +13,13 @@ const title = ref()
 const getSettingsData = async() => {
   const settingData = await setting.getData(); 
   settingData.data.map((ele)=> {
-    if (ele.key == "logo" ) {
+    if (ele.key == "header_logo" ) {
       logo.value = ele
     }
-    if (ele.key == "email" ) {
+    if (ele.key == "footer_email" ) {
       email.value = ele
     }
-    if (ele.key == "phone" ) {
+    if (ele.key == "phone_number" ) {
       phone.value = ele
     }
     if (ele.key == "title" ) {

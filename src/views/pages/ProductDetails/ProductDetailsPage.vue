@@ -206,16 +206,16 @@ const relatedProducts = ref('');
 const getSettingsData = async() => {
     const settingData = await setting.getData(); 
     settingData.data.map((ele)=> {
-        if (ele.key == "phone" ) {
+        if (ele.key == "phone_number" ) {
           phone.value = ele
         }
-        if (ele.key == "whatsapp" ) {
+        if (ele.key == "whatsapp_number" ) {
           whatsapp.value = ele
         }
-        if (ele.key == "website-url" ) {
+        if (ele.key == "website_url" ) {
           websiteUrl.value = ele
         }
-        if (ele.key == "messenger" ) {
+        if (ele.key == "messenger_id" ) {
             messengerId.value = ele
         }
     })

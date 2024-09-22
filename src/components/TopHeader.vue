@@ -15,7 +15,7 @@ const searchData                    = ref([]);
 const name                          = ref('');
 const logo                          = ref('');
 const primaryColor                  = ref('')
-const secendPrimaryColor            = ref('')
+const secondaryColor                = ref('')
 const faviconFile                   = ref('maxfit.png')
 const gtmId                         = ref('GTM-TMP9GG8Q');
 const headerTextOne                 = ref('');
@@ -49,25 +49,25 @@ const clearSearchBar = () =>{
 const getSettingsData = async() => {
   const settingData = await setting.getData(); 
   settingData.data.map((ele)=> {
-    if (ele.key == "logo" ) {
+    if (ele.key == "header_logo" ) {
       logo.value = ele
     } 
-    if (ele.key == "primary-color" ) {
+    if (ele.key == "primary_color" ) {
         primaryColor.value = ele
     } 
-    if (ele.key == "secend-primary-color" ) {
-        secendPrimaryColor.value = ele
+    if (ele.key == "secondary_color" ) {
+        secondaryColor.value = ele
     } 
-    if (ele.key == "favicon" ) {
+    if (ele.key == "favicon_icon" ) {
         faviconFile.value = ele
     } 
-    if (ele.key == "header-text" ) {
+    if (ele.key == "header_text_one" ) {
         headerTextOne.value = ele
     } 
-    if (ele.key == "header-text-two" ) {
+    if (ele.key == "header_text_two" ) {
         headerTextTwo.value = ele
     } 
-    if (ele.key == "header-text-three" ) {
+    if (ele.key == "header_text_three" ) {
         headerTextThree.value = ele
     } 
   })
@@ -106,15 +106,15 @@ function searchFrom(){
 
     const fetchPrimaryColor = () =>{
         try {
-            updateCSSVariable(primaryColor.value, secendPrimaryColor.value);
+            updateCSSVariable(primaryColor.value, secondaryColor.value);
         } catch (error) {
             console.error('Error fetching primary color:', error);
         }
     }
 
-    const updateCSSVariable = (primaryColor, secendPrimaryColor) => {
+    const updateCSSVariable = (primaryColor, secondaryColor) => {
       document.documentElement.style.setProperty('--primary', primaryColor);
-      document.documentElement.style.setProperty('--secend-primary', secendPrimaryColor);
+      document.documentElement.style.setProperty('--secend-primary', secondaryColor);
     }
 
 // get primary and secendary color end

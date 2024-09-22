@@ -33,26 +33,26 @@ const socialShares = ref("");
 const getSettingsData = async() => {
   const settingData = await setting.getData();
   settingData.data.map((ele)=> {
-    if (ele.key == "email" ) {
+    if (ele.key == "footer_email" ) {
       email.value = ele
     } 
-    if (ele.key == "facebook" ) {
+    if (ele.key == "facebook_id" ) {
       facebook.value = ele
       fbPageUrl.value = ele.value
     } 
-    if (ele.key == "address" ) {
+    if (ele.key == "footer_address" ) {
       address.value = ele
     } 
-    if (ele.key == "phone" ) {
+    if (ele.key == "phone_number" ) {
       phone.value = ele
     } 
-    if (ele.key == "description" ) {
+    if (ele.key == "footer_description" ) {
       description.value = ele
     } 
-    if (ele.key == "logo" ) {
+    if (ele.key == "footer_logo" ) {
       logo.value = ele
     } 
-    if (ele.key == "whatsapp" ) {
+    if (ele.key == "whatsapp_number" ) {
       whatsapp.value = ele
     } 
     if (ele.key == "title" ) {
