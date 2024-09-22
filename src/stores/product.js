@@ -45,6 +45,7 @@ export const useProduct = defineStore("product", {
       try {
         const res = await axiosInstance.get(`/products/${id}`);
         if (res?.data?.success) {
+          this.products = res.data?.result;
           return res.data?.result;
         }
         

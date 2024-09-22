@@ -44,7 +44,7 @@ export const useShop = defineStore("shop", {
 
     async sideBarData() {
       try {
-        const res = await axiosInstance.get("/products/shopsideBar");
+        const res = await axiosInstance.get("/products/shop-sideBar");
         console.log(res)
         if (res.status === 200) {
           this.sideBar = res.data;

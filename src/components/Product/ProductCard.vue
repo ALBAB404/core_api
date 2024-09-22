@@ -1,11 +1,10 @@
 <script setup>
 import { storeToRefs } from "pinia";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useCart, useNotification, useAuth, useModal } from "@/stores";
+import { useCart, useNotification, useAuth, useModal, useProduct, useSetting } from "@/stores";
 import axiosInstance from "@/services/axiosService.js";
-import { addToCart } from '@/composables'
-
+import { mrpOrOfferPrice, addToCart } from '@/composables'
 // All Variable  Code Is Here.....................................................................................................
 const modal         = useModal()
 const auth          = useAuth();
@@ -13,9 +12,12 @@ const cart          = useCart();
 const { loading }   = storeToRefs(cart);
 const notify        = useNotification();
 const isloading     = ref(loading);
+const uProduct       = useProduct();
+const { products, variationProducts }   = storeToRefs(uProduct);
 const color         = "white";
 const size          = "8px";
 const quantityInput = ref(1);
+const setting       = useSetting();
 const props = defineProps({
   product: Object,
   types: String,
@@ -23,19 +25,65 @@ const props = defineProps({
   required: true,
 });
 
-const price          = ref();
-const route          = useRoute();
-const router         = useRouter();
-
-const sizeMrp        = ref();
-const sizeOfferPrice = ref();
-const sizeId         = ref();
-const productPrices  = ref();
-const sizeName       = ref();
-const selectedSize   = ref();
-
-
+const price            = ref();
+const route            = useRoute();
+const router           = useRouter();
+const sizeMrp          = ref();
+const sizeOfferPrice   = ref();
+const sizeId           = ref();
+const productPrices    = ref();
+const sizeName         = ref();
+const selectedSize     = ref();
 const isButtonDisabled = ref(true);
+const modalProduct = ref('');
+
+// product variations start
+const productVariations     = ref([]);
+const attribute_id_1        = ref(null);
+const attribute_id_2        = ref(null);
+const attribute_id_3        = ref(null);
+const attribute_value_id_1  = ref(null);
+const attribute_value_id_2  = ref(null);
+const attribute_value_id_3  = ref(null);
+const productVariationData  = ref('');
+const productVariationPrice = ref('');
+const resetBtns             = ref(false);
+const activeBtns            = ref(false);
+const variationRemoveBtn    = ref(false);
+const activeAttributes = ref({
+    0: [],
+    1: [],
+    2: [],
+});
+// product variations end
+
+// get modal data start
+
+const getProductDetails = async (productId) => {
+  modalProduct.value = await uProduct.productById(productId);
+  productVariations.value = modalProduct.value?.variations?.attributes;
+};
+
+
+
+watch(products, (newProduct) => {
+    modalProduct.value = { ...newProduct }; 
+});
+
+// get modal data end
+
+
+// image working start
+  
+const thumbnailImage = ref(null);
+    const activeImage    = ref(0);
+    const images         = ref([]);
+
+    const changeImage = (img, index) => {
+        thumbnailImage.value = img;
+        activeImage.value = index;
+    };
+// image working end
 
 
 // sizes start
@@ -61,6 +109,132 @@ const isLogin = (product) => {
   }
 }
 // auth login part end
+
+
+// get products variation working start
+
+async function getProductVariation(productId,attributeValue, index) {
+    
+    resetBtns.value = true;
+
+    // variation selected section start
+        if (activeAttributes.value[index] === attributeValue.attribute_value_id) {
+            // যদি ক্লিক করা ভ্যালুটি ইতিমধ্যেই সক্রিয় থাকে, তাহলে নিষ্ক্রিয় করুন
+            activeAttributes.value[index] = null;
+        } else {
+            // যদি ক্লিক করা ভ্যালুটি সক্রিয় না থাকে, তাহলে এটিকে সক্রিয় করুন এবং অন্যান্য সক্রিয়গুলো নিষ্ক্রিয় করুন
+            activeAttributes.value[index] = attributeValue.attribute_value_id;
+        }
+    // variation selected section end
+
+   
+   if (index === 0) {
+       attribute_id_1.value = attributeValue.attribute_id;
+       attribute_value_id_1.value = attributeValue.attribute_value_id;
+       productVariationData.value = {
+            "product_id"          : productId,
+            "attribute_id_1"      : attribute_id_1.value || '',
+            "attribute_value_id_1": attribute_value_id_1.value || '',
+            "attribute_id_2"      : '',
+            "attribute_value_id_2": attribute_value_id_2.value || '',
+            "attribute_id_3"      : '',
+            "attribute_value_id_3": attribute_value_id_3.value || ''
+        };
+   } 
+   
+   if (index === 1) {
+        attribute_id_2.value = attributeValue.attribute_id;
+        attribute_value_id_2.value = attributeValue.attribute_value_id
+        productVariationData.value = {
+            "product_id"          : productId,
+            "attribute_id_1"      : '',
+            "attribute_value_id_1": attribute_value_id_1.value || '',
+            "attribute_id_2"      : attribute_id_2.value || '',
+            "attribute_value_id_2": attribute_value_id_2.value || '',
+            "attribute_id_3"      : '',
+            "attribute_value_id_3": attribute_value_id_3.value || ''
+        };
+   } 
+   if (index === 2) {     
+       attribute_id_3.value = attributeValue.attribute_id;
+       attribute_value_id_3.value = attributeValue.attribute_value_id
+       productVariationData.value = {
+            "product_id"          : productId,
+            "attribute_id_1"      : '',
+            "attribute_value_id_1": attribute_value_id_1.value || '',
+            "attribute_id_2"      : '',
+            "attribute_value_id_2": attribute_value_id_2.value || '',
+            "attribute_id_3"      : attribute_id_3.value || '',
+            "attribute_value_id_3": attribute_value_id_3.value || ''
+        };
+   } 
+   
+
+   const variations =  await uProduct.productVariations(productVariationData.value); 
+
+   productVariations.value =  variations.attributes;
+         
+   
+
+   // price jodi backend theke dubble na hoy eitar code start 
+   
+   if ((Object.keys(productVariations.value).length == 1) && (attribute_value_id_1.value != null)) {
+      productVariationPrice.value = variations.variation_price[0];
+      activeBtns.value            = true;
+   }
+   if ((Object.keys(productVariations.value).length == 2) && (attribute_value_id_2.value != null && attribute_value_id_1.value != null)) {
+      productVariationPrice.value = variations.variation_price[0];
+      activeBtns.value            = true;
+   }
+   if ((Object.keys(productVariations.value).length == 3) && (attribute_value_id_3.value != null && attribute_value_id_2.value != null && attribute_value_id_1.value != null)) {
+    console.log(variations.variation_price);
+    
+      productVariationPrice.value = variations.variation_price[0];         
+      activeBtns.value = true; 
+   }
+   
+   // price jodi backend theke dubble na hoy eitar code end 
+   
+   
+}
+
+
+const removeAllVariation = () => {
+    // Reset the product variations
+    productVariations.value = [];
+    quantityInput.value = 1;
+    
+    // Reset the attribute value IDs
+    attribute_value_id_1.value = null;
+    attribute_value_id_2.value = null;
+    attribute_value_id_3.value = null;
+    
+    // Reset the product variation data
+    productVariationData.value = '';
+    
+    // Reset the product variation price
+    productVariationPrice.value = '';
+    
+    // Reset the active buttons state
+    activeBtns.value = false;
+    
+    // Reset the active attributes
+    activeAttributes.value = {
+        0: [],
+        1: [],
+        2: [],
+    };
+
+    productVariations.value = modalProduct.value?.variations?.attributes
+
+    resetBtns.value =false;
+
+};
+
+// get products variation working end
+
+
+
 
 onMounted(() => {
   $(document).ready(function () {
@@ -90,8 +264,7 @@ onMounted(() => {
           </router-link>
           
           <div class="product-widget">
-            <a title="Product Video" href="https://youtu.be/9xzcVxSBbG8" class="venobox fas fa-play vbox-item" data-autoplay="true" data-vbtype="video"></a>
-            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view"></a>
+            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view" @click.prevent="getProductDetails(product?.id)"></a>
             <a title="Product Video" v-show="product?.video_url" :href="product?.video_url" class="venobox fas fa-play" data-vbtype="video" data-autoplay="true"></a>
           </div>
       </div>
@@ -147,10 +320,204 @@ onMounted(() => {
   </div>
 
 
+
+
+  <div class="modal fade" id="product-view" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog"> 
+      <div class="modal-content">
+        <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
+        <div class="product-view">
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              {{ modalProduct }}
+              <div class="view-gallery">
+                            <div class="view-label-group">
+                                <label class="view-label new" v-if="modalProduct?.type">{{ modalProduct?.type }}</label>
+                                <label class="view-label off" v-if="modalProduct?.offer_percent != 0.00">-{{ modalProduct?.offer_percent }}%</label>
+                            </div>
+                            <div class="product-imgs">
+                              <div class="img-display">
+                                  <div class="img-showcase">
+                                      <img :src="modalProduct?.image" alt="shoe image" v-if="thumbnailImage == null" />
+                                      <img :src="thumbnailImage" alt="shoe image" v-else />
+                                  </div>
+                              </div>
+                              <div class="image-gallery">
+                                  <div class="img-item" v-for="(img, index) in modalProduct?.images" :key="index" :class="[activeImage == index ? 'active-thumb' : '']" >
+                                      <img :src="img.image" alt="shoe image" @click.prevent="changeImage(img.image, index)" />
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <div class="view-details">
+                            <h3 class="view-name">
+                                <router-link :to="{name: 'productDetailsPage',params: { id: modalProduct?.id ? modalProduct?.id : 0, slug: modalProduct?.slug ? modalProduct?.slug : 0 },}" >{{ modalProduct?.name }}</router-link>
+                            </h3>
+                            <div class="view-meta">
+                                <p>SKU:<span>1234567</span></p>
+                                <p v-if="modalProduct?.brand">BRAND:<a href="#">{{ modalProduct?.brand?.name }}</a></p>
+                            </div>
+                            <div class="view-meta">
+                                <p v-if="modalProduct?.category">Category:<a href="#">{{ modalProduct?.category?.name }}</a></p>
+                                <p v-if="modalProduct?.sub_category">Sub Category:<a href="#">{{ modalProduct?.sub_category?.name }}</a></p>
+                            </div>
+
+                              <!-- Price Section start -->
+                              <!-- Product Variation Price Section start -->
+                                <span v-if="modalProduct?.variations?.data.length > 0">
+                                  <h3 class="view-price" v-if="productVariationPrice == ''">
+                                      <span>{{  $filters.currencySymbol(modalProduct.variation_price_range.min_price) }} - {{  $filters.currencySymbol(modalProduct.variation_price_range.max_price) }}</span> 
+                                  </h3>
+                                  <h3 class="view-price" v-else>
+                                      <span>{{  $filters.currencySymbol(productVariationPrice.sell_price) }}</span> 
+                                  </h3>
+                              </span>
+                            <!-- Product Variation Price Section end -->
+                              <span v-else>
+                                  <h3 class="view-price">
+                                      <del>{{  $filters.currencySymbol(modalProduct.mrp) }}</del>
+                                      <span>{{  $filters.currencySymbol(mrpOrOfferPrice(modalProduct.mrp, modalProduct.offer_price)) }}</span>
+                                  </h3>
+                              </span>
+                            <!-- Price Section end -->
+                          
+                            <p class="details-desc" v-if="modalProduct?.short_description" v-html="modalProduct?.short_description"></p>
+
+                            <!-- Product Variation Price Section start -->
+                                <span v-if="modalProduct?.variations?.data.length > 0">
+                                  <div class="details-list-group" v-for="(attribute, key, index) in productVariations" :key="index">
+                                      <label class="details-list-title">{{ key }}:</label>
+                                      <ul class="details-tag-list">
+                                          <li v-for="(attributeValue, indexAttributeValue) in attribute" :key="indexAttributeValue">
+                                              <a href="#" 
+                                              :class="{ 'is-active': activeAttributes[index] === attributeValue.attribute_value_id }"
+                                              @click.prevent="getProductVariation(modalProduct.id, attributeValue, index)">
+                                              {{ attributeValue.attribute_value }}
+                                              </a>
+                                          </li>
+                                      </ul>
+                                  </div>
+                                  <button class="variationRemoveBtn" v-show="resetBtns" @click.prevent="removeAllVariation()">X clear</button>
+                              </span>
+                          
+
+                            <!-- Product Variation Price Section end -->
+
+                            <div class="view-list-group mt-2">
+                                <label class="view-list-title">tags:</label>
+                                <ul class="view-tag-list">
+                                    <li><a href="#">organic</a></li>
+                                    <li><a href="#">vegetable</a></li>
+                                    <li><a href="#">chilis</a></li>
+                                </ul>
+                            </div>
+                            <div class="view-list-group">
+                                <label class="view-list-title">Share:</label>
+                                <ul class="view-share-list">
+                                    <li><a href="#" class="icofont-facebook" title="Facebook"></a></li>
+                                    <li><a href="#" class="icofont-twitter" title="Twitter"></a></li>
+                                    <li><a href="#" class="icofont-linkedin" title="Linkedin"></a></li>
+                                    <li><a href="#" class="icofont-instagram" title="Instagram"></a></li>
+                                </ul>
+                            </div>
+                            <div class="view-add-group">
+                                <button class="product-add" title="Add to Cart">
+                                    <i class="fas fa-shopping-basket"></i>
+                                    <span>add to cart</span>
+                                </button>
+                                <!-- <div class="product-action">
+                                    <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                    <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
+                                    <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                </div> -->
+                            </div>
+                            <div class="view-action-group">
+                                <a class="view-wish wish" href="#" title="Add Your Wishlist">
+                                    <i class="icofont-heart"></i>
+                                    <span>add to wish</span>
+                                </a>
+                                <a class="view-compare" href="compare.html" title="Compare This Item">
+                                    <i class="fas fa-random"></i>
+                                    <span>Compare This</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div> 
+</div>
+
+
   </div>
 </template>
 
 <style scoped>
+
+.variationRemoveBtn{
+  padding: 1px 10px;
+  background-color: white;
+  color: rgb(255, 0, 0);
+  border-radius: 5px;
+  border: 2px solid rgb(255, 0, 0);
+}
+.variationRemoveBtn:hover{
+  background-color: rgb(255, 0, 0);
+  color: white;
+  border: 2px solid rgb(255, 0, 0);
+}
+
+.details-list-group{
+  margin-bottom: 0px !important;
+}
+
+.is-active{
+  color: var(--white) !important;
+  background: var(--primary) !important;
+}
+
+
+/* Product image */
+
+img{
+  width: 100%;
+  display: block;
+}
+.img-display{
+  overflow: hidden;
+}
+.img-showcase{
+  display: flex;
+  width: 100%;
+  transition: all 0.5s ease;
+}
+.img-showcase img{
+  min-width: 100%;
+}
+.img-select{
+  display: flex;
+}
+.img-item{
+  margin: 0.3rem;
+}
+.img-item:nth-child(1),
+.img-item:nth-child(2),
+.img-item:nth-child(3){
+  margin-right: 0;
+}
+.img-item:hover{
+  opacity: 0.8;
+}
+.active-thumb{
+border: 2px solid #119744;
+}
+
+
+/* Product image */
+
 
 .product-widget a[title="Product View"], .product-widget a[title="Product Video"] {
   background-color: var(--primary);

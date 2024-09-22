@@ -239,13 +239,13 @@ onMounted(() => {
             </form>
 
           <div class="header-widget-group">
-            <button class="header-widget header-cart" title="Cartlist">
+            <button class="header-widget header-cart" title="User">
                 <i class="fas fa-user"></i>
               <span></span>
             </button>
           </div>
           <div class="header-widget-group">
-            <button class="header-widget header-cart" title="Cartlist">
+            <button class="header-widget header-cart" title="Wishlist">
                 <i class="fas fa-heart"></i>
               <span></span>
             </button>

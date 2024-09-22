@@ -4,7 +4,6 @@ import { useRoute } from "vue-router";
 import { useProduct, useCart, useNotification, useShop, useSetting } from "@/stores";
 import { storeToRefs } from "pinia";
 import { CartSideBar, MobileMenu, BannerPart, ProductCard, ProductView, CategorySideBar, NavSideBar } from "@/components";
-import axiosInstance from "@/services/axiosService.js";
 import { mrpOrOfferPrice, addToCart } from '@/composables'
 
 const product       = useProduct();
@@ -276,7 +275,7 @@ const getSettingsData = async() => {
                           <p v-if="singleProduct?.category">Category:<a href="#">{{ singleProduct?.category?.name }}</a></p>
                           <p v-if="singleProduct?.sub_category">Sub Category:<a href="#">{{ singleProduct?.sub_category?.name }}</a></p>
                       </div>
-
+                      <!-- Price Section start -->
                       <!-- Product Variation Price Section start -->
                         <span v-if="singleProduct?.variations?.data.length > 0">
                             <h3 class="details-price" v-if="productVariationPrice == ''">
