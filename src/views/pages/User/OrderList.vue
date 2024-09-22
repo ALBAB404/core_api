@@ -4,12 +4,12 @@ import { useOrder, useStatus } from "@/stores";
 import { storeToRefs } from "pinia";
 import { CategorySideBar, CartSideBar, NavSideBar, MobileMenu, } from '@/components'
 
-const statu = useStatus()
-const statuses = ref()
-const order = useOrder()
+const statu        = useStatus()
+const statuses     = ref()
+const order        = useOrder()
 const {orderLists} = storeToRefs(order)
-const isOpen = ref(false);
-const orderId = ref();
+const isOpen       = ref(false);
+const orderId      = ref();
 
 const getStatuses = async() => {
     statuses.value = await statu.getStatus();
@@ -17,7 +17,7 @@ const getStatuses = async() => {
 
 
 const toggleOrderList = (index) => {
-    isOpen.value = !isOpen.value;
+    isOpen.value  = !isOpen.value;
     orderId.value = index;
     getStatuses();
 }
@@ -26,9 +26,9 @@ const toggleOrderList = (index) => {
 const formattedDate = (createdAtString) => {
   const createdAtDate = new Date(createdAtString);
   return createdAtDate.toLocaleDateString("en-US", {
-    year: "numeric",
+    year : "numeric",
     month: "long",
-    day: "2-digit"
+    day  : "2-digit"
   });
 };
 
@@ -79,8 +79,8 @@ onMounted(() => {
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="orderlist-filter">
-                            <h5>total order <span>- ({{ orderLists?.result?.total }})</span></h5>
+                        <div class="orderlist-filter"  v-if="orderLists?.result?.data.length > 0">
+                            <h5>total order <span>- ({{ orderLists?.result?.meta?.total }})</span></h5>
                             <div class="filter-short">
                                 <label class="form-label">short by:</label>
                                 <select class="form-select">
@@ -91,6 +91,9 @@ onMounted(() => {
                                     <option value="delivered">delivered order</option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="orderlist-filter bg-warning justify-content-center"  v-else>
+                            <h5>You Have No Order Right </h5>
                         </div>
                     </div>
                 </div>

@@ -21,26 +21,25 @@ const notify = useNotification();
 const phone_number = ref(user.value?.phone_number);
 // API Calling Code Is Here.....................................................................................................
 const onSubmit = async (values, { setErrors, resetForm }) => {
-  try {
-    const res = await auth.login(values);
-    if (res?.status == 200) {
-      modal.toggleModal() 
+    
+    try {
+        const res = await auth.login(values);
+        if (res?.status == 200) {
+        //   modal.toggleModal() 
+          resetForm();
+          if (route.path === "/login") {
+              router.push({ name: route.path === "/login" ? "homePage" : "" });
+              }else{
+              router.push({ name: "checkoutPage" });
+          }
+          notify.Success("Login Successfully Done");
+        //   modal.Modalclose() 
+        } else {
+            console.error("Unexpected response:", res);
+        }
+    } catch (error) {
+        console.error("Error:", error);
     }
-    // if (res.data) {
-    // //   resetForm();
-    //   modal.Modalclose() 
-    //   if (route.path === "/login") {
-    //       router.push({ name: route.path === "/login" ? "homePage" : "" });
-    //     }else{
-    //       router.push({ name: "checkoutPage" });
-    //   }
-    //   notify.Success("Login Successfully Done");
-    // } else {
-    //   console.error("Unexpected response:", res);
-    // }
-  } catch (error) {
-    console.error("Error:", error);
-  }
 };
 
 
@@ -73,6 +72,7 @@ const onSubmit = async (values, { setErrors, resetForm }) => {
 
 const schema = yup.object({
   phone_number: yup.string().required("Phone Feild Is Required"),
+  password: yup.string().required("Password Feild Is Required"),
 });
 
 const schemaTwo = yup.object({
@@ -94,27 +94,34 @@ const schemaTwo = yup.object({
                 :validation-schema="schema"
                 v-slot="{ errors, isSubmitting }"
             >
-            <div class="form-group">
-                <Field
-                name="phone_number"
-                type="text"
-                class="form-control"
-                placeholder="phone no"
-                :class="{ 'is-invalid': errors.phone_number }"
-                />
-                <span class="text-danger" v-if="errors.phone_number">{{ errors.phone_number }}</span>
-                <template  v-if="backendErrors.phone_number">
-                        <span class="text-danger" v-show="backendErrors.phone_number">{{ backendErrors.phone_number[0] }}</span>
-                </template>
-            </div>
+                <div class="form-group">
+                    <Field
+                    name="phone_number"
+                    type="text"
+                    class="form-control"
+                    placeholder="phone no"
+                    :class="{ 'is-invalid': errors.phone_number }"
+                    />
+                    <span class="text-danger" v-if="errors.phone_number">{{ errors.phone_number }}</span>
+                    <template  v-if="backendErrors.phone_number">
+                            <span class="text-danger" v-show="backendErrors.phone_number">{{ backendErrors.phone_number[0] }}</span>
+                    </template>
+                </div>
+                <div class="form-group">
+                    <Field
+                    name="password"
+                    type="text"
+                    class="form-control"
+                    placeholder="Password"
+                    :class="{ 'is-invalid': errors.password }"
+                    />
+                    <span class="text-danger" v-if="errors.password">{{ errors.password }}</span>
+                    <template  v-if="backendErrors.password">
+                            <span class="text-danger" v-show="backendErrors.password">{{ backendErrors.password[0] }}</span>
+                    </template>
+                </div>
                 <div class="form-button">
-                    <button type="submit" :disabled="isSubmitting">
-                        login
-                        <span
-                            v-show="isSubmitting"
-                            class="spinner-border spinner-border-sm mr-1"
-                        ></span>
-                    </button>
+                    <button type="submit" :disabled="isSubmitting">login <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1" ></span></button>
                     <!-- <p>Forgot your password?<a href="reset-password.html">reset here</a></p> -->
                 </div>
             </Form>

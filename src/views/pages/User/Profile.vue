@@ -12,20 +12,19 @@ const name     = ref()
 const password = ref()
 
 const getData = async() => {
-          profileData.value = await auth.profile()
-          id.value   = profileData.value.id
-          name.value = profileData.value.name
+    profileData.value = await auth.profile()
+    id.value          = profileData.value.id
+    name.value        = profileData.value.name
 }
 
 const profileInfoUpdate = async () => {
-    
      const res =  await auth.profileUpdate(id.value, name.value, password.value)
-     console.log(res);
+
      if (res) {
         modal.Modalclose()
         getData();
      }
-      
+     
 }
 
 onMounted(() => {

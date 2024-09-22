@@ -20,7 +20,8 @@ export const useAuth = defineStore("auth", {
 
     async login(formData) {
       try {
-        const res = await axiosInstance.post("/login-or-register", formData);
+        const res = await axiosInstance.post("/login", formData);
+
         console.log(res);
         if (res.status == 200) {
           this.user = res.data.result;
@@ -87,7 +88,7 @@ export const useAuth = defineStore("auth", {
     async logout() {
       this.loading = true;
       try {
-        const res = await axiosInstance.post("/logout");
+        const res = await axiosInstance.post("/users/logout");
         if (res.status === 200) {
           this.user = {};
           return res.data;
@@ -106,7 +107,7 @@ export const useAuth = defineStore("auth", {
 
     async profile() {
       try {
-        const res = await axiosInstance.get("/profile");
+        const res = await axiosInstance.get("/users/profile");
         if (res.status === 200) {
           return res.data.result
         }else{

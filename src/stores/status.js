@@ -13,7 +13,7 @@ export const useStatus = defineStore('status', {
     
     async getStatus(){
       try{
-        const res = await axiosInstance.get("/statuses");
+        const res = await axiosInstance.get("/statues");
         if (res.status === 200) {
            return res?.data?.result;
         }else{

@@ -89,6 +89,18 @@ onMounted(() => {
                                 <li class="navbar-item">
                                      <router-link :to="{ name: 'blogPage' }" class="navbar-link" :class="{ 'active-text-color': $route.name === 'blogPage' }">Blog</router-link>
                                 </li>
+                                <li class="navbar-item dropdown">
+                                    <a class="navbar-link dropdown-arrow" href="#">authentic</a>
+                                    <ul class="dropdown-position-list" v-if="user.user">
+                                        <li><router-link :to="{name: 'Profile'}">Profile</router-link></li>
+                                        <li><router-link :to="{name: 'OrderList'}">My Order</router-link></li>
+                                        <li ><a href="" @click.prevent="logout()">Logout<span v-show="loading" class="spinner-border spinner-border-sm mr-1"></span></a></li>
+                                    </ul>
+                                    <ul class="dropdown-position-list" v-else>
+                                        <li><router-link :to="{name:'Login'}">login</router-link></li>
+                                        <li><router-link :to="{name: 'Registration'}">register</router-link></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                     </div>
