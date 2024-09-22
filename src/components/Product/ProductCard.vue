@@ -69,6 +69,9 @@ const getProductDetails = async (productId) => {
 watch(products, (newProduct) => {
     modalProduct.value = { ...newProduct }; 
 });
+watch(variationProducts, (newProduct) => {
+    modalProduct.value = { ...newProduct }; 
+});
 
 // get modal data end
 
@@ -524,7 +527,7 @@ border: 2px solid #119744;
   color: var(--white);
 }
 .product-widget a[title="Product View"]:hover, .product-widget a[title="Product Video"]:hover {
-  background-color: var(--secend-primary);
+  background-color: var(--secondary-color);
   color: var(--white);
 }
 
@@ -643,7 +646,7 @@ border: 2px solid #119744;
 }
 
 .btnColorOrder{
-  background-color: var(--secend-primary) !important;
+  background-color: var(--secondary-color) !important;
   color: var(--white) !important;
 }
 

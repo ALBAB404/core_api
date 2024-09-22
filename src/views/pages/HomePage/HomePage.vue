@@ -154,7 +154,7 @@ onMounted(() => {
 
 .section-header-text:hover{
     background-color: #f5f6f7;
-    border: 3px solid var(--secend-primary) !important;
+    border: 3px solid var(--secondary-color) !important;
     border-top-width: 7px !important;
     border-radius: 15px / 45px !important;
     transition: all linear .2s;
@@ -167,7 +167,7 @@ onMounted(() => {
   margin-top: -25px;
 }
 .heading-line:hover {
-  background-color: var(--secend-primary);
+  background-color: var(--secondary-color);
 }
 
 </style>

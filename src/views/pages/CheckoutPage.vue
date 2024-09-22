@@ -471,11 +471,11 @@ onMounted(() => {
   animation: pulse 1s infinite; 
 }
 .orderBTN:hover{
-  background-color: var(--secend-primary);
-  border-top: 3px solid var(--secend-primary);
-  border-left: 3px solid var(--secend-primary);
-  border-bottom: 3px solid var(--secend-primary);
-  border-right: 3px solid var(--secend-primary);
+  background-color: var(--secondary-color);
+  border-top: 3px solid var(--secondary-color);
+  border-left: 3px solid var(--secondary-color);
+  border-bottom: 3px solid var(--secondary-color);
+  border-right: 3px solid var(--secondary-color);
   color: var(--white);
 }
 

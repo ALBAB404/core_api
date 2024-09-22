@@ -33,7 +33,7 @@
   --border: #e8e8e8;
   --heading: #39404a;
   --primary: #ff0000;
-  --secend-primary: #000000;
+  --secondary-color: #000000;
   --sub-heading: #565765;
   --green-chalk: #ddffd5;
   --green-dark: #072f17;
@@ -1767,9 +1767,9 @@ tbody tr td:last-child {
 }
 
 .product-card:hover {
-  border-color: var(--secend-primary);
-  border-top: 4px solid var(--secend-primary);
-  border-bottom: 4px solid var(--secend-primary);
+  border-color: var(--secondary-color);
+  border-top: 4px solid var(--secondary-color);
+  border-bottom: 4px solid var(--secondary-color);
   -webkit-box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.1);
           box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.1);
 }
@@ -1781,7 +1781,7 @@ tbody tr td:last-child {
 
 .product-add:hover {
   color: var(--white);
-  background: var(--secend-primary);
+  background: var(--secondary-color);
 }
 
 .product-media {

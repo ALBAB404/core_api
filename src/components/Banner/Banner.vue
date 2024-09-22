@@ -14,18 +14,14 @@ import { Pagination,Autoplay, Navigation } from 'swiper/modules'
 // slider get data 
 import { storeToRefs } from 'pinia';
 // slider data fetch 
-import {useSlider, useCategory, useBanner} from '@/stores'
+import {useSlider, useCategory} from '@/stores'
 
 
 // All Variable  Code Is Here.....................................................................................................
 
 const modules = ref([Pagination,Autoplay, Navigation]);
 
-// banner part start
-const banner = useBanner();
-const banner1 = ref(''); 
-const banner2 = ref(''); 
-// banner part end
+
 
 // slider data fetch 
 const slider = useSlider();
@@ -34,14 +30,7 @@ const sliders = ref('');
 const category = useCategory();
 const categories = ref('');
 
-// banner part start
 
-const getBanner = async() => {
-  banner1.value =  await banner.getData('home-page-b1');
-  banner2.value =  await banner.getData('home-page-b2');
-}
-
-// banner part end
 
 // category part start
 
@@ -60,7 +49,6 @@ const getSlider = async() => {
 // slider part end
 
 onMounted(() => {
-    getBanner();
     getCategory();
     getSlider();
 })
@@ -107,22 +95,22 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <div class="row mt-3">
+        <!-- <div class="row mt-3">
           <div class="col-md-6 col-lg-6 d-none d-sm-block" v-if="banner1[0]">
-                <div class="banner-promo">
-                  <a href="#"
-                    > <img :src="banner1[0]?.image" alt="promo"
-                  /></a>
-                </div>
+            <div class="banner-promo">
+              <a href="#">
+                <img :src="banner1[0]?.image" alt="promo" />
+              </a>
+            </div>
+          </div>
+            <div class="col-md-6 col-lg-6 d-none d-sm-block" v-if="banner2[0]">
+              <div class="banner-promo">
+                <a href="#" > 
+                  <img :src="banner2[0]?.image" alt="promo" />
+                </a>
               </div>
-              <div class="col-md-6 col-lg-6 d-none d-sm-block" v-if="banner2[0]">
-                <div class="banner-promo">
-                  <a href="#"
-                    > <img :src="banner2[0]?.image" alt="promo"
-                  /></a>
-                </div>
-              </div>  
-        </div>
+            </div>  
+        </div> -->
       </div>
     </section>
 

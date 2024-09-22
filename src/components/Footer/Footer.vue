@@ -181,7 +181,7 @@ onMounted(() => {
                         <li><router-link :to="{ name: 'ReturnRefund' }" class="">Return & Refund</router-link></li>
                     </ul>
                     <ul>
-                        <li><a href="https://www.facebook.com/maxfitfood1/" target="_blank" class="">Facebook</a></li>
+                        <li><a :href="`https://www.facebook.com/${fbPageUrl}`" target="_blank" class="">Facebook</a></li>
                         <li><router-link :to="{ name: 'contactPage' }" class="">contact us</router-link></li>
                         <li><router-link :to="{ name: 'shopPage' }" class="">Shop page</router-link></li>
                         <li><router-link :to="{ name: 'shopPage', query: {top: 'top-product'}}" class="">Top product</router-link></li>

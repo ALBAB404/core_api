@@ -2,7 +2,9 @@
 // All Import File  Code Is Here......................................................................................................
 import { onMounted, ref } from "vue";
 import { storeToRefs } from 'pinia';
-import {useCart, useSetting} from '@/stores'
+import {useCart, useSetting, useAuth} from '@/stores'
+const auth                = useAuth()
+const {user, loading}     = storeToRefs(auth)
 import axiosInstance from "@/services/axiosService.js";
 import { CategorySideBar, NavSideBar  } from '@/components'
 
@@ -23,7 +25,6 @@ const headerTextTwo                 = ref('');
 const headerTextThree               = ref('');
 const isNavTrue                     = ref(false);
 
-// All Function  Code Is Here.....................................................................................................
 
 const getProducts = async() =>{
     try {
@@ -114,7 +115,7 @@ function searchFrom(){
 
     const updateCSSVariable = (primaryColor, secondaryColor) => {
       document.documentElement.style.setProperty('--primary', primaryColor);
-      document.documentElement.style.setProperty('--secend-primary', secondaryColor);
+      document.documentElement.style.setProperty('--secondary-color', secondaryColor);
     }
 
 // get primary and secendary color end
@@ -153,6 +154,18 @@ function searchFrom(){
         document.head.appendChild(gtmScript);
     }
 // Add Google Tag Manager Script end
+
+// logout function start 
+
+const logout = async () => {
+    const res = await auth.logout();
+    if (res.success) {
+        router.push({ name: "homePage"});
+        notify.Success("Logout Successfully Done");
+    }
+}
+
+// logout function end
 
 onMounted(() => {
     getSettingsData(); 
@@ -238,11 +251,20 @@ onMounted(() => {
                 </ul>
             </form>
 
-          <div class="header-widget-group">
+          <div class="header-widget-group  dropdown">
             <button class="header-widget header-cart" title="User">
                 <i class="fas fa-user"></i>
               <span></span>
             </button>
+            <ul class="dropdown-position-list" v-if="user.user">
+                <li><router-link :to="{name: 'Profile'}">Profile</router-link></li>
+                <li><router-link :to="{name: 'OrderList'}">My Order</router-link></li>
+                <li ><a href="" @click.prevent="logout()">Logout<span v-show="loading" class="spinner-border spinner-border-sm mr-1"></span></a></li>
+            </ul>
+            <ul class="dropdown-position-list" v-else>
+                <li><router-link :to="{name:'Login'}">login</router-link></li>
+                <li><router-link :to="{name: 'Registration'}">register</router-link></li>
+            </ul>
           </div>
           <div class="header-widget-group">
             <button class="header-widget header-cart" title="Wishlist">
@@ -258,6 +280,7 @@ onMounted(() => {
 </template>
 
 <style>
+
 
 .marqueTag{
     background-color: var(--primary);
