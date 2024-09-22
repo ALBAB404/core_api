@@ -8,6 +8,8 @@ import { mrpOrOfferPrice, addToCart } from '@/composables'
 
 const product       = useProduct();
 const singleProduct = ref('');
+const sizeName      = ref('');
+const productPrices = ref('');
 const route         = useRoute();
 const shop          = useShop();
 const { products }  = storeToRefs(shop);
