@@ -98,10 +98,6 @@ function navSideBar(){
 //========================================
 //       RESPONSIVE SEARCH BAR
 //========================================
-function searchFrom(){
-    $('.header-form').toggleClass('active');
-    $(this).children('.fa-search').toggleClass('fa-times');
-}
 
 // get primary and secondary color start
 
@@ -211,13 +207,25 @@ onMounted(() => {
             <router-link :to="{ name: 'homePage'}">
                 <img :src="logo?.image" alt="logo" />
             </router-link>
-            <button class="header-src" @click.prevent="searchFrom()"><i class="fas fa-search"></i></button>
+            <div class="mobile-header-menu dropdown-right">
+                <button class="header-src"><i class="fas fa-user me-2"></i></button>
+                <button class="header-src"><i class="fas fa-heart"></i></button>
+                <ul class="dropdown-position-list-right" v-if="user.user">
+                    <li><router-link :to="{name: 'Profile'}">Profile</router-link></li>
+                    <li><router-link :to="{name: 'OrderList'}">My Order</router-link></li>
+                    <li ><a href="" @click.prevent="logout()">Logout<span v-show="loading" class="spinner-border spinner-border-sm mr-1"></span></a></li>
+                </ul>
+                <ul class="dropdown-position-list-right" v-else>
+                    <li><router-link :to="{name:'Login'}">login</router-link></li>
+                    <li><router-link :to="{name: 'Registration'}">register</router-link></li>
+                </ul>
+            </div>
           </div>
           <router-link :to="{ name: 'homePage'}" class="header-logo">
             <img :src="logo?.image" alt="logo" />
           </router-link>
 
-          <form class="header-form">
+          <form class="header-form active">
                 <input type="search" placeholder="Search anything..."  v-model="name" @input="getProducts()"/>
                 <button type="submit">
                     <i class="fas fa-search"></i>
@@ -280,6 +288,39 @@ onMounted(() => {
 </template>
 
 <style>
+
+/* mobile user menu dropdown*/
+.dropdown-right:hover .dropdown-position-list-right {
+    visibility: visible;
+    opacity: 1;
+}
+
+.dropdown-position-list-right {
+    position: absolute;
+    top: 100px;
+    right: 15%;
+    z-index: 2;
+    width: 115px;
+    height: auto;
+    visibility: hidden;
+    opacity: 0;
+    padding: 10px;
+    border-radius: 8px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    -webkit-box-shadow: 0px 15px 35px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 15px 35px 0px rgba(0, 0, 0, 0.1);
+    transition: all linear .3s;
+    -webkit-transition: all linear .3s;
+    -moz-transition: all linear .3s;
+    -ms-transition: all linear .3s;
+    -o-transition: all linear .3s;
+}
+.dropdown-position-list-right li a{
+    color: black;
+}
+
+/* mobile user menu dropdown*/
 
 
 .marqueTag{
