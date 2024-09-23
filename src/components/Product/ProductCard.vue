@@ -61,17 +61,16 @@ const activeAttributes = ref({
 
 const getProductDetails = async (productId) => {
   modalProduct.value = await uProduct.productById(productId);
-  productVariations.value = modalProduct.value?.variations?.attributes;
+  productVariations.value = modalProduct.value?.variations?.attributes
 };
 
 
 
 watch(products, (newProduct) => {
     modalProduct.value = { ...newProduct }; 
+    productVariations.value = modalProduct.value?.variations?.attributes
 });
-watch(variationProducts, (newProduct) => {
-    modalProduct.value = { ...newProduct }; 
-});
+
 
 // get modal data end
 
@@ -236,6 +235,16 @@ const removeAllVariation = () => {
 
 // get products variation working end
 
+const incrementCartItem = () => {        
+    quantityInput.value = parseInt(quantityInput.value) + 1;
+};
+
+const decrementCartItem = () => {
+    if (quantityInput.value != 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+    }
+};
+
 
 
 
@@ -332,126 +341,150 @@ onMounted(() => {
         <div class="product-view">
           <div class="row">
             <div class="col-md-6 col-lg-6">
-              {{ modalProduct }}
               <div class="view-gallery">
-                            <div class="view-label-group">
-                                <label class="view-label new" v-if="modalProduct?.type">{{ modalProduct?.type }}</label>
-                                <label class="view-label off" v-if="modalProduct?.offer_percent != 0.00">-{{ modalProduct?.offer_percent }}%</label>
-                            </div>
-                            <div class="product-imgs">
-                              <div class="img-display">
-                                  <div class="img-showcase">
-                                      <img :src="modalProduct?.image" alt="shoe image" v-if="thumbnailImage == null" />
-                                      <img :src="thumbnailImage" alt="shoe image" v-else />
-                                  </div>
-                              </div>
-                              <div class="image-gallery">
-                                  <div class="img-item" v-for="(img, index) in modalProduct?.images" :key="index" :class="[activeImage == index ? 'active-thumb' : '']" >
-                                      <img :src="img.image" alt="shoe image" @click.prevent="changeImage(img.image, index)" />
-                                  </div>
-                              </div>
-                            </div>
+                  <div class="view-label-group">
+                      <label class="view-label new" v-if="modalProduct?.type">{{ modalProduct?.type }}</label>
+                      <label class="view-label off" v-if="modalProduct?.offer_percent != 0.00">-{{ modalProduct?.offer_percent }}%</label>
+                  </div>
+                  <div class="product-imgs">
+                    <div class="img-display">
+                        <div class="img-showcase">
+                            <img :src="modalProduct?.image" alt="shoe image" v-if="thumbnailImage == null" />
+                            <img :src="thumbnailImage" alt="shoe image" v-else />
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-6">
-                        <div class="view-details">
-                            <h3 class="view-name">
-                                <router-link :to="{name: 'productDetailsPage',params: { id: modalProduct?.id ? modalProduct?.id : 0, slug: modalProduct?.slug ? modalProduct?.slug : 0 },}" >{{ modalProduct?.name }}</router-link>
-                            </h3>
-                            <div class="view-meta">
-                                <p>SKU:<span>1234567</span></p>
-                                <p v-if="modalProduct?.brand">BRAND:<a href="#">{{ modalProduct?.brand?.name }}</a></p>
-                            </div>
-                            <div class="view-meta">
-                                <p v-if="modalProduct?.category">Category:<a href="#">{{ modalProduct?.category?.name }}</a></p>
-                                <p v-if="modalProduct?.sub_category">Sub Category:<a href="#">{{ modalProduct?.sub_category?.name }}</a></p>
-                            </div>
-
-                              <!-- Price Section start -->
-                              <!-- Product Variation Price Section start -->
-                                <span v-if="modalProduct?.variations?.data.length > 0">
-                                  <h3 class="view-price" v-if="productVariationPrice == ''">
-                                      <span>{{  $filters.currencySymbol(modalProduct.variation_price_range.min_price) }} - {{  $filters.currencySymbol(modalProduct.variation_price_range.max_price) }}</span> 
-                                  </h3>
-                                  <h3 class="view-price" v-else>
-                                      <span>{{  $filters.currencySymbol(productVariationPrice.sell_price) }}</span> 
-                                  </h3>
-                              </span>
-                            <!-- Product Variation Price Section end -->
-                              <span v-else>
-                                  <h3 class="view-price">
-                                      <del>{{  $filters.currencySymbol(modalProduct.mrp) }}</del>
-                                      <span>{{  $filters.currencySymbol(mrpOrOfferPrice(modalProduct.mrp, modalProduct.offer_price)) }}</span>
-                                  </h3>
-                              </span>
-                            <!-- Price Section end -->
-                          
-                            <p class="details-desc" v-if="modalProduct?.short_description" v-html="modalProduct?.short_description"></p>
-
-                            <!-- Product Variation Price Section start -->
-                                <span v-if="modalProduct?.variations?.data.length > 0">
-                                  <div class="details-list-group" v-for="(attribute, key, index) in productVariations" :key="index">
-                                      <label class="details-list-title">{{ key }}:</label>
-                                      <ul class="details-tag-list">
-                                          <li v-for="(attributeValue, indexAttributeValue) in attribute" :key="indexAttributeValue">
-                                              <a href="#" 
-                                              :class="{ 'is-active': activeAttributes[index] === attributeValue.attribute_value_id }"
-                                              @click.prevent="getProductVariation(modalProduct.id, attributeValue, index)">
-                                              {{ attributeValue.attribute_value }}
-                                              </a>
-                                          </li>
-                                      </ul>
-                                  </div>
-                                  <button class="variationRemoveBtn" v-show="resetBtns" @click.prevent="removeAllVariation()">X clear</button>
-                              </span>
-                          
-
-                            <!-- Product Variation Price Section end -->
-
-                            <div class="view-list-group mt-2">
-                                <label class="view-list-title">tags:</label>
-                                <ul class="view-tag-list">
-                                    <li><a href="#">organic</a></li>
-                                    <li><a href="#">vegetable</a></li>
-                                    <li><a href="#">chilis</a></li>
-                                </ul>
-                            </div>
-                            <div class="view-list-group">
-                                <label class="view-list-title">Share:</label>
-                                <ul class="view-share-list">
-                                    <li><a href="#" class="icofont-facebook" title="Facebook"></a></li>
-                                    <li><a href="#" class="icofont-twitter" title="Twitter"></a></li>
-                                    <li><a href="#" class="icofont-linkedin" title="Linkedin"></a></li>
-                                    <li><a href="#" class="icofont-instagram" title="Instagram"></a></li>
-                                </ul>
-                            </div>
-                            <div class="view-add-group">
-                                <button class="product-add" title="Add to Cart">
-                                    <i class="fas fa-shopping-basket"></i>
-                                    <span>add to cart</span>
-                                </button>
-                                <!-- <div class="product-action">
-                                    <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
-                                    <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
-                                    <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
-                                </div> -->
-                            </div>
-                            <div class="view-action-group">
-                                <a class="view-wish wish" href="#" title="Add Your Wishlist">
-                                    <i class="icofont-heart"></i>
-                                    <span>add to wish</span>
-                                </a>
-                                <a class="view-compare" href="compare.html" title="Compare This Item">
-                                    <i class="fas fa-random"></i>
-                                    <span>Compare This</span>
-                                </a>
-                            </div>
+                    <div class="image-gallery">
+                        <div class="img-item" v-for="(img, index) in modalProduct?.images" :key="index" :class="[activeImage == index ? 'active-thumb' : '']" >
+                            <img :src="img.image" alt="shoe image" @click.prevent="changeImage(img.image, index)" />
                         </div>
                     </div>
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="view-details">
+                    <h3 class="view-name">
+                        <router-link :to="{name: 'productDetailsPage',params: { id: modalProduct?.id ? modalProduct?.id : 0, slug: modalProduct?.slug ? modalProduct?.slug : 0 },}" >{{ modalProduct?.name }}</router-link>
+                    </h3>
+                    <div class="view-meta">
+                        <p>SKU:<span>1234567</span></p>
+                        <p v-if="modalProduct?.brand">BRAND:<a href="#">{{ modalProduct?.brand?.name }}</a></p>
+                    </div>
+                    <div class="view-meta">
+                        <p v-if="modalProduct?.category">Category:<a href="#">{{ modalProduct?.category?.name }}</a></p>
+                        <p v-if="modalProduct?.sub_category">Sub Category:<a href="#">{{ modalProduct?.sub_category?.name }}</a></p>
+                    </div>
+
+                      <!-- Price Section start -->
+                      <!-- Product Variation Price Section start -->
+                        <span v-if="modalProduct?.variations?.data.length > 0">
+                          <h3 class="view-price" v-if="productVariationPrice == ''">
+                              <span>{{  $filters.currencySymbol(modalProduct.variation_price_range.min_price) }} - {{  $filters.currencySymbol(modalProduct.variation_price_range.max_price) }}</span> 
+                          </h3>
+                          <h3 class="view-price" v-else>
+                              <span>{{  $filters.currencySymbol(productVariationPrice.sell_price) }}</span> 
+                          </h3>
+                      </span>
+                    <!-- Product Variation Price Section end -->
+                      <span v-else>
+                          <h3 class="view-price">
+                              <del>{{  $filters.currencySymbol(modalProduct.mrp) }}</del>
+                              <span>{{  $filters.currencySymbol(mrpOrOfferPrice(modalProduct.mrp, modalProduct.offer_price)) }}</span>
+                          </h3>
+                      </span>
+                    <!-- Price Section end -->
+                  
+                    <p class="details-desc" v-if="modalProduct?.short_description" v-html="modalProduct?.short_description"></p>
+
+                    <!-- Product Variation Price Section start -->
+                        <span v-if="modalProduct?.variations?.data.length > 0">
+                          <div class="details-list-group" v-for="(attribute, key, index) in productVariations" :key="index">
+                              <label class="details-list-title">{{ key }}:</label>
+                              <ul class="details-tag-list">
+                                  <li v-for="(attributeValue, indexAttributeValue) in attribute" :key="indexAttributeValue">
+                                      <a href="#" 
+                                      :class="{ 'is-active': activeAttributes[index] === attributeValue.attribute_value_id }"
+                                      @click.prevent="getProductVariation(modalProduct.id, attributeValue, index)">
+                                      {{ attributeValue.attribute_value }}
+                                      </a>
+                                  </li>
+                              </ul>
+                          </div>
+                          <button class="variationRemoveBtn" v-show="resetBtns" @click.prevent="removeAllVariation()">X clear</button>
+                      </span>
+                  
+
+                    <!-- Product Variation Price Section end -->
+
+                    <div class="view-list-group">
+                        <label class="view-list-title">Share:</label>
+                        <ul class="view-share-list">
+                            <li><a href="#" class="icofont-facebook" title="Facebook"></a></li>
+                            <li><a href="#" class="icofont-twitter" title="Twitter"></a></li>
+                            <li><a href="#" class="icofont-linkedin" title="Linkedin"></a></li>
+                            <li><a href="#" class="icofont-instagram" title="Instagram"></a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="view-list-group mt-3">
+                      <div class="quantity" :class="{'quantity-disabled' : (activeBtns === false) && (modalProduct?.variations?.data.length > 0)}">
+                          <button class="minus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>
+                          <input type="number" class="input-box"  min="1" max="10" v-model="quantityInput">
+                          <button class="plus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
+                      </div>
+                    </div>
+                    
+                    <div class="view-add-group">
+                      <div class="row" v-if="modalProduct?.variations?.data.length > 0">
+                          <div class="col-md-6 mt-lg-0 mt-3">
+                              <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput, productVariationData, productVariationPrice)">
+                                  <i :class="loading == modalProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
+                                  <span>add to cart</span>
+                              </button>
+                          </div>
+                          <div class="col-md-6 mt-lg-0 mt-3">
+                              <router-link :to="{ name: 'checkoutPage' }" class="product-add main-order-btn" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput, productVariationData, productVariationPrice)">
+                                  <i class="fas fa-cart-plus"></i>
+                                  <span>Buy Now</span>
+                              </router-link>
+                          </div>
+                      </div>    
+                      <div class="row" v-else>
+                          <div class="col-md-6 mt-lg-0 mt-3">
+                              <button class="product-add"  title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput)">
+                                  <i :class="loading == modalProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
+                                  <span>add to cart</span>
+                              </button>
+                          </div>
+                          <div class="col-md-6 mt-lg-0 mt-3">
+                              <router-link :to="{ name: 'checkoutPage' }" class="product-add main-order-btn" title="Add to Cart" @click.prevent="addToCart(modalProduct, quantityInput)" >
+                                  <i class="fas fa-cart-plus"></i>
+                                  <span>Buy Now</span>
+                              </router-link>
+                          </div>
+                      </div>    
+                    </div>
+                    <div class="view-action-group">
+                        <a class="view-wish wish bg-warning text-dark" :href="`tel:+88${phone}`" title="Add Your Wishlist">
+                            <i class="fas fa-phone-alt"></i>
+                            <span >Phone</span>
+                        </a>
+                        <a :href="`https://wa.me/+88${whatsapp}?text=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
+                          class="product-add bg-success text-light" target="_blank">
+                          <i class="fab fa-whatsapp"></i><span>হোয়াটসঅ্যাপ</span>
+                        </a>
+                        <a :href="`https://m.me/${messengerId}?ref=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
+                          class="product-add bg-primary text-light" target="_blank">
+                          <i class="fab fa-facebook-messenger"></i><span>মেসেঞ্জার</span>
+                        </a>
+                    </div>
+
                 </div>
             </div>
-        </div> 
-    </div> 
+          </div>
+        </div>
+     </div> 
+   </div> 
 </div>
 
 
@@ -477,9 +510,78 @@ onMounted(() => {
   margin-bottom: 0px !important;
 }
 
+.singleProductBtn{
+  background: rgb(199, 40, 40);
+  color: white;
+  border: 0;
+  cursor: pointer;
+  padding: 1em;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .is-active{
   color: var(--white) !important;
   background: var(--primary) !important;
+}
+
+.is-disabled {
+  pointer-events: none; 
+  opacity: 0.5;
+}
+
+
+.quantity {
+  display: flex;
+  border: 2px solid var(--primary);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.quantity-disabled{
+  background: rgb(199, 40, 40);
+  color: white;
+  cursor: pointer;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quantity button {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  width: 30px;
+  height: auto;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.quantity button:hover {
+  background-color: rgb(172, 16, 16);
+  color: white;
+}
+
+.input-box {
+  width: 40px;
+  text-align: center;
+  border: none;
+  padding: 8px 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+/* Hide the number input spin buttons */
+.input-box::-webkit-inner-spin-button,
+.input-box::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-box[type="number"] {
+  -moz-appearance: textfield;
 }
 
 

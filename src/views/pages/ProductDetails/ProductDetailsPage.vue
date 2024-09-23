@@ -194,8 +194,6 @@ const relatedProducts = ref('');
 
     const incrementCartItem = () => {        
         quantityInput.value = parseInt(quantityInput.value) + 1;
-        // if (sizeId.value !== null) {
-        // }
     };
     const decrementCartItem = () => {
         if (quantityInput.value != 1) {
@@ -203,31 +201,70 @@ const relatedProducts = ref('');
         }
     };
 
-const getSettingsData = async() => {
-    const settingData = await setting.getData(); 
-    settingData.data.map((ele)=> {
-        if (ele.key == "phone_number" ) {
-          phone.value = ele
+  // setting data start
+    const getSettingsData = async() => {
+        const settingData = await setting.getData(); 
+        settingData.data.map((ele)=> {
+            if (ele.key == "phone_number" ) {
+              phone.value = ele
+            }
+            if (ele.key == "whatsapp_number" ) {
+              whatsapp.value = ele
+            }
+            if (ele.key == "website_url" ) {
+              websiteUrl.value = ele
+            }
+            if (ele.key == "messenger_id" ) {
+                messengerId.value = ele
+            }
+        })
+    }
+ // setting data end
+
+// footer navbar Start
+
+const stickyFooter = () => {
+    const innerSection         = document.querySelector('.inner-section');
+    const mainFooterNavSection = document.querySelector('.main-footer-nav-section');
+
+    window.addEventListener('scroll', () => {
+        const scrollTopWindow = window.pageYOffset;
+        if (scrollTopWindow > 80) {
+            mainFooterNavSection.style.bottom     = '0px';
+            mainFooterNavSection.style.transition = 'all .5s ease';
+            mainFooterNavSection.style.opacity    = '1';
+        }else{
+            mainFooterNavSection.style.bottom     = '-115px';
+            mainFooterNavSection.style.transition = 'all .5s ease';
+            mainFooterNavSection.style.opacity    = '0';
         }
-        if (ele.key == "whatsapp_number" ) {
-          whatsapp.value = ele
-        }
-        if (ele.key == "website_url" ) {
-          websiteUrl.value = ele
-        }
-        if (ele.key == "messenger_id" ) {
-            messengerId.value = ele
-        }
-    })
+    });
+
+    if (innerSection) {
+
+        innerSection.addEventListener('scroll', () => {
+
+        const scrollTopInnerSection = innerSection.scrollTop;
+            if (scrollTopInnerSection > 80) {
+                mainFooterNavSection.style.bottom     = '0px';
+                mainFooterNavSection.style.transition = 'all .5s ease';
+                mainFooterNavSection.style.opacity    = '1';
+            }else{
+                mainFooterNavSection.style.bottom     = '-115px';
+                mainFooterNavSection.style.transition = 'all .5s ease';
+                mainFooterNavSection.style.opacity    = '0';
+            }
+        });
+    }
 }
 
-
+// footer navbar end
 
     
-    onMounted(() => {
-        productByid();
-              
-    })
+onMounted(() => {
+    stickyFooter();
+    productByid();
+})
 
 </script>
 
@@ -296,7 +333,7 @@ const getSettingsData = async() => {
                         </span>
                       <!-- Price Section end -->
 
-                      <p class="details-desc" v-if="singleProduct.short_description" v-html="singleProduct.short_description"></p>
+                      <p class="details-desc mt-2" v-if="singleProduct.short_description" v-html="singleProduct.short_description"></p>
 
                       <!-- Product Variation Price Section start -->
 
@@ -335,16 +372,23 @@ const getSettingsData = async() => {
                             <button class="plus" :disabled="(activeBtns === false) && (singleProduct?.variations?.data.length > 0)" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
                         </div>
                       </div>
+
                       <div class="details-add-group">
                         <div class="row" v-if="singleProduct?.variations?.data.length > 0">
                             <div class="col-md-6 mt-lg-0 mt-3">
-                                <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, quantityInput, productVariationData, productVariationPrice)">
+                                <button class="product-add" :disabled="(activeBtns === false) && (singleProduct?.variations?.data.length > 0)" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, quantityInput, productVariationData, productVariationPrice)">
                                     <i :class="loading == singleProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
                                     <span>add to cart</span>
                                 </button>
                             </div>
-                            <div class="col-md-6 mt-lg-0 mt-3">
-                                <router-link :to="{ name: 'checkoutPage' }" class="product-add main-order-btn" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, quantityInput, productVariationData, productVariationPrice)">
+                            <div class="col-md-6 mt-lg-0" v-if="activeBtns === false">
+                                <a  class="product-add main-order-btn" :class="{'singleProductBtn ' : activeBtns === false}" title="Add to Cart">
+                                    <i class="fas fa-cart-plus"></i>
+                                    <span>Buy Now</span>
+                                </a>
+                            </div>
+                            <div class="col-md-6 mt-lg-0 mt-3" v-else>
+                                <router-link :to="{ name: 'checkoutPage' }" class="product-add main-order-btn" :class="{'singleProductBtn ' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(singleProduct, quantityInput, productVariationData, productVariationPrice)">
                                     <i class="fas fa-cart-plus"></i>
                                     <span>Buy Now</span>
                                 </router-link>
@@ -411,6 +455,52 @@ const getSettingsData = async() => {
 </section>
 
 
+<!-- Sticky Footer Start -->
+  <div class="main-footer-nav-section">
+    <div class="container">
+        <div class="row">
+        <div class="col-lg-5 col-md-4">
+          <div class="footer-nav-left">
+            <img :src="singleProduct?.image" alt="">
+            <p>{{ singleProduct?.name }}</p>
+          </div>
+        </div>
+        <div class="col-lg-7 col-md-8 d-flex align-center main-nav-footer">
+          <div class="footer-nav-right">
+            <div class="price me-2" v-if="singleProduct?.variations?.data.length > 0">
+              <template v-if="!productPrices">
+                <span v-for="(productPrice, index) in singleProduct?.product_prices" :key="index">
+                  <span v-if="productPrice?.is_default==1">
+                    <del class="text-danger" style="font-size: 16px;" v-if="productPrice?.offer_price != 0">{{ $filters.currencySymbol(productPrice?.mrp * quantityInput) }}</del><span class="text-danger" >{{  $filters.currencySymbol(productPrice?.offer_price ? productPrice?.offer_price * quantityInput :  productPrice?.mrp * quantityInput) }}</span>
+                  </span>
+                </span>
+              </template>
+              <template v-else>
+                <span v-html="$filters.productPrice(productPrices)"></span>
+              </template>
+
+            </div>
+            <div class="price me-2" v-else>
+              <h3 class="details-price">
+                <del>{{  $filters.currencySymbol(singleProduct.mrp) }}</del>
+                <span>{{  $filters.currencySymbol(mrpOrOfferPrice(singleProduct.mrp, singleProduct.offer_price)) }}</span>
+              </h3>
+            </div>
+           <div class="quantity" :class="{'quantity-disabled' : (activeBtns === false) && (modalProduct?.variations?.data.length > 0)}">
+              <button class="minus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>
+              <input type="number" class="input-box"  min="1" max="10" v-model="quantityInput">
+              <button class="plus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
+            </div>
+            <router-link :to="{ name: 'checkoutPage' }" @click.prevent="addToCart(singleProduct)"  type="button" class="mx-2 btnColor">অর্ডার করুন</router-link>
+             
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Sticky Footer End -->
+
+
   </div>
 </template>
 
@@ -437,6 +527,11 @@ const getSettingsData = async() => {
 
 .main-order-btn{
     animation: pulse 1s infinite; 
+    margin: 0px;
+    border: var(--primary);
+}
+.main-order-btn:hover {
+    border: var(--primary);
 }
 
 
@@ -570,6 +665,382 @@ img {
   .input-box[type="number"] {
     -moz-appearance: textfield;
   }
+
+
+/* sticky footer start */
+
+.quentyDefaultClass {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quentyDefaultClass button {
+  font-size: 28px;
+}
+
+.quentyDefaultClass input {
+  margin: 0px 8px;
+  border-radius: 5px;
+}
+
+.btnColor{
+  animation: pulse 1s infinite; 
+  background-color: var(--primary);
+  color: rgb(255, 255, 255);
+  padding: 9px 32px;
+  border-radius: 5px;
+}
+
+.main-footer-nav-section{
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0px -7px 16px -4px rgba(0,0,0,0.69);
+    -webkit-box-shadow: 8px -9px 24px -12px rgba(5,19,3,0.69);
+    -moz-box-shadow: 0px -7px 16px -4px rgba(0,0,0,0.69);
+    position: fixed;
+    bottom: -115px;
+    transition: all .5s ease;
+    width: 100%;
+    z-index: 9999;
+  }
+  
+  .main-nav-footer{
+    justify-content: end;
+  }
+  
+  /* right */
+  
+  .footer-nav-right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .price{
+    display: flex;
+  }
+
+  .price h3{
+    font-size: 22px;
+    margin-right: 5px;
+  }
+  
+  .footer-nav-cart{
+    display: flex;
+    align-items: center;
+  }
+  .footer-nav-cart input{
+      /* width: 57px; */
+      border: 1px solid #494B51;
+      height: 40px;
+      padding: 9px;
+      margin-right: 10px;
+  }
+  .footer-nav-cart button{
+    padding: 6px 9px;
+    border: 1px solid var(--primary);
+    background-color: var(--primary);
+    color: var(--white);
+    border-radius: 5px;
+  }
+  
+  
+  /* left */
+  .footer-nav-left{
+    display: flex;
+    align-items: center;
+    
+  }
+  .footer-nav-left img{
+    width: 50px;
+    margin-right: 10px;
+  }
+  .footer-nav-left p{
+    font-size: 20px;
+    align-items: center;
+    margin: 0;
+  }
+  
+  input[type=number]::-webkit-inner-spin-button {
+    color: #8bc4a1;
+  }
+
+/* sticky footer end */
+
+/*
+@media (max-width: 1399px) {
+  .details-label-group{
+    top: 17px;
+    left: 19rem;
+ }
+  img {
+    width: 50%;
+    display: block;
+  }
+
+
+  .banner-category-list {
+    width: 14%;
+  }
+}
+
+@media (max-width: 1199px) {
+  .details-label-group{
+    top: 17px;
+    left: 15rem;
+ }
+
+ .couter-span-tag[data-v-c230a133] {
+    font-size: 15px;
+  }
+}
+
+
+@media (max-width: 1024px) {
+
+  .img-showcase {
+    width: 99%;
+  }
+
+  .img-showcase img{
+    width: 103%;
+  }
+
+  .videoHW iframe {
+    width: 466px !important;
+    height: 322px !important;
+}
+  
+  .details-label-group{
+    top: 17px;
+    left: 12rem;
+  }
+  
+  .main-footer-nav-section{
+    padding: 15px;
+  }
+
+  .footer-nav-left p {
+    font-size: 20px;
+    line-height: 27px;
+  }
+
+  .price{
+    display: flex;
+    flex-direction: column;
+  }
+  .price h3 {
+    font-size: 17px;
+}
+
+
+  .footer-nav-cart button {
+    padding: 6px 7px;
+  }
+
+
+  .btnColor{
+      padding: 9px 5px;
+  }
+
+  .couter-span-tag {
+    font-size: 19px;
+  }
+
+
+}
+
+
+*/
+@media (max-width: 991px){
+
+  .btnColor{
+    padding: 10px 15px;
+    white-space: nowrap !important;
+  }
+
+  .price h3{
+    font-size: 20px;
+    white-space: nowrap;
+  }
+
+  .footer-nav-left p{
+    font-size: 19px;
+  }
+
+  .details-price del{
+      color: var(--red);
+      margin-right: 12px;
+  }
+
+  .quantity{
+    border: 1px solid var(--primary);
+  }
+  
+}
+
+@media (max-width: 768px) {
+
+  .videoHW iframe{
+    width: 519px !important;
+    height: 400px !important;
+  }
+
+  .btnColor{
+    padding: 10px 15px;
+    white-space: nowrap !important;
+  }
+
+  .price h3{
+    font-size: 20px;
+    white-space: nowrap;
+  }
+
+  .footer-nav-left p{
+    font-size: 19px;
+  }
+
+  .details-price del{
+      color: var(--red);
+      margin-right: 12px;
+  }
+
+  .quantity{
+    border: 1px solid var(--primary);
+  }
+
+}
+
+
+@media (max-width: 767px) {
+
+  .footer-nav-left{
+    display: none;
+  }
+
+  .price {
+    display: none;
+  }
+
+  .main-nav-footer{
+    justify-content: center;
+  }
+
+  .quantity{
+    margin-right: 15px;
+  }
+
+}
+
+/*
+
+
+
+  .videoHW iframe{
+    width: 355px !important;
+    height: 220px !important;
+  }
+
+  .quentyDefaultClass {
+    margin: 16px 0px;
+  }
+
+  .quentyDefaultClass input {
+    width: 260px;
+  }
+
+  img {
+    width: 100%;
+    display: block;
+  }
+
+  .img-item{
+    margin-right: 10px !important;
+  }
+  
+  .img-select{
+    width: 100%;
+  }
+
+  .details-label-group{
+    top: 17px;
+    left: 1rem;
+ }
+
+  .footer-nav-left{
+    display: none;
+  }
+
+  .price{
+    display: none;
+  }
+  .footer-nav-cart{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .footer-nav-cart button {
+    padding: 6px 80px;
+  }
+
+  .main-nav-footer{
+    justify-content: space-around;
+  }
+
+  .couter-span-tag{
+    font-size: 18px;
+  }
+
+  .countdown-time{
+    padding: 5px 7px;
+  }
+}
+
+@media (max-width: 375px) {
+
+  .videoHW iframe{
+    width: 305px !important;
+    height: 170px !important;
+  }
+
+  .quentyDefaultClass {
+    margin: 16px 0px;
+  }
+
+  .quentyDefaultClass input {
+    width: 200px;
+  }
+
+  .footer-nav-cart button {
+    padding: 6px 55px;
+  }
+  .couter-span-tag {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 320px) {
+
+  .videoHW iframe{
+    width: 251px !important;
+    height: 150px !important;
+  }
+  .quentyDefaultClass {
+    margin: 16px 0px;
+  }
+
+  .quentyDefaultClass input {
+    width: 150px;
+  }
+
+  .footer-nav-cart button {
+    padding: 6px 29px;
+  }
+  .couter-span-tag {
+    font-size: 14px !important;
+  }
+}
+*/
   
 
 </style>

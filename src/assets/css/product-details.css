@@ -262,9 +262,9 @@
   color: var(--yellow);
 }
 
-.details-price {
+/* .details-price {
   margin-bottom: 20px;
-}
+} */
 
 .details-price del {
   color: var(--red);
