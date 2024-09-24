@@ -163,11 +163,31 @@ const logout = async () => {
 
 // logout function end
 
+// sticky Header 
+
+const stickyHeader = () => {
+    const mainHeaderNavSection = document.querySelector('.header-media-group');
+
+    window.addEventListener('scroll', () => {        
+        const scrollTopWindow = window.pageYOffset;
+        const scrollScreenSize = window.screen.width;
+
+        if (scrollTopWindow > 80 && scrollScreenSize < 768) {            
+            mainHeaderNavSection.classList.add('header-sticky');
+        }else{
+            mainHeaderNavSection.classList.remove('header-sticky');
+        }
+    });
+}
+
+// sticky Header 
+
 onMounted(() => {
     getSettingsData(); 
     fetchPrimaryColor();
     changeFavicon();
     addGTM();
+    stickyHeader();
 })
 
 </script>
@@ -410,6 +430,15 @@ onMounted(() => {
         }
         .featured_label{
             display: none;
+        }
+
+        .header-sticky{
+            position: fixed;
+            background-color: rgb(255, 255, 255);
+            top: 0;
+            padding: 15px;
+            border-radius: 0 0 30px 30px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         }
     }
     @media (max-width: 450px) {
