@@ -17,7 +17,7 @@ export const useBrand = defineStore('brand', {
     
     async getData() {
       try {
-        const res = await axiosInstance.get("/brands");
+        const res = await axiosInstance.get("/brands");        
         if (res.status === 200) {
             this.brands = res.data
           return new Promise((resolve) => {

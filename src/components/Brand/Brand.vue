@@ -18,12 +18,6 @@ const brand = useBrand();
 const { brands } = storeToRefs(brand);
 const newSlide = ref([Navigation]);
 const modules = ref([Pagination, Autoplay]);
-// API Calling Code Is Here.....................................................................................................
-onMounted(() => {
-  brand.getData();
-})
-
-// All Function  Code Is Here.....................................................................................................
 
 function calculateSlides() {
   if (window.innerWidth < 768) {
@@ -34,6 +28,11 @@ function calculateSlides() {
     return 5;
   }
 }
+
+onMounted(() => {
+  brand.getData();
+})
+
 </script>
 
 <template>
@@ -61,7 +60,7 @@ function calculateSlides() {
             :breakpoints="{ 320:{ slidesPerView:2,spaceBetweenSlides: 20  },480:{ slidesPerView:3,spaceBetweenSlides: 30  }, 790:{ slidesPerView:5,spaceBetweenSlides: 40 } }"
             
           >
-            <swiper-slide v-for="(brand, index) in brands.result" :key="index">
+            <swiper-slide v-for="(brand, index) in brands?.result?.data" :key="index">
               <div class="brand-wrap" >
                 <div class="brand-media">
                   <img :src="brand.image" alt="brand" />

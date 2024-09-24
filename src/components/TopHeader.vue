@@ -173,9 +173,9 @@ const stickyHeader = () => {
         const scrollScreenSize = window.screen.width;
 
         if (scrollTopWindow > 80 && scrollScreenSize < 768) {            
-            mainHeaderNavSection.classList.add('header-sticky');
+            mainHeaderNavSection.classList.add('header-sticky-phone');
         }else{
-            mainHeaderNavSection.classList.remove('header-sticky');
+            mainHeaderNavSection.classList.remove('header-sticky-phone');
         }
     });
 }
@@ -432,7 +432,8 @@ onMounted(() => {
             display: none;
         }
 
-        .header-sticky{
+        .header-sticky-phone{
+            z-index: 99999;
             position: fixed;
             background-color: rgb(255, 255, 255);
             top: 0;

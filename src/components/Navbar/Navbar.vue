@@ -33,8 +33,28 @@ const campaignData = async () => {
     
 }
 
+// sticky Header 
+
+const stickyHeader = () => {
+    const mainHeaderNavSection = document.querySelector('.navbar-part');
+
+    window.addEventListener('scroll', () => {        
+        const scrollTopWindow = window.pageYOffset;
+        const scrollScreenSize = window.screen.width;
+
+        if (scrollTopWindow > 80 && scrollScreenSize > 768) {            
+            mainHeaderNavSection.classList.add('header-sticky');
+        }else{
+            mainHeaderNavSection.classList.remove('header-sticky');
+        }
+    });
+}
+
+// sticky Header 
+
 onMounted(() => {
     campaignData();
+    stickyHeader();
 })
 
 
@@ -105,6 +125,17 @@ onMounted(() => {
 </template>
 
 <style>
+
+.header-sticky{
+    z-index: 99999;
+    width: 100%;
+    position: fixed;
+    background-color: rgb(255, 255, 255);
+    top: 0;
+    padding: 5px 0 10px 0;
+    border-radius: 0 0 30px 30px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 
 @keyframes pulse {
     0% {
