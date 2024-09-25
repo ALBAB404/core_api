@@ -117,24 +117,24 @@ const routes = [
     component: FlashDealPage,
     meta: { title: " Flash Deals" },
   },
-  {
-    path: "/flash-deal-details/:campaignId/:productId",
-    name: "FlashDealDetailsPage",
-    component: FlashDealDetailsPage,
-    meta: { title: " Flash Deals Details" },
-  },
+  // {
+  //   path: "/flash-deal-details/:campaignId/:productId",
+  //   name: "FlashDealDetailsPage",
+  //   component: FlashDealDetailsPage,
+  //   meta: { title: " Flash Deals Details" },
+  // },
   {
     path: "/campaign-page",
     name: "campaignPage",
     component: campaignPage,
     meta: { title: " Campaign Page" },
   },
-  {
-    path: "/campaign-details-page/:campaignId/:productId",
-    name: "campaignDetailsPage",
-    component: campaignDetailsPage,
-    meta: { title: " Campaign Details Page" },
-  },
+  // {
+  //   path: "/campaign-details-page/:campaignId/:productId",
+  //   name: "campaignDetailsPage",
+  //   component: campaignDetailsPage,
+  //   meta: { title: " Campaign Details Page" },
+  // },
   {
     path: "/blog-page",
     name: "blogPage",

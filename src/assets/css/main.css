@@ -1440,7 +1440,8 @@ tbody tr td:last-child {
   border-radius: 50%;
   text-align: center;
   display: inline-block;
-  background: var(--white);
+  color: var(--white);
+  background: var(--primary);
   -webkit-box-shadow: 0px 5px 12px 0px rgba(0, 0, 0, 0.2);
           box-shadow: 0px 5px 12px 0px rgba(0, 0, 0, 0.2);
   transition: all linear .3s;
@@ -1451,8 +1452,8 @@ tbody tr td:last-child {
 }
 
 .modal-close:hover {
-  color: var(--white);
-  background: var(--primary);
+  color: var(--primary);
+  background: var(--white);
 }
 
 .modal-form {

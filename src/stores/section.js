@@ -11,6 +11,7 @@ export const useSection = defineStore("section", {
         actions: {
             async getData(){
                 try {
+                    this.loading = true;
                     const res = await axiosInstance.get('/sections');
                     if(res.data.success){
                         // this.sections = res.data?.result              

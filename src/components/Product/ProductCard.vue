@@ -269,7 +269,7 @@ onMounted(() => {
               <i class="fas fa-heart"></i>
           </button>
 
-          <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}" class="hover14 column hover01 column">
+          <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" class="hover14 column hover01 column">
             <div class="product-image">
               <figure><img :src="product?.image"></figure>
             </div>
@@ -283,7 +283,7 @@ onMounted(() => {
       <div class="product-content">
           
           <h6 class="product-name">
-              <router-link :to="{name: 'productDetailsPage',params: { id: product?.id ? product?.id : 0, slug: product?.slug ? product?.slug : 0 },}" >{{ product?.name }}</router-link>
+              <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" >{{ product?.name }}</router-link>
           </h6>
 
 
@@ -364,7 +364,7 @@ onMounted(() => {
             <div class="col-md-6 col-lg-6">
                 <div class="view-details">
                     <h3 class="view-name">
-                        <router-link :to="{name: 'productDetailsPage',params: { id: modalProduct?.id ? modalProduct?.id : 0, slug: modalProduct?.slug ? modalProduct?.slug : 0 },}" >{{ modalProduct?.name }}</router-link>
+                        <router-link :to="{name: 'productDetailsPage',params: { slug: modalProduct?.slug ? modalProduct?.slug : 0 },}" >{{ modalProduct?.name }}</router-link>
                     </h3>
                     <div class="view-meta">
                         <p>SKU:<span>1234567</span></p>
@@ -464,7 +464,7 @@ onMounted(() => {
                           </div>
                       </div>    
                     </div>
-                    <div class="view-action-group">
+                    <!-- <div class="view-action-group">
                         <a class="view-wish wish bg-warning text-dark" :href="`tel:+88${phone}`" title="Add Your Wishlist">
                             <i class="fas fa-phone-alt"></i>
                             <span >Phone</span>
@@ -477,7 +477,7 @@ onMounted(() => {
                           class="product-add bg-primary text-light" target="_blank">
                           <i class="fab fa-facebook-messenger"></i><span>মেসেঞ্জার</span>
                         </a>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>

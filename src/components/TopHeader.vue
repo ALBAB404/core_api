@@ -133,22 +133,22 @@ function navSideBar(){
 // get fav icons end
 
 // Add Google Tag Manager Script start
-    function addGTM() {
-        const gtmScript = document.createElement('script');
-        gtmScript.textContent = `
-            (function(w,d,s,l,i){
-            w[l]=w[l]||[];
-            w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});
-            var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-            j.async=true;
-            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-            f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','${gtmId.value}');
-        `;
-        document.head.appendChild(gtmScript);
-    }
+    // function addGTM() {
+    //     const gtmScript = document.createElement('script');
+    //     gtmScript.textContent = `
+    //         (function(w,d,s,l,i){
+    //         w[l]=w[l]||[];
+    //         w[l].push({'gtm.start':
+    //             new Date().getTime(),event:'gtm.js'});
+    //         var f=d.getElementsByTagName(s)[0],
+    //         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+    //         j.async=true;
+    //         j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+    //         f.parentNode.insertBefore(j,f);
+    //         })(window,document,'script','dataLayer','${gtmId.value}');
+    //     `;
+    //     document.head.appendChild(gtmScript);
+    // }
 // Add Google Tag Manager Script end
 
 // logout function start 
@@ -186,7 +186,7 @@ onMounted(() => {
     getSettingsData(); 
     fetchPrimaryColor();
     changeFavicon();
-    addGTM();
+    // addGTM();
     stickyHeader();
 })
 
