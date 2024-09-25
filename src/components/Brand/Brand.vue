@@ -16,8 +16,7 @@ import { Pagination, Autoplay, Navigation } from "swiper/modules";
 // All Variable  Code Is Here.....................................................................................................
 const brand = useBrand();
 const { brands } = storeToRefs(brand);
-const newSlide = ref([Navigation]);
-const modules = ref([Pagination, Autoplay]);
+const modules = ref([Pagination, Autoplay, Navigation]);
 
 function calculateSlides() {
   if (window.innerWidth < 768) {
@@ -49,13 +48,13 @@ onMounted(() => {
         <div class="brand-slider slider-arrow">
           <swiper
             :slidesPerView="5"
-            :sliderPerGroup="5"
+            :sliderPerGroup="1"
             :loop="true"
             :autoplay="{
               delay: 2000,
             }"
             :navigation="true"
-            :modules="newSlide"
+            :modules="modules"
             class="mySwiper"
             :breakpoints="{ 320:{ slidesPerView:2,spaceBetweenSlides: 20  },480:{ slidesPerView:3,spaceBetweenSlides: 30  }, 790:{ slidesPerView:5,spaceBetweenSlides: 40 } }"
             

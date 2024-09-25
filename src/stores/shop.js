@@ -24,7 +24,7 @@ export const useShop = defineStore("shop", {
             brand_ids      : brand,
             category_ids   : category,
             sub_category_id: subCategory,
-            name           : search,
+            search_key     : search,
           },
         });
         if (res.status === 200) {

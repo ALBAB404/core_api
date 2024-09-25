@@ -113,7 +113,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <div class="col-xl-2 col-lg-2 text-center">
-                        <button class="main-order-btn">Campaign</button>
+                        <button class="main-order-btn mt-2">Campaign</button>
                     </div>
                 </div>
             </div>
@@ -165,7 +165,6 @@ onMounted(() => {
     border-top-left-radius: 20px !important;
     border-bottom-right-radius: 20px !important;
     transition: .3s ease-in-out background-color;
-    margin: 8px 0px 0 0;
   }
 
   .main-order-btn:hover{
