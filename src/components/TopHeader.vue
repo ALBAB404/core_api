@@ -10,7 +10,6 @@ import { CategorySideBar, NavSideBar  } from '@/components'
 
 // All Variable  Code Is Here.....................................................................................................
 const setting                       = useSetting();
-const { settings }                  = storeToRefs(setting);
 const cart                          = useCart();
 const { cartItemCount, totalPrice } = storeToRefs(cart);
 const searchData                    = ref([]);

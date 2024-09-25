@@ -1,17 +1,36 @@
 <script setup>
 import {BannerPart} from '@/components'
+import {useAbout} from '@/stores'
+import { ref, onMounted  } from 'vue';
+
+
+
+const about       = useAbout()
+const aboutUsData = ref('')
+
+
+const getAboutUsData = async() => {
+  aboutUsData.value = await about.getData()
+}
+
+
+
+onMounted(() => {
+    getAboutUsData();
+})
+
 </script>
 
 <template>
   <div>
     <!--=====================================
-                    BANNER PART START
-        =======================================-->
-       
-        <BannerPart :title="'About Page'"/>
-        <!--=====================================
-                    BANNER PART END
-        =======================================-->
+                BANNER PART START
+    =======================================-->
+    
+    <BannerPart :title="'About Page'"/>
+    <!--=====================================
+                BANNER PART END
+    =======================================-->
     <div class="container">
       <section class="section_all bg-light" id="about">
         <div class="container">
@@ -32,37 +51,25 @@ import {BannerPart} from '@/components'
               </div>
             </div>
           </div>
-
-          <div class="row vertical_content_manage mt-5">
-            <div class="col-lg-6">
+          <div class="row vertical_content_manage mt-5" v-for="(about, index) in aboutUsData.data" :key="index">
+            <div :class="['col-lg-6', index % 2 === 0 ? 'order-lg-2' : 'order-lg-1']">
               <div class="about_header_main mt-3">
                 <h4 class="about_heading text-capitalize font-weight-bold mt-4">
-                  Lorem Ipsum is simply dummy text of the printing industry.
+                  {{ about.title }}
                 </h4>
                 <p class="text-muted mt-3">
-                  Contrary to popular belief, Lorem Ipsum is not simply random
-                  text. It has roots in a piece of classical Latin literature
-                  from 45 BC, making it over 2000 years old.
-                </p>
-
-                <p class="text-muted mt-3">
-                  Richard McClintock, a Latin professor at Hampden-Sydney
-                  College in Virginia, looked up one of the more obscure Latin
-                  words, consectetur, from a Lorem Ipsum passage.
+                  {{ about.description }}
                 </p>
               </div>
             </div>
-            <div class="col-lg-6">
+            <div :class="['col-lg-6', index % 2 === 0 ? 'order-lg-1' : 'order-lg-2']">
               <div class="img_about mt-3">
-                <img
-                  src="https://i.ibb.co/qpz1hvM/About-us.jpg"
-                  alt=""
-                  class="img-fluid mx-auto d-block"
-                />
+                <img :src="about.image" alt="" class="img-fluid mx-auto d-block" />
               </div>
             </div>
           </div>
-          <div class="row vertical_content_manage mt-5">
+
+          <!-- <div class="row vertical_content_manage mt-5">
             <div class="col-lg-6">
               <div class="img_about mt-3">
                 <img
@@ -90,7 +97,7 @@ import {BannerPart} from '@/components'
                 </p>
               </div>
             </div>
-          </div>
+          </div> -->
 
 
           <div class="row mt-5">
@@ -217,7 +224,7 @@ import {BannerPart} from '@/components'
   </div>
 </template>
 
-<style>
+<style scoped>
     h1,
     h2,
     h3,

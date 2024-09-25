@@ -21,6 +21,7 @@ export const useNotification = defineStore("notification", {
         type: this.type.success,
         position: this.position,
         duration: this.duration,
+        customClass: "custom-notification-z-index",
       });
     },
 
@@ -31,6 +32,7 @@ export const useNotification = defineStore("notification", {
         type: this.type.warning,
         position: this.position,
         duration: this.duration,
+        customClass: "custom-notification-z-index",
       });
     },
 
@@ -41,6 +43,7 @@ export const useNotification = defineStore("notification", {
         type: this.type.info,
         position: this.position,
         duration: this.duration,
+        customClass: "custom-notification-z-index",
       });
     },
 
@@ -51,6 +54,7 @@ export const useNotification = defineStore("notification", {
         type: this.type.error,
         position: this.position,
         duration: this.duration,
+        customClass: "custom-notification-z-index",
       });
     },
   },

@@ -34,3 +34,7 @@
     border-top-color: #ff0000 !important;
     border-left-color: #ff0000 !important;
  }
+
+ .custom-notification-z-index {
+    z-index: 999999 !important;
+  }

@@ -1,3 +1,55 @@
+
+<script setup>
+import {BannerPart} from '@/components'
+import {useSetting, useContact, useNotification} from '@/stores'
+import { ref, onMounted } from 'vue';
+
+
+const setting         = useSetting();
+const contact         = useContact();
+const notify          = useNotification();
+const email           = ref('')
+const phone           = ref('')
+const address         = ref('')
+const userName        = ref('')
+const userEmail       = ref('')
+const userPhone       = ref('')
+const userDescription = ref('')
+
+
+const getSettingData = async() => {
+  const vlaue1        = await setting.getData('footer_email')
+        email.value   = vlaue1.data[0].value
+  const vlaue2        = await setting.getData('footer_address')
+        address.value = vlaue2.data[0].value
+  const vlaue3        = await setting.getData('phone_number')
+        phone.value   = vlaue3.data[0].value
+}
+
+const submitForm = async () => {
+    const res = await contact.insertData({
+        name       : userName.value,
+        phone      : userEmail.value,
+        email      : userPhone.value,
+        description: userDescription.value,
+    });
+
+    if (res.data.success) {
+        notify.Success("Your Information has been successfully submitted Thank you");
+        userName.value = '';
+        userEmail.value = '';
+        userPhone.value = '';
+        userDescription.value = '';
+    }
+        
+}
+
+onMounted(() => {
+    getSettingData();
+})
+
+</script>
+
 <template>
     <div>
         
@@ -14,10 +66,11 @@
                                         <div class="contact_field">
                                             <h3>Contatc Us</h3>
                                             <p>Feel Free to contact us any time. We will get back to you as soon as we can!.</p>
-                                            <input type="text" class="form-control form-group" placeholder="Name" />
-                                            <input type="text" class="form-control form-group" placeholder="Email" />
-                                            <textarea class="form-control form-group" rows="10" placeholder="Message"></textarea>
-                                            <button class="contact_form_submit">Send</button>
+                                            <input type="text" class="form-control form-group" placeholder="Name"  v-model="userName"/>
+                                            <input type="text" class="form-control form-group" placeholder="Phone"  v-model="userPhone"/>
+                                            <input type="text" class="form-control form-group" placeholder="Email" v-model="userEmail" />
+                                            <textarea class="form-control form-group" rows="10" placeholder="Message" v-model="userDescription"></textarea>
+                                            <button class="contact_form_submit" @click.prevent="submitForm">Send</button>
                                         </div>
                                     </div>
                                 </div>
@@ -35,15 +88,15 @@
                                 <h4>Contact Info</h4>
                                 <div class="d-flex info_single align-items-center">
                                     <i class="fas fa-headset"></i>
-                                    <span>+880 177 337 7673</span>
+                                    <span>+88{{ phone }}</span>
                                 </div>
                                 <div class="d-flex info_single align-items-center">
                                     <i class="fas fa-envelope-open-text"></i>
-                                    <span>rodelacrafts@gmail.com</span>
+                                    <span>{{ email }}</span>
                                 </div>
                                 <div class="d-flex info_single align-items-center">
                                     <i class="fas fa-map-marked-alt"></i>
-                                    <span>Shop: 05, House: 22, Road: 03, Block: C, Mirpur 13, Dhaka-1216</span>
+                                    <span>{{ address }}</span>
                                 </div>
                 
                             </div>
@@ -54,9 +107,7 @@
         </section>
     </div>
 </template>
-<script setup>
-    import {BannerPart} from '@/components'
-</script>
+
 <style>
 
     .right_conatct_social_icon{
