@@ -113,7 +113,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <div class="col-xl-2 col-lg-2 text-center">
-                        <button class="main-order-btn mt-2">Campaign</button>
+                        <router-link :to="{ name: 'CampaignBanner' }" class="main-order-btn mt-2">Campaign</router-link>
                     </div>
                 </div>
             </div>

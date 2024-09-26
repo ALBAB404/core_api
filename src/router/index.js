@@ -22,6 +22,8 @@ import {
   TermsConditions,
   PrivacyPolicy,
   ReturnRefund,
+  CampaignBanner,
+  CampaignProductList
 } from "@/views/pages";
 import NProgress from "nprogress";
 import {useAuth} from '@/stores'
@@ -128,6 +130,20 @@ const routes = [
     name: "campaignPage",
     component: campaignPage,
     meta: { title: " Campaign Page" },
+  },
+
+  {
+    path: "/campaign",
+    name: "CampaignBanner",
+    component: CampaignBanner,
+    meta: { title: " Campaign Page" },
+  },
+
+  {
+    path: "/campaign-products",
+    name: "CampaignProductList",
+    component: CampaignProductList,
+    meta: { title: " Campaign products Page" },
   },
   // {
   //   path: "/campaign-details-page/:campaignId/:productId",

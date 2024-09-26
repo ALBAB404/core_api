@@ -279,7 +279,7 @@ onMounted(() => {
             </form>
 
           <div class="header-widget-group  dropdown">
-            <button class="header-widget header-cart" title="User">
+            <button class="header-widget" title="User">
                 <i class="fas fa-user"></i>
               <span></span>
             </button>
@@ -294,7 +294,7 @@ onMounted(() => {
             </ul>
           </div>
           <div class="header-widget-group">
-            <button class="header-widget header-cart" title="Wishlist">
+            <button class="header-widget" title="Wishlist">
                 <i class="fas fa-heart"></i>
               <span></span>
             </button>
