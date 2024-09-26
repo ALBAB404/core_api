@@ -27,7 +27,7 @@ const { cartItemCount, totalPrice } = storeToRefs(cart);
 .addtocart-main-section{
     position: absolute;
     position: fixed;
-    top: 40%;
+    top: 56%;
     right: 0%;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     z-index: 9;    
