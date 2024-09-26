@@ -7,7 +7,7 @@ const modal =  useModal()
 
 
 <template lang="">
-    <div class="modal fade show" v-show="modal.isOpen" style="display: block">
+    <div class="modal fade" v-show="modal.isOpen" style="display: block">
       <div class="modal-dialog">
         <div class="modal-content">
           <button

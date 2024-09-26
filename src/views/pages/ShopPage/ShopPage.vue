@@ -22,7 +22,7 @@ import { useShop, useCart, useNotification, useAuth, useModal, useBanner } from 
 const route = useRoute();
 const router= useRouter();
 const auth = useAuth();
-const modal =  useModal()
+// const modal =  useModal()
 
 
 const banner = useBanner();
@@ -186,17 +186,17 @@ const queryProducts = () => {
 
 
 // auth login part start 
-const isLogin = (product) => {
-  if (Object.keys(auth.user).length > 0) {
-    addToCart(product)
-    router.push({ name: "checkoutPage" });
-  }else{
-    // $("#login-modal").modal("show")
-    modal.toggleModal();
-    addToCart(product)
-  }
+// const isLogin = (product) => {
+//   if (Object.keys(auth.user).length > 0) {
+//     addToCart(product)
+//     router.push({ name: "checkoutPage" });
+//   }else{
+//     // $("#login-modal").modal("show")
+//     modal.toggleModal();
+//     addToCart(product)
+//   }
 
-}
+// }
 // auth login part end
 
 // category slug wise product showing
@@ -271,7 +271,7 @@ onMounted(() => {
     <!--=====================================
                     BANNER PART END
         =======================================-->
-    <section class="inner-section shop-part">
+    <section class="inner-section shop-part mt-3">
       <div class="container">
         <div class="row">
           <div class="col-lg-3">
@@ -296,29 +296,6 @@ onMounted(() => {
                 </form>
               </div>
               <div class="shop-widget">
-                <h6 class="shop-widget-title">Filter by Brand</h6>
-                <form>
-                  <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchBrandQuery" />
-                  <TransitionGroup tag="ul" class="shop-widget-list shop-widget-scroll">
-                    <li v-for="(brand, index) in searchBrands" :key="brand.id">
-                      <div class="shop-widget-content">
-                        <input type="checkbox" :id="`brand${index}`" :value="brand.id" v-model="selectedBrandIds"
-                          @change="getProducts" />
-                        <label :for="`brand${index}`">{{ brand.name }}</label>
-                      </div>
-                      <span class="shop-widget-number">({{ brand.products_count }})</span>
-                    </li>
-                    <li v-show="searchBrands.length === 0">
-                      <img src="@/assets/images/nodatafound.png" class="image-fluid mt-5" alt="" />
-                    </li>
-                  </TransitionGroup>
-                  <button class="shop-widget-btn" @click.prevent="clearFilter('brand')">
-                    <i class="far fa-trash-alt"></i>
-                    <span>clear filter</span>
-                  </button>
-                </form>
-              </div>
-              <div class="shop-widget">
                 <h6 class="shop-widget-title">Filter by Category</h6>
                 <form>
                   <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchCategoryQuery" />
@@ -336,6 +313,29 @@ onMounted(() => {
                     </li>
                   </ul>
                   <button class="shop-widget-btn" @click.prevent="clearFilter('category')">
+                    <i class="far fa-trash-alt"></i>
+                    <span>clear filter</span>
+                  </button>
+                </form>
+              </div>
+              <div class="shop-widget">
+                <h6 class="shop-widget-title">Filter by Brand</h6>
+                <form>
+                  <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchBrandQuery" />
+                  <TransitionGroup tag="ul" class="shop-widget-list shop-widget-scroll">
+                    <li v-for="(brand, index) in searchBrands" :key="brand.id">
+                      <div class="shop-widget-content">
+                        <input type="checkbox" :id="`brand${index}`" :value="brand.id" v-model="selectedBrandIds"
+                          @change="getProducts" />
+                        <label :for="`brand${index}`">{{ brand.name }}</label>
+                      </div>
+                      <span class="shop-widget-number">({{ brand.products_count }})</span>
+                    </li>
+                    <li v-show="searchBrands.length === 0">
+                      <img src="@/assets/images/nodatafound.png" class="image-fluid mt-5" alt="" />
+                    </li>
+                  </TransitionGroup>
+                  <button class="shop-widget-btn" @click.prevent="clearFilter('brand')">
                     <i class="far fa-trash-alt"></i>
                     <span>clear filter</span>
                   </button>

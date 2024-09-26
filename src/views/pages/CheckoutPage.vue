@@ -201,10 +201,32 @@ const hasFreeShipping = () => {
 }
 
 
+// total price section hide and show 
+
+const showTotalPriceSection = () => {
+  const hideAndShowTopSection = document.querySelector('.hide_and_show_top_section');
+  const hideAndShowButtomSection = document.querySelector('.hide_and_show_bottam_section');
+  const scrollScreenSize = window.screen.width;
+  console.log(scrollScreenSize);
+  
+  if (scrollScreenSize < 768) {            
+    hideAndShowTopSection.classList.add('price_section_hide');
+    hideAndShowButtomSection.classList.remove('price_section_show');
+  }else{
+    hideAndShowButtomSection.classList.add('price_section_hide');
+    hideAndShowTopSection.classList.remove('price_section_show');
+  }
+
+}
+
+// total price section hide and show 
+
+
 onMounted(() => {
   getDeliveryGateway();
   getPaymentGetway();
   modal.Modalclose();
+  showTotalPriceSection();
 });
 </script>
 
@@ -302,30 +324,30 @@ onMounted(() => {
                       </div>
                       <span v-if="couponErrorMessage" class="text-danger ps-3">{{ couponErrorMessage }}</span>
                   </div>
-                    <div class="left my-3">
-                      <h5 class="text-wrap">Order Summery</h5>
-                      <div class="d-flex justify-content-between my-2">
-                        <p class="text-danger">Sub Total</p>
-                        <p class="text-danger">{{ cart.totalPrice }} <span class="font-weight-bold">TK</span></p>
-                      </div>
-                      <div class="d-flex justify-content-between my-2">
-                        <p class="text-danger">Delivary Charge</p>
-                        <p class="text-danger">{{ deliverCharge }}<span class="font-weight-bold">TK</span></p>
-                      </div>
-                      <div class="d-flex justify-content-between my-2" v-if="couponDiscountAmount">
-                        <p class="text-danger">Coupon Discount</p>
-                        <p class="text-danger"> -({{ couponDiscountAmount ?  cart.totalPrice - couponDiscountAmount : 0 }})<span class="font-weight-bold">TK</span></p>
-                      </div>
-                      <div class="line"></div>
-                      <div class="d-flex justify-content-between my-2">
-                        <p class="text-danger">Total</p>
-                        <p class="text-danger"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
-                      </div>
+                  <div class="left my-3 hide_and_show_top_section ">
+                    <h5 class="text-wrap">Order Summery</h5>
+                    <div class="d-flex justify-content-between my-2">
+                      <p class="text-danger">Sub Total</p>
+                      <p class="text-danger">{{ cart.totalPrice }} <span class="font-weight-bold">TK</span></p>
                     </div>
-                <div class="text-note">
-                  <p class="text-danger">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
-                    <textarea class="p-2" name="" id="" cols="50" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
-                </div>
+                    <div class="d-flex justify-content-between my-2">
+                      <p class="text-danger">Delivary Charge</p>
+                      <p class="text-danger">{{ deliverCharge }}<span class="font-weight-bold">TK</span></p>
+                    </div>
+                    <div class="d-flex justify-content-between my-2" v-if="couponDiscountAmount">
+                      <p class="text-danger">Coupon Discount</p>
+                      <p class="text-danger"> -({{ couponDiscountAmount ?  cart.totalPrice - couponDiscountAmount : 0 }})<span class="font-weight-bold">TK</span></p>
+                    </div>
+                    <div class="line"></div>
+                    <div class="d-flex justify-content-between my-2">
+                      <p class="text-danger">Total</p>
+                      <p class="text-danger"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
+                    </div>
+                  </div>
+                  <div class="text-note">
+                    <p class="text-danger">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
+                      <textarea class="p-2" name="" id="" cols="50" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
+                  </div>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -404,6 +426,26 @@ onMounted(() => {
                           <label class="form-check-label" :for="'paymentGateway_' + index">{{ payment_gateway.name }}</label>
                         </div>
                     </div>
+                    <div class="left my-3 hide_and_show_bottam_section ">
+                      <h5 class="text-wrap">Order Summery</h5>
+                      <div class="d-flex justify-content-between my-2">
+                        <p class="text-danger">Sub Total</p>
+                        <p class="text-danger">{{ cart.totalPrice }} <span class="font-weight-bold">TK</span></p>
+                      </div>
+                      <div class="d-flex justify-content-between my-2">
+                        <p class="text-danger">Delivary Charge</p>
+                        <p class="text-danger">{{ deliverCharge }}<span class="font-weight-bold">TK</span></p>
+                      </div>
+                      <div class="d-flex justify-content-between my-2" v-if="couponDiscountAmount">
+                        <p class="text-danger">Coupon Discount</p>
+                        <p class="text-danger"> -({{ couponDiscountAmount ?  cart.totalPrice - couponDiscountAmount : 0 }})<span class="font-weight-bold">TK</span></p>
+                      </div>
+                      <div class="line"></div>
+                      <div class="d-flex justify-content-between my-2">
+                        <p class="text-danger">Total</p>
+                        <p class="text-danger"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
+                      </div>
+                    </div>
                   <button type="submit" :disabled="isSubmitting" class="text-center orderBTN mt-4 w-100" @click="placeOrder()"><span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>Order Now</button>
               </Form>
             </div>
@@ -420,6 +462,13 @@ onMounted(() => {
 
 <style>
 @import "@/assets/css/checkout.css";
+
+.price_section_show{
+  display: block;
+}
+.price_section_hide{
+  display: none;
+}
 
 .formRadioControl{
   border: 1px solid rgb(192, 192, 192);
@@ -483,6 +532,7 @@ onMounted(() => {
     width: 50px;
 }
 .img img{
+    width: 100%;
     border-radius: 0% !important;
 }
 

@@ -5,6 +5,7 @@ import { useRouter, useRoute } from "vue-router";
 import { useCart, useNotification, useAuth, useModal, useProduct, useSetting } from "@/stores";
 import axiosInstance from "@/services/axiosService.js";
 import { mrpOrOfferPrice, addToCart } from '@/composables'
+
 // All Variable  Code Is Here.....................................................................................................
 const modal         = useModal()
 const auth          = useAuth();

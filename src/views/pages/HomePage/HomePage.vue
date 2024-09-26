@@ -1,5 +1,5 @@
 <script setup>
-import { CategorySideBar, CartSideBar,ProductCard, NavSideBar, MobileMenu,  Blog, ProductView, PromoPart, Banner, IntroPart, NewItem, Brand, Footer } from '@/components'
+import { CategorySideBar, CartSideBar, ProductCard, NavSideBar, MobileMenu,  Blog, ProductView, PromoPart, Banner, IntroPart, NewItem, Brand, Footer } from '@/components'
 // product data fetch 
 import {useProduct, useSection} from '@/stores'
 import { storeToRefs } from 'pinia';
