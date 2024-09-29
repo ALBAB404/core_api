@@ -15,7 +15,7 @@ const { isOrder } = storeToRefs(auth);
 const cart = useCart();
 const { cartItem, totalPrice, campaignId } = storeToRefs(cart);
 const order = useOrder();
-const { storeOrder, backendErrors } = storeToRefs(order);
+const { storeOrder, backendErrors, loading } = storeToRefs(order);
 
 const name                = ref(auth?.user?.user?.name);
 const phoneNumber         = ref(auth?.user?.user?.phone_number);
@@ -102,8 +102,20 @@ const orderSubmited = async () => {
     });
 }
 
+const isLoading = ref(false);
 const placeOrder = async() => {
-  orderSubmited();
+  isLoading.value = true;
+  try {
+    await orderSubmited();
+    // Handle successful order submission
+  } catch (error) {
+    // Handle error
+    console.error("Order submission failed:", error);
+  } finally {
+    isLoading.value = false; // Hide the preloader
+  }
+
+
   // if (Object.keys(auth.user).length > 0) {
   // }else{
   //   const res = await auth.login({phone_number: phoneNumber.value, name: name.value});
@@ -113,6 +125,8 @@ const placeOrder = async() => {
   // }
 
 };
+
+
 
 const handleOrderSubmitted = () => {
   orderSubmited(); 
@@ -207,7 +221,6 @@ const showTotalPriceSection = () => {
   const hideAndShowTopSection = document.querySelector('.hide_and_show_top_section');
   const hideAndShowButtomSection = document.querySelector('.hide_and_show_bottam_section');
   const scrollScreenSize = window.screen.width;
-  console.log(scrollScreenSize);
   
   if (scrollScreenSize < 768) {            
     hideAndShowTopSection.classList.add('price_section_hide');
@@ -231,7 +244,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="testing">
+    <!-- pre loader -->
+    <div v-if="isLoading" class="preloader">
+      <div class="loader"></div>
+    </div>
+     
+
+    <!-- pre loader -->
     <!--=====================================
                     MOBILE-MENU PART START
         =======================================-->
@@ -253,9 +273,8 @@ onMounted(() => {
     <!--=====================================
                     CHECKOUT PART START
         =======================================-->
-    
-     <ProductView @orderSubmitted="handleOrderSubmitted"/>
-
+        <ProductView @orderSubmitted="handleOrderSubmitted"/>
+        
     <div class="container my-5 checkoutBorder">
         <div class="row">
             <div class="col-lg-8">
@@ -446,7 +465,11 @@ onMounted(() => {
                         <p class="text-danger"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
                       </div>
                     </div>
-                  <button type="submit" :disabled="isSubmitting" class="text-center orderBTN mt-4 w-100" @click="placeOrder()"><span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>Order Now</button>
+                    <div v-if="isLoading" class="preloader"></div>
+                  <button type="submit"  class="text-center orderBTN mt-4 w-100" @click="placeOrder()">
+                    <span v-if="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    <span v-else>Order Now</span>
+                  </button>
               </Form>
             </div>
         </div>
@@ -462,6 +485,45 @@ onMounted(() => {
 
 <style>
 @import "@/assets/css/checkout.css";
+
+
+/* pre loader start*/
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader {
+  width: 50px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #25b09b;
+  --_m:
+    conic-gradient(#0000 10%, #000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+  mask: var(--_m);
+  -webkit-mask-composite: source-out;
+  mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+
+@keyframes l3 {
+  to {
+    transform: rotate(1turn)
+  }
+}
+
+/* pre loader end*/
 
 .price_section_show{
   display: block;

@@ -446,7 +446,7 @@
   z-index: 1;
 }
 
-.deals-clock::before {
+/* .deals-clock::before {
   position: absolute;
   content: "";
   top: 50%;
@@ -456,7 +456,7 @@
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   border-top: 2px dashed var(--primary);
-}
+} */
 
 .deals-clock::after {
   position: absolute;

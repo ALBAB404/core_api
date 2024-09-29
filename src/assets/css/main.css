@@ -1620,27 +1620,30 @@ tbody tr td:last-child {
 }
 
 .countdown-time {
-  padding: 0px 30px;
-  position: relative;
-  color: var(--heading);
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
+  padding              : 10px 30px;
+  border               : 2px solid var(--secondary-color);
+  position             : relative;
+  color                : var(--primary);
+  display              : -webkit-box;
+  display              : -ms-flexbox;
+  display              : flex;
+  -webkit-box-align    : center;
+  -ms-flex-align       : center;
+  align-items          : center;
+  -webkit-box-pack     : center;
+  -ms-flex-pack        : center;
+  justify-content      : center;
+  -webkit-box-orient   : vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction   : column;
+  flex-direction       : column;
+  margin               : 0 10px;
+  border-radius: 15px;
+
 }
 
 .countdown-time::before {
   position: absolute;
-  content: ":";
   top: 28%;
   right: -3px;
   font-size: 25px;
@@ -1670,13 +1673,9 @@ tbody tr td:last-child {
 @media (max-width: 575px) {
   .countdown-time {
     padding: 0px 12px;
+    margin: 0 4px;
   }
-  .countdown-time:first-child {
-    padding-left: 0px;
-  }
-  .countdown-time:last-child {
-    padding-right: 0px;
-  }
+  
   .countdown-time span {
     font-size: 35px;
   }

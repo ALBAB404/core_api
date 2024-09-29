@@ -29,7 +29,7 @@ import NProgress from "nprogress";
 import {useAuth} from '@/stores'
 import axiosInstance from "@/services/axiosService.js";
 
-let brandName = "Maxfit Food";
+let brandName = "Service Key";
 
 const routes = [
   // Auth Pages
@@ -125,12 +125,12 @@ const routes = [
   //   component: FlashDealDetailsPage,
   //   meta: { title: " Flash Deals Details" },
   // },
-  {
-    path: "/campaign-page",
-    name: "campaignPage",
-    component: campaignPage,
-    meta: { title: " Campaign Page" },
-  },
+  // {
+  //   path: "/campaign-page",
+  //   name: "campaignPage",
+  //   component: campaignPage,
+  //   meta: { title: " Campaign Page" },
+  // },
 
   {
     path: "/campaign",
@@ -140,7 +140,7 @@ const routes = [
   },
 
   {
-    path: "/campaign-products",
+    path: "/campaign-products/:campaignId?",
     name: "CampaignProductList",
     component: CampaignProductList,
     meta: { title: " Campaign products Page" },

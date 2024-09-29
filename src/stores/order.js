@@ -21,6 +21,7 @@ export const useOrder = defineStore('order', {
     
       async storeOrder(orderInfo) {
         try {
+          this.loading = true;
           const response = await axiosInstance.post('/orders',{
             customer_name: orderInfo.name,
             phone_number: orderInfo.phoneNumber,

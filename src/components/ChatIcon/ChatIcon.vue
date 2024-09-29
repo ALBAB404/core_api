@@ -14,11 +14,14 @@ const setting = useSetting();
 
 const getSettingsData = async() => {
   const settingData = await setting.getData();
-  settingData.map((ele)=> {
+  console.log(settingData);
+  
+  settingData.data.map((ele)=> {
     if (ele.key == "messenger_id" ) {
       messenger.value = ele
-      } 
-      if (ele.key == "phone_number" ) {
+      
+    } 
+    if (ele.key == "phone_number" ) {
         phone.value = ele
       } 
       if (ele.key == "whatsapp_number" ) {

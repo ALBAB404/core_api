@@ -16,3 +16,4 @@ export * from "./setting";
 export * from "./banner";
 export * from "./aboutus";
 export * from "./contactus";
+export * from "./campaign";
