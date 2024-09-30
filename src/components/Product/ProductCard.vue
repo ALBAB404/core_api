@@ -26,6 +26,13 @@ const props = defineProps({
   required: true,
 });
 
+// settings variables
+const addToCartButton      = ref('Add Cart');
+const orderButton          = ref('Order Now ');
+const productNameFontSize  = ref('16px');
+const productPriceFontSize = ref('26px');
+
+
 const price            = ref();
 const route            = useRoute();
 const router           = useRouter();
@@ -284,14 +291,14 @@ onMounted(() => {
       <div class="product-content">
           
           <h6 class="product-name">
-              <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" >{{ product?.name }}</router-link>
+              <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" :style="`font-size: ${productNameFontSize ? productNameFontSize : ''}`">{{ product?.name }}</router-link>
           </h6>
 
 
-          <h6 class="product-price" v-if="product?.variations?.data?.length > 0">
+          <h6 class="product-price" v-if="product?.variations?.data?.length > 0" :style="`font-size: ${productPriceFontSize ? productPriceFontSize : ''}`">
             <span>{{ product?.variation_price_range.min_price }} - {{ product?.variation_price_range.max_price }}</span>
           </h6>
-          <h6 class="product-price" v-else>
+          <h6 class="product-price" v-else :style="`font-size: ${productPriceFontSize ? productPriceFontSize : ''}`">
             <span v-html="$filters.productPrice(product)"></span>
           </h6>
 
@@ -305,13 +312,13 @@ onMounted(() => {
             <div class="col-xl-6 col-lg-12 col-12 mt-2">
               <button  class="product-add btnColorOrder" :disabled="isButtonDisabled" :class="isButtonDisabled ? 'disabled btn border-dark' : ''" title="Add to Cart" @click.prevent="addToCart(product)">
                 <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
-                <span>Add Cart</span>
+                <span>{{ addToCartButton }}</span>
               </button>
             </div>
             <div class="col-xl-6 col-lg-12 col-12 mt-2">
               <router-link :to="{ name: 'checkoutPage' }"  class="product-add standard-wishs" :class="isButtonDisabled ? 'disabled btn border-danger' : ''" @click.prevent="addToCart(product)">
                 <i class="fas fa-shopping-basket"></i>
-                <span>Order Now</span>
+                <span>{{ orderButton }}</span>
               </router-link>
             </div>
           </div>
@@ -319,13 +326,13 @@ onMounted(() => {
             <div class="col-xl-6 col-lg-12 col-12 mt-2">
               <button  class="product-add btnColorOrder"  title="Add to Cart" @click.prevent="addToCart(product)">
                 <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
-                <span>Add Cart</span>
+                <span>{{ addToCartButton }}</span>
               </button>
             </div>
             <div class="col-xl-6 col-lg-12 col-12 mt-2">
               <router-link :to="{ name: 'checkoutPage' }"  class="product-add standard-wishs" @click.prevent="addToCart(product)">
                 <i class="fas fa-shopping-basket"></i>
-                <span>Order Now</span>
+                <span>{{ orderButton }}</span>
               </router-link>
             </div>
           </div>
@@ -440,7 +447,7 @@ onMounted(() => {
                           <div class="col-md-6 mt-lg-0 mt-3">
                               <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput, productVariationData, productVariationPrice)">
                                   <i :class="loading == modalProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
-                                  <span>add to cart</span>
+                                  <span>{{ addToCartButton }}</span>
                               </button>
                           </div>
                           <div class="col-md-6 mt-lg-0 mt-3">
@@ -454,7 +461,7 @@ onMounted(() => {
                           <div class="col-md-6 mt-lg-0 mt-3">
                               <button class="product-add"  title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput)">
                                   <i :class="loading == modalProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
-                                  <span>add to cart</span>
+                                  <span>{{ addToCartButton }}</span>
                               </button>
                           </div>
                           <div class="col-md-6 mt-lg-0 mt-3">

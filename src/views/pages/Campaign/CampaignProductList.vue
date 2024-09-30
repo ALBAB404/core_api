@@ -10,9 +10,10 @@ const campaigns = ref('');
 const route     = useRoute();
 
 const getCampaigns = async() =>{
-  campaigns.value =  await campaign.getCampaign(route.params.campaignId);
-  startDate.value = campaigns.value.start_date
-  endDate.value = campaigns.value.end_date
+  const res =  await campaign.getCampaign(route.params.campaignId);
+  campaigns.value = res;
+  startDate.value = campaigns.value?.start_date
+  endDate.value = campaigns.value?.end_date
   startCountdown(startDate.value, endDate.value)  
 }
 
@@ -108,12 +109,12 @@ onMounted(() => {
     </div>
     <div class="banner_section text-center">
       <a href="">
-        <img :src="campaigns.image" alt="" style="width: 100%;">
+        <img :src="campaigns?.image" alt="" style="width: 100%;">
       </a>
     </div>
     <div class="mt-5">
       <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4">
-          <div class="col" v-for="(product, index) in campaigns.products" :key="index">
+          <div class="col" v-for="(product, index) in campaigns?.products" :key="index">
             <!-- {{ product }} -->
               <ProductCard :product="product" />
           </div>

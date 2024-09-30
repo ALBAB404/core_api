@@ -14,7 +14,6 @@ const setting = useSetting();
 
 const getSettingsData = async() => {
   const settingData = await setting.getData();
-  console.log(settingData);
   
   settingData.data.map((ele)=> {
     if (ele.key == "messenger_id" ) {

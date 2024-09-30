@@ -18,13 +18,12 @@ import { TopHeader, Navbar,  Footer,  Newsletter, ChatIcon, AddtoCartIcon } from
 
     <Navbar />
 
-    <!-- <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" />
       </transition>
-    </router-view> -->
+    </router-view>
 
-    <router-view></router-view>
 
     <Footer /> 
 
