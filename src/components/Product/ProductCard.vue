@@ -26,6 +26,13 @@ const props = defineProps({
   required: true,
 });
 
+// Setting data start
+const websiteUrl  = ref("");
+const phone       = ref("");
+const whatsapp    = ref("");
+const messengerId = ref("");
+// Setting data end
+
 // settings variables
 const addToCartButton      = ref('Add Cart');
 const orderButton          = ref('Order Now ');
@@ -197,7 +204,6 @@ async function getProductVariation(productId,attributeValue, index) {
       activeBtns.value            = true;
    }
    if ((Object.keys(productVariations.value).length == 3) && (attribute_value_id_3.value != null && attribute_value_id_2.value != null && attribute_value_id_1.value != null)) {
-    console.log(variations.variation_price);
     
       productVariationPrice.value = variations.variation_price[0];         
       activeBtns.value = true; 
@@ -253,7 +259,25 @@ const decrementCartItem = () => {
     }
 };
 
-
+ // setting data start
+ const getSettingsData = async() => {
+        const settingData = await setting.getData(); 
+        settingData.data.map((ele)=> {
+            if (ele.key == "phone_number" ) {
+              phone.value = ele
+            }
+            if (ele.key == "whatsapp_number" ) {
+              whatsapp.value = ele
+            }
+            if (ele.key == "website_url" ) {
+              websiteUrl.value = ele
+            }
+            if (ele.key == "messenger_id" ) {
+                messengerId.value = ele
+            }
+        })
+    }
+ // setting data end
 
 
 onMounted(() => {
@@ -261,6 +285,7 @@ onMounted(() => {
     $(".venobox").venobox();
   });
 
+  getSettingsData();
 
 });
 </script>
@@ -398,6 +423,7 @@ onMounted(() => {
                           <h3 class="view-price">
                               <del>{{  $filters.currencySymbol(modalProduct.mrp) }}</del>
                               <span>{{  $filters.currencySymbol(mrpOrOfferPrice(modalProduct.mrp, modalProduct.offer_price)) }}</span>
+                              <a class="discout_amount" v-if="modalProduct.offer_price != 0">{{ modalProduct.mrp -  modalProduct.offer_price}} /- TK</a>
                           </h3>
                       </span>
                     <!-- Price Section end -->
@@ -472,20 +498,20 @@ onMounted(() => {
                           </div>
                       </div>    
                     </div>
-                    <!-- <div class="view-action-group">
-                        <a class="view-wish wish bg-warning text-dark" :href="`tel:+88${phone}`" title="Add Your Wishlist">
-                            <i class="fas fa-phone-alt"></i>
-                            <span >Phone</span>
-                        </a>
-                        <a :href="`https://wa.me/+88${whatsapp}?text=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
-                          class="product-add bg-success text-light" target="_blank">
-                          <i class="fab fa-whatsapp"></i><span>হোয়াটসঅ্যাপ</span>
-                        </a>
-                        <a :href="`https://m.me/${messengerId}?ref=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
-                          class="product-add bg-primary text-light" target="_blank">
-                          <i class="fab fa-facebook-messenger"></i><span>মেসেঞ্জার</span>
-                        </a>
-                    </div> -->
+                    <div class="view-action-group">
+                      <a :href="`https://wa.me/+88${whatsapp}?text=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
+                        class="product-add bg-success text-light" target="_blank">
+                        <i class="fab fa-whatsapp"></i><span>হোয়াটসঅ্যাপ</span>
+                      </a>
+                      <a :href="`https://m.me/${messengerId}?ref=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
+                        class="product-add bg-primary text-light" target="_blank">
+                        <i class="fab fa-facebook-messenger"></i><span>মেসেঞ্জার</span>
+                      </a>
+                      <a class="view-wish wish bg-warning text-dark" :href="`tel:+88${phone}`" title="Add Your Wishlist">
+                          <i class="fas fa-phone-alt"></i>
+                          <span >Phone</span>
+                      </a>
+                  </div>
 
                 </div>
             </div>
@@ -512,6 +538,17 @@ onMounted(() => {
   background-color: rgb(255, 0, 0);
   color: white;
   border: 2px solid rgb(255, 0, 0);
+}
+
+.discout_amount{
+  border          : 1px solid var(--primary);
+  margin-left     : 20px;
+  padding         : 0px 8px;
+  border-radius   : 5px;
+  background-color: var(--primary);
+  color           : var(--white) !important;
+  font-size       : 18px;
+  margin-bottom   : 5px;
 }
 
 .details-list-group{

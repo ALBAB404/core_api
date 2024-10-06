@@ -279,7 +279,7 @@ onMounted(() => {
                     CART SIDEBAR PART END
     =======================================-->
 
-    <section class="inner-section mt-5">
+    <section class="inner-section mt-4">
       <div class="container">
           <div class="row">
               <div class="col-lg-6">
@@ -329,6 +329,7 @@ onMounted(() => {
                             <h3 class="details-price">
                                 <del>{{  $filters.currencySymbol(singleProduct.mrp) }}</del>
                                 <span>{{  $filters.currencySymbol(mrpOrOfferPrice(singleProduct.mrp, singleProduct.offer_price)) }}</span>
+                                <a class="discout_amount" v-if="singleProduct.offer_price != 0">Save {{ singleProduct.mrp -  singleProduct.offer_price}} ৳</a>
                             </h3>
                         </span>
                       <!-- Price Section end -->
@@ -410,10 +411,6 @@ onMounted(() => {
                         </div>    
                       </div>
                       <div class="details-action-group">
-                          <a class="details-wish wish bg-warning text-dark" :href="`tel:+88${phone}`" title="Add Your Wishlist">
-                              <i class="fas fa-phone-alt"></i>
-                              <span >Phone</span>
-                          </a>
                           <a :href="`https://wa.me/+88${whatsapp}?text=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${singleProduct?.id}%0AProduct%20Name:%20${singleProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : singleProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : singleProduct?.mrp}৳`" 
                             class="product-add bg-success text-light" target="_blank">
                             <i class="fab fa-whatsapp"></i><span>হোয়াটসঅ্যাপ</span>
@@ -421,6 +418,10 @@ onMounted(() => {
                           <a :href="`https://m.me/${messengerId}?ref=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${singleProduct?.id}%0AProduct%20Name:%20${singleProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : singleProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : singleProduct?.mrp}৳`" 
                             class="product-add bg-primary text-light" target="_blank">
                             <i class="fab fa-facebook-messenger"></i><span>মেসেঞ্জার</span>
+                          </a>
+                          <a class="details-wish wish bg-warning text-dark" :href="`tel:+88${phone}`" title="Add Your Wishlist">
+                              <i class="fas fa-phone-alt"></i>
+                              <span >Phone</span>
                           </a>
                       </div>
                   </div>
@@ -486,10 +487,10 @@ onMounted(() => {
                 <span>{{  $filters.currencySymbol(mrpOrOfferPrice(singleProduct.mrp, singleProduct.offer_price)) }}</span>
               </h3>
             </div>
-           <div class="quantity" :class="{'quantity-disabled' : (activeBtns === false) && (modalProduct?.variations?.data.length > 0)}">
-              <button class="minus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>
+           <div class="quantity" :class="{'quantity-disabled' : (activeBtns === false) && (singleProduct?.variations?.data.length > 0)}">
+              <button class="minus" :disabled="(activeBtns === false) && (singleProduct?.variations?.data.length > 0)"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>
               <input type="number" class="input-box"  min="1" max="10" v-model="quantityInput">
-              <button class="plus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
+              <button class="plus" :disabled="(activeBtns === false) && (singleProduct?.variations?.data.length > 0)" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
             </div>
             <router-link :to="{ name: 'checkoutPage' }" @click.prevent="addToCart(singleProduct)"  type="button" class="mx-2 btnColor">অর্ডার করুন</router-link>
              
@@ -534,6 +535,22 @@ onMounted(() => {
     border: var(--primary);
 }
 
+.discout_amount{
+  border          : 1px solid var(--primary);
+  margin-left     : 20px;
+  padding         : 0px 8px;
+  border-radius   : 5px;
+  background-color: var(--primary);
+  color           : var(--white) !important;
+  font-size       : 18px;
+  margin-bottom   : 5px;
+  border-top: 2px solid var(--primary);
+    border-left: 2px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
+    border-right: 2px solid var(--primary);
+    border-top-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+}
 
 img {
   width: 100%;
@@ -932,6 +949,18 @@ img {
 
 }
 
+
+@media (max-width: 375px) {
+
+  .discout_amount{
+    margin-left: 0px;
+  }
+}
+
+
+
+
+
 /*
 
 
@@ -994,9 +1023,11 @@ img {
   .countdown-time{
     padding: 5px 7px;
   }
-}
+
 
 @media (max-width: 375px) {
+
+
 
   .videoHW iframe{
     width: 305px !important;

@@ -202,7 +202,7 @@ button:focus {
         ALL COMPONENTS PART STYLE
 =========================================*/
 .section {
-  margin: 40px 0;
+  margin: 22px 0;
 }
 
 
@@ -219,9 +219,14 @@ button:focus {
 
 .section-btn-25 {
   text-align: center;
-  margin-top: 25px;
+  margin: 0px 0px 22px 0px;
 }
 
+@media (max-width: 1024px) {
+  .section-btn-25 {
+    margin: 0px;
+  }
+}
 @media (max-width: 767px) {
   .section {
     margin-bottom: 40px;
@@ -364,6 +369,11 @@ button:focus {
 }
 
 @media (max-width: 575px) {
+
+  .section-btn-25 {
+    margin: 22px 0px 0px 0px;
+  }
+
   .backtop {
     width: 42px;
     height: 42px;
@@ -562,7 +572,7 @@ button:focus {
   top: 100px;
   left: 0px;
   z-index: 2;
-  width: 200px;
+  width: 150px;
   height: auto;
   visibility: hidden;
   opacity: 0;
@@ -584,7 +594,7 @@ button:focus {
   content: "";
   z-index: -1;
   top: -7px;
-  left: 12px;
+  left: 66px;
   width: 12px;
   height: 12px;
   border-radius: 3px;
@@ -875,7 +885,7 @@ button:focus {
   border: none;
   padding: 25px 25px;
   border-radius: 8px;
-  margin-bottom: 25px;
+  margin: 25px 0;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -1799,7 +1809,7 @@ tbody tr td:last-child {
   position: absolute;
   top: 0px;
   left: 0px;
-  z-index: 9;
+  z-index: 2;
 }
 
 .label-text {
@@ -1970,12 +1980,12 @@ tbody tr td:last-child {
 }
 
 .product-price del {
-  color: var(--red);
+  color: black;
   margin-right: 8px;
 }
 
 .product-price span {
-  color: var(--primary);
+  color: black;
   white-space: nowrap;
 }
 
@@ -4969,8 +4979,7 @@ tbody tr td:last-child {
 
 .cart-footer {
   text-align: center;
-  -webkit-box-shadow: 0px -3px 7px 0px rgba(0, 0, 0, 0.08);
-          box-shadow: 0px -3px 7px 0px rgba(0, 0, 0, 0.08);
+  padding: 10px 25px;
 }
 
 .coupon-btn {
@@ -5652,8 +5661,8 @@ tbody tr td:last-child {
   display: -ms-grid;
   display: grid;
   grid-gap: 15px;
-  -ms-grid-columns: (minmax(200px, 1fr))[auto-fit];
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  -ms-grid-columns: (minmax(359px, 1fr))[auto-fit];
+      grid-template-columns: repeat(auto-fit, minmax(359px, 1fr));
   position: relative;
 }
 

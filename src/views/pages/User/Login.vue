@@ -1,6 +1,21 @@
 
 <script setup>
 import {LoginFrom} from "@/components"
+import { useSetting} from '@/stores'
+import { ref, onMounted } from "vue";
+
+
+const setting = useSetting();
+const logo = ref('');
+const getSettingsData = async() => {
+  const settingData = await setting.getData('header_logo');
+  logo.value = settingData.data[0].image;  
+}
+
+onMounted(() => {
+    getSettingsData(); 
+})
+
 </script>
 
 <template>
@@ -10,7 +25,7 @@ import {LoginFrom} from "@/components"
                 <div class="row justify-content-center">
                     <div class="col-12 col-sm-10 col-md-12 col-lg-12 col-xl-10">
                         <div class="user-form-logo">
-                            <router-link :to="{name: 'homePage'}"><img src="@/assets/images/maxfit.png" alt="logo" /></router-link>
+                            <router-link :to="{name: 'homePage'}"><img :src="logo" alt="logo" /></router-link>
                         </div>
                         
                         <LoginFrom />

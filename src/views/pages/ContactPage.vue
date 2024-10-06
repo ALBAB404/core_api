@@ -114,7 +114,7 @@ onMounted(() => {
         background: linear-gradient(to right, rgba(165, 36, 19, 0.8), rgba(170, 168, 27, 0.8));
     }
     .contact_us{
-        background-color: #f1f1f1;
+        background-color: var(--body);
         padding: 120px 0px;
     }
 

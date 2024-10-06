@@ -126,10 +126,10 @@ onMounted(() => {
         <div class="row">
           <div class="col-lg-12">
             <div class="section-btn-25">
-              <a href="blog-grid.html" class="btn btn-outline">
+              <router-link :to="{name : 'blogPage'}" class="btn btn-outline">
                 <i class="fas fa-eye"></i>
                 <span>view all blog</span>
-              </a>
+              </router-link>
             </div>
           </div>
         </div>
@@ -137,7 +137,22 @@ onMounted(() => {
     </section>
   </div>
 </template>
+<style scoped>
 
-<style>
+.blog-part{
+  margin-top: 22px !important;
+}
+
+.blog-slider {
+  margin-top: -30px;
+}
+
+@media (max-width: 425px) {
+  .blog-part{
+    margin-top: -50px !important;
+  }
+  
+}
+
 
 </style>

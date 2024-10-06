@@ -368,8 +368,6 @@ onMounted(() => {
                       title="Three Column"><i class="fas fa-th"></i></a>
                     <a href="" @click.prevent="currentTab = 'two'" :class="currentTab === 'two' ? 'active' : ''"
                       title="Two Column"><i class="fas fa-th-large"></i></a>
-                    <a href="" @click.prevent="currentTab = 'one'" :class="currentTab === 'one' ? 'active' : ''"
-                      title="One Column"><i class="fas fa-th-list"></i></a>
                   </div>
                 </div>
               </div>
@@ -399,84 +397,6 @@ onMounted(() => {
                   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-2">
                     <div class="col" v-for="(product, index) in products.data" :key="index">
                       <ProductCard :product="product" />
-                    </div>
-                  </div>
-                </template>
-              </Transition>
-            </template>
-
-            <template v-if="currentTab === 'one'">
-              <Transition name="fade" mode="out-in">
-                <template v-if="!products.data">
-                  <ProductSkeleton :dataAmount="20" :cols="3" />
-                </template>
-                <template v-else>
-                  <div class="row">
-                    <div class="col" v-for="(product, index) in products.data" :key="index">
-                      <div class="product-standard">
-                        <div class="standard-label-group">
-                          <label class="standard-label off">-{{ product.offer_percent }}%</label>
-                          <label class="label-text new">{{ product.type }}</label>
-                        </div>
-                        <div class="standard-media">
-                          <a class="standard-image">
-                            <img :src="product.image" alt="product" />
-                          </a>
-                          <div class="standard-widget" v-show="product.video_url">
-                            <a title="Product Video" :href="product.video_url" class="venobox fas fa-play"
-                              data-autoplay="true" data-vbtype="video"></a>
-                          </div>
-                        </div>
-                        <div class="standard-content">
-                          <h4 class="standard-name">
-                            <a>{{ product.name }}</a>
-                          </h4>
-                          <h5 class="standard-price">
-                            <del>{{ $filters.currencySymbol(product.mrp) }}</del>
-                            <span>{{
-                              $filters.currencySymbol(product.offer_price)
-                            }}</span>
-                          </h5>
-                          <div class="standard-rating">
-                            <i class="active icofont-star"></i>
-                            <i class="active icofont-star"></i>
-                            <i class="active icofont-star"></i>
-                            <i class="active icofont-star"></i>
-                            <i class="icofont-star"></i>
-                            <a>(3)</a>
-                          </div>
-                          <p class="standard-desc">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit
-                            molestias quaerat rem ullam ut nam quibusdam labore sed magnam
-                            eos Inventore quis corrupti nemo ipsa ratione culpa porro
-                            vitae.
-                          </p>
-                          <div class="standard-action-group">
-                            <button class="product-add" title="Add to Cart" @click.prevent="addToCart(product)">
-                              <template v-if="cart.loading === product.id">
-                                <pulse-loader :loading="isloadings" :color="color" :size="size"></pulse-loader>
-                              </template>
-                              <template v-else>
-                                <i class="fas fa-shopping-basket"></i>
-                              </template>
-                              <span>কার্টে যোগ করুন</span>
-                            </button>
-                            <div class="product-action">
-                              <button class="action-minus" title="Quantity Minus">
-                                <i class="icofont-minus"></i>
-                              </button>
-                              <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1" />
-                              <button class="action-plus" title="Quantity Plus">
-                                <i class="icofont-plus"></i>
-                              </button>
-                            </div>
-                            <button class="standard-wish wish" title="Add to Wishlist" @click.prevent="isLogin(product)">
-                              <i class="fas fa-heart"></i>
-                              <span>অর্ডার করুন</span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </template>

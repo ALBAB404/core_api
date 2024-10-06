@@ -187,14 +187,20 @@ const cartDecrement = (index) => {
 
 
 const couponCalculate = async() => {
-  const res = await axiosInstance.get(`/coupons/check?coupon_code=${coupon.value}&cart_total_amount=${totalPrice.value}`); 
-  if (res.status == 200) {
-    couponDiscountAmount.value = res.data.result.discount_amount;
-    couponId.value = res.data.result.coupon_id;
-    isOpen.value = false
-  }else{
-    couponErrorMessage.value = res.data.message 
-  }
+  try {
+
+      const res = await axiosInstance.get(`/coupons/check?coupon_code=${coupon.value}&cart_total_amount=${totalPrice.value}`);   
+      if (res.status == 200) {
+      couponDiscountAmount.value = res.data.result.discount_amount;
+      couponId.value = res.data.result.coupon_id;
+      isOpen.value = false
+
+    }else{
+      couponErrorMessage.value = res.data.message 
+    }
+   } catch (error) {
+     couponErrorMessage.value = error.response.data.message      
+   }
 }
 
 
@@ -333,9 +339,9 @@ onMounted(() => {
                     </tbody>
                     </table>
                     <div class="left my-3 p-0">
-                      <div class="d-flex justify-content-between is-coupon">
+                      <div class="d-flex justify-content-between is-coupon" @click="isOpenCoupon">
                         <h6>Do you have any coupon ?</h6>
-                        <button class="btn-danger btn-sm" @click="isOpenCoupon"><i class="fas fa-chevron-down " :class="{'isRoted' : isOpen}"></i></button>
+                        <button class="btn-danger btn-sm" ><i class="fas fa-chevron-down " :class="{'isRoted' : isOpen}"></i></button>
                       </div>
                       <div class="input-group p-3" :class="{'d-none' : !isOpen}">
                         <input type="text" class="form-control" placeholder="Apply Your Coupon Here" aria-label="Input group example" aria-describedby="btnGroupAddon" v-model="coupon">
@@ -346,12 +352,12 @@ onMounted(() => {
                   <div class="left my-3 hide_and_show_top_section ">
                     <h5 class="text-wrap">Order Summery</h5>
                     <div class="d-flex justify-content-between my-2">
-                      <p class="text-danger">Sub Total</p>
-                      <p class="text-danger">{{ cart.totalPrice }} <span class="font-weight-bold">TK</span></p>
+                      <p class="">Sub Total</p>
+                      <p class="text-dark">{{ cart.totalPrice }} <span class="font-weight-bold">TK</span></p>
                     </div>
                     <div class="d-flex justify-content-between my-2">
-                      <p class="text-danger">Delivary Charge</p>
-                      <p class="text-danger">{{ deliverCharge }}<span class="font-weight-bold">TK</span></p>
+                      <p class="">Delivary Charge</p>
+                      <p class="text-dark">{{ deliverCharge }}<span class="font-weight-bold">TK</span></p>
                     </div>
                     <div class="d-flex justify-content-between my-2" v-if="couponDiscountAmount">
                       <p class="text-danger">Coupon Discount</p>
@@ -359,12 +365,12 @@ onMounted(() => {
                     </div>
                     <div class="line"></div>
                     <div class="d-flex justify-content-between my-2">
-                      <p class="text-danger">Total</p>
-                      <p class="text-danger"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
+                      <p class="text-dark">Total</p>
+                      <p class="text-dark"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
                     </div>
                   </div>
                   <div class="text-note">
-                    <p class="text-danger">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
+                    <p class="">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
                       <textarea class="p-2" name="" id="" cols="50" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
                   </div>
                 </div>
@@ -415,7 +421,7 @@ onMounted(() => {
                       <span class="text-danger" v-if="errors.address">{{ errors.address }}</span>
                     </div>
                     <h6 class="delivary-charge text-center mb-3" >ডেলিভারি চার্জ</h6>
-                    <div class="formRadioControl" v-for="(delivery, index) in deliveryInfo.data" :key="index">
+                    <div class="formRadioControl" v-for="(delivery, index) in deliveryInfo.data" :key="index" @click="delivery_gateway_id = delivery.id">
                       <input
                         class="form-check-input me-2"
                         type="radio"
@@ -429,11 +435,10 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="secend-box p-2 bg-light mt-3">
-                    <div class="d-flex justify-content-between">
-                      <div class="left-text"><h5 class="text-wrap">পেমেন্ট মেথড সিলেক্ট করুন</h5></div>
-                      <div class="right-text"><i class="fa-solid fa-lock"></i>সম্পূর্ণ নিরাপদ পেমেন্ট</div>
+                    <div class="">
+                      <div class="right-text fw-bolder text-dark text-center"><i class="fa-solid fa-lock"></i>সম্পূর্ণ নিরাপদ পেমেন্ট</div>
                     </div>
-                        <div class="formRadioControl" v-for="(payment_gateway, index) in payment_gateways.data" :key="index">
+                        <div class="formRadioControl" v-for="(payment_gateway, index) in payment_gateways.data" :key="index" @click="payment_gateway_id = payment_gateway.id">
                           <input
                             class="form-check-input me-2"
                             type="radio"
@@ -468,7 +473,7 @@ onMounted(() => {
                     <div v-if="isLoading" class="preloader"></div>
                   <button type="submit"  class="text-center orderBTN mt-4 w-100" @click="placeOrder()">
                     <span v-if="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                    <span v-else>Order Now</span>
+                    <span v-else>Place Order</span>
                   </button>
               </Form>
             </div>
@@ -545,7 +550,7 @@ onMounted(() => {
 }
 
 .form-control.PlaceHolderColorChange::placeholder {
-    color: var(--primary) !important;
+    color: var(--black) !important;
 }
 
 /* Define the keyframes for the pulse animation */
