@@ -349,7 +349,7 @@ onMounted(() => {
                       </div>
                       <span v-if="couponErrorMessage" class="text-danger ps-3">{{ couponErrorMessage }}</span>
                   </div>
-                  <div class="left my-3 hide_and_show_top_section ">
+                  <div class="left my-3 hide_and_show_top_section">
                     <h5 class="text-wrap">Order Summery</h5>
                     <div class="d-flex justify-content-between my-2">
                       <p class="">Sub Total</p>
@@ -368,10 +368,6 @@ onMounted(() => {
                       <p class="text-dark">Total</p>
                       <p class="text-dark"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
                     </div>
-                  </div>
-                  <div class="text-note">
-                    <p class="">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
-                      <textarea class="p-2" name="" id="" cols="50" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
                   </div>
                 </div>
             </div>
@@ -470,8 +466,12 @@ onMounted(() => {
                         <p class="text-danger"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
                       </div>
                     </div>
+                    <div class="text-note mt-3">
+                      <p class="">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
+                        <textarea class="p-2" name="" id="" cols="35" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
+                    </div>
                     <div v-if="isLoading" class="preloader"></div>
-                  <button type="submit"  class="text-center orderBTN mt-4 w-100" @click="placeOrder()">
+                  <button type="submit"  class="text-center orderBTN mt-3 w-100" @click="placeOrder()">
                     <span v-if="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     <span v-else>Place Order</span>
                   </button>
@@ -547,6 +547,7 @@ onMounted(() => {
 .text-note textarea {
     border-color: var(--primary);
     border-radius: 5px;
+    margin-top: 5px;
 }
 
 .form-control.PlaceHolderColorChange::placeholder {
