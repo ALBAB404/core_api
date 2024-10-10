@@ -423,7 +423,7 @@ onMounted(() => {
                           <h3 class="view-price">
                               <del>{{  $filters.currencySymbol(modalProduct.mrp) }}</del>
                               <span>{{  $filters.currencySymbol(mrpOrOfferPrice(modalProduct.mrp, modalProduct.offer_price)) }}</span>
-                              <a class="discout_amount" v-if="modalProduct.offer_price != 0">{{ modalProduct.mrp -  modalProduct.offer_price}} /- TK</a>
+                              <a class="discout_amount" v-if="modalProduct.offer_price != 0">{{ Math.round(modalProduct.mrp -  modalProduct.offer_price) }} /- TK</a>
                           </h3>
                       </span>
                     <!-- Price Section end -->
@@ -803,9 +803,18 @@ border: 2px solid #119744;
 }
 /* product variation end */
 
+@media (max-width: 768px) {
+  .view-action-group{
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
 @media (max-width: 576px) {
   .standard-wishs {
     margin-top: 8px;
+  }
+
+  .view-action-group{
+    grid-template-columns: repeat(auto-fit, minmax(325px, 1fr));
   }
 }
 
@@ -823,6 +832,19 @@ border: 2px solid #119744;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+  }
+}
+
+
+@media (max-width: 375px) {
+  .view-action-group{
+    grid-template-columns: repeat(auto-fit, minmax(325px, 1fr));
+  }
+}
+
+@media (max-width: 320px) {
+  .view-action-group{
+    grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
   }
 }
 

@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import { useProduct, useCart, useNotification, useShop, useSetting } from "@/stores";
 import { storeToRefs } from "pinia";
 import { CartSideBar, MobileMenu, BannerPart, ProductCard, ProductView, CategorySideBar, NavSideBar } from "@/components";
+import {SingleProductPageSkeleton} from '@/components/skeleton'
 import { mrpOrOfferPrice, addToCart } from '@/composables'
 
 const product       = useProduct();
@@ -279,7 +280,7 @@ onMounted(() => {
                     CART SIDEBAR PART END
     =======================================-->
 
-    <section class="inner-section mt-4">
+    <section class="inner-section mt-4"  v-if="singleProduct?.variations?.data.length > 0">
       <div class="container">
           <div class="row">
               <div class="col-lg-6">
@@ -428,7 +429,12 @@ onMounted(() => {
               </div>
           </div>
       </div>
-  </section>
+    </section>
+    <section class="inner-section mt-4"  v-else>
+      <div class="container">
+          <SingleProductPageSkeleton />
+      </div>
+    </section>
 
   <!-- description feild  -->
 
