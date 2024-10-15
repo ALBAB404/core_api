@@ -72,9 +72,7 @@ onMounted(() => {
             <i class="fa-solid fa-xmark text-light" style="font-size: 20px;width:100%;" v-if="isOpenChat"></i>
             <i class="fa-regular fa-comment-dots" style="font-size: 20px;width:100%;" v-else></i>
             </div>
-            <div class="chat-text">
-            Live Chat
-            </div>
+            <div class="chat-text mt-2">Live Chat</div>
         </div>
     </div>
 </template>

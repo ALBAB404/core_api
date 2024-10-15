@@ -120,7 +120,7 @@ onMounted(() => {
     display:inline-block;
 }
 .navbar-section span a{
-    padding: 0px 10px; 
+    padding: 10px 20px; 
     display:inline-block;
     font-size: 15px;
     color: var(--white);

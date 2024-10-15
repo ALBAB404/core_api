@@ -122,7 +122,7 @@ onMounted(() => {
 
 <template>
   <div>
- <footer class="mt-5">
+ <footer class="mt-5 pt-5">
       <div class="container">
         <div class="row">
           <div class="col-sm-6 col-xl-3">
@@ -130,7 +130,7 @@ onMounted(() => {
               <router-link :to="{ name: 'homePage'}" class="footer-logo" href="#">
                 <img :src="logo?.image" alt="logo" />
               </router-link>
-              <p class="footer-desc ">{{ description?.value }}</p>
+              <p class="footer-desc text-light">{{ description?.value }}</p>
               <!-- <ul class="footer-social" v-show="socialShares.length > 0">
                 <li v-for="(socialShare, index) in socialShares" :key="index">
                   <a :href="socialURL(socialShare.type, socialShare.contact)" target="_blank" title="">
@@ -142,8 +142,8 @@ onMounted(() => {
           </div>
           <div class="col-sm-6 col-xl-3">
             <div class="footer-widget contact">
-              <h3 class="footer-title ">contact us</h3>
-              <ul class="footer-contact ">
+              <h3 class="footer-title text-light">contact us</h3>
+              <ul class="footer-contact text-light">
                 <li>
                   <i class="icofont-ui-email"></i>
                   <p>
@@ -172,20 +172,20 @@ onMounted(() => {
 
           <div class="col-sm-6 col-xl-3">
             <div class="footer-widget">
-                <h3 class="footer-title ">quick Links</h3>
+                <h3 class="footer-title text-light">quick Links</h3>
                 <div class="footer-links">
                     <ul>
-                        <li><router-link :to="{ name: 'TermsConditions' }" class="">Terms & Conditions</router-link></li>
-                        <li><router-link :to="{ name: 'aboutPage' }" class="">About us</router-link></li>
-                        <li><router-link :to="{ name: 'PrivacyPolicy' }" class="">privacy policy</router-link></li>
-                        <li><router-link :to="{ name: 'ReturnRefund' }" class="">Return & Refund</router-link></li>
+                        <li><router-link :to="{ name: 'TermsConditions' }" class="text-light">Terms & Conditions</router-link></li>
+                        <li><router-link :to="{ name: 'aboutPage' }" class="text-light">About us</router-link></li>
+                        <li><router-link :to="{ name: 'PrivacyPolicy' }" class="text-light">privacy policy</router-link></li>
+                        <li><router-link :to="{ name: 'ReturnRefund' }" class="text-light">Return & Refund</router-link></li>
                     </ul>
                     <ul>
-                        <li><a :href="`https://www.facebook.com/${fbPageUrl}`" target="_blank" class="">Facebook</a></li>
-                        <li><router-link :to="{ name: 'contactPage' }" class="">contact us</router-link></li>
-                        <li><router-link :to="{ name: 'shopPage' }" class="">Shop page</router-link></li>
-                        <li><router-link :to="{ name: 'shopPage', query: {top: 'top-product'}}" class="">Top product</router-link></li>
-                        <li><router-link :to="{ name: 'shopPage', query: {recent: 'recent-product'}}" class="">New Arrivals</router-link></li>
+                        <li><a :href="`https://www.facebook.com/${fbPageUrl}`" target="_blank" class="text-light">Facebook</a></li>
+                        <li><router-link :to="{ name: 'contactPage' }" class="text-light">contact us</router-link></li>
+                        <li><router-link :to="{ name: 'shopPage' }" class="text-light">Shop page</router-link></li>
+                        <li><router-link :to="{ name: 'shopPage', query: {top: 'top-product'}}" class="text-light">Top product</router-link></li>
+                        <li><router-link :to="{ name: 'shopPage', query: {recent: 'recent-product'}}" class="text-light">New Arrivals</router-link></li>
                     </ul>
                 </div>
             </div>
@@ -193,7 +193,7 @@ onMounted(() => {
           
           <div class="col-sm-6 col-xl-3">
             <div class="footer-widget">
-                <h3 class="footer-title">Let's Connect</h3>
+                <h3 class="footer-title text-light">Let's Connect</h3>
                 <p class="footer-desc">
                     <div id="fb-root"></div>
                     <div class="fb-page" :data-href="fbPageUrl" data-tabs="timeline" data-width="" data-height="130" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
