@@ -198,25 +198,7 @@ const DEFAULT_TITLE = "404";
 router.beforeEach(async (to, from, next) => {
   // dynamiclly page title start
 
-    try {
-
-      const response = await axiosInstance.get('/settings', {
-        params: {
-          key:"title",
-          is_paginate: 0
-        }
-      });
-      
-      const campaignTitle = response.data.result.data[0].value; 
-
-      const staticTitle = to.meta.title || DEFAULT_TITLE;
-      document.title = `${campaignTitle} | ${staticTitle}`;
-
-    } catch (error) {
-      console.error('Error fetching campaign details:', error);
-      // Use fallback title if there's an error
-      document.title = to.meta.title;
-    }
+  document.title = to.meta.title || DEFAULT_TITLE;
 
   // dynamiclly page title end
 

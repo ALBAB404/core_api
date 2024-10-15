@@ -122,7 +122,7 @@ onMounted(() => {
 
 <template>
   <div>
- <footer class="mt-5 pt-5">
+ <footer class="mt-5 pt-5 main-section-footer">
       <div class="container">
         <div class="row">
           <div class="col-sm-6 col-xl-3">
@@ -218,6 +218,10 @@ onMounted(() => {
 </template>
 
 <style>
+
+.main-section-footer{
+  background-color: var(--primary);
+}
 
 .footer-part{
   background-color: #2c150f;
