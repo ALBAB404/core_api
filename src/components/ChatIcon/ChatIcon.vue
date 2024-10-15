@@ -70,7 +70,7 @@ onMounted(() => {
             </ul>
             <div class="message-icon contact_icon" @click.prevent="chatOpen">
             <i class="fa-solid fa-xmark text-light" style="font-size: 20px;width:100%;" v-if="isOpenChat"></i>
-            <i class="fa-regular fa-comment-dots text-light" style="font-size: 20px;width:100%;" v-else></i>
+            <i class="fa-regular fa-comment-dots" style="font-size: 20px;width:100%;" v-else></i>
             </div>
             <div class="chat-text">
             Live Chat
@@ -195,7 +195,7 @@ a{
     height: 50px;
     line-height: 50px;
     text-align: center;
-    background-color: #ff0015;
+    background-color: var(--secondary-color);
     position: fixed;
     top: 30%;
     right: 0;
@@ -208,7 +208,8 @@ a{
     height: 50px;
     line-height: 50px;
     text-align: center;
-    background-color: #ff0000;
+    background-color: var(--secondary-color);
+    color: var(--primary);
     position: fixed;
     bottom: 50px;
     right: 50px;
@@ -216,7 +217,7 @@ a{
     cursor: pointer;
     transition: 0.5s;
     border-radius: 100%;
-    border: 2px solid #fff;
+    border: 2px solid var(--secondary-color);
 }
 .social-contact .chat-text{
     position: fixed;

@@ -35,9 +35,9 @@ const { cartItemCount, totalPrice } = storeToRefs(cart);
 }
 
 .top-section{
-    background-color: rgb(255, 0, 0);
+    background-color: var(--secondary-color);
     padding: 8px;
-    color: white;  
+    color: var(--primary); 
 
 }
 .top-section i{
@@ -66,7 +66,7 @@ const { cartItemCount, totalPrice } = storeToRefs(cart);
 
   .triangle-5 {
     position: absolute;
-    border-top: solid 10px rgb(255, 0, 0);
+    border-top: solid 10px var(--secondary-color);
     border-left: solid 10px transparent;
     border-right: solid 10px transparent;
     top: 62%;
