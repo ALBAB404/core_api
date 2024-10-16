@@ -23,6 +23,7 @@ export { default as Blog } from "@/components/Blog/Blog.vue";
 export { default as Newsletter } from "@/components/Newsletter/Newsletter.vue";
 export { default as Footer } from "@/components/Footer/Footer.vue";
 export { default as ProductCard } from "@/components/Product/ProductCard.vue";
+export { default as ProductVariation } from "@/components/Product/ProductVariation.vue";
 export { default as LoginFrom } from "@/components/LoginFrom/LoginFrom.vue";
 export { default as ChatIcon } from "@/components/ChatIcon/ChatIcon.vue";
 export { default as PremiumCollection } from "@/components/PremiumCollection/PremiumCollection.vue";
