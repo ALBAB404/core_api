@@ -6,6 +6,7 @@ import { storeToRefs } from "pinia";
 import { CartSideBar, MobileMenu, BannerPart, ProductCard, ProductView, CategorySideBar, NavSideBar } from "@/components";
 import {SingleProductPageSkeleton} from '@/components/skeleton'
 import { mrpOrOfferPrice, addToCart } from '@/composables'
+import axiosInstance from "@/services/axiosService.js";
 
 const product       = useProduct();
 const singleProduct = ref('');
@@ -261,10 +262,50 @@ const stickyFooter = () => {
 
 // footer navbar end
 
+// social media link  start
+
+const socialMedia = async () => {
+  try {
+    const res = await axiosInstance.get("/social-medias");
+    socialShares.value = res.data.result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const socialIcons = (socialType) => {
+  const iconMapping = {
+    Facebook: "fab fa-facebook-f",
+    Twitter: "fab fa-twitter",
+    Whatsapp: "fab fa-whatsapp",
+    Messenger: "fab fa-facebook-messenger",
+    Linkedin: "fab fa-linkedin",
+    Instagram: "fab fa-instagram",
+    Phone: "fas fa-phone",
+  };
+  return iconMapping[socialType] || "default-icon-class";
+};
+
+const socialURL = (socialType, socialUrl) => {
+  const iconMapping = {
+    Facebook: `https://www.facebook.com/${socialUrl}/`,
+    Twitter: `https://www.twitter.com/${socialUrl}/`,
+    Whatsapp: `https://wa.me/+88${socialUrl}?text=Hello!`,
+    Messenger: `https://www.messenger.com/t/${socialUrl}/`,
+    Linkedin: `https://www.linkedin.com/${socialUrl}/`,
+    Instagram: `https://www.instagram.com/${socialUrl}/`,
+    Phone: `https://m.me/+88${socialUrl}`,
+  };
+  return iconMapping[socialType] || "default-icon-class";
+};
+
+// social media link  end
+
     
 onMounted(() => {
     stickyFooter();
     productByid();
+    socialMedia();
 })
 
 </script>
@@ -280,7 +321,7 @@ onMounted(() => {
                     CART SIDEBAR PART END
     =======================================-->
 
-    <section class="inner-section mt-4"  v-if="singleProduct?.variations?.data.length > 0">
+    <section class="inner-section mt-4"  v-if="singleProduct">
       <div class="container">
           <div class="row">
               <div class="col-lg-6">
@@ -358,15 +399,19 @@ onMounted(() => {
 
                       <!-- Product Variation Price Section end -->
 
-                      <div class="details-list-group mt-3">
-                          <label class="details-list-title">Share:</label>
-                          <ul class="details-share-list">
-                              <li><a href="#" class="icofont-facebook" title="Facebook"></a></li>
-                              <li><a href="#" class="icofont-twitter" title="Twitter"></a></li>
-                              <li><a href="#" class="icofont-linkedin" title="Linkedin"></a></li>
-                              <li><a href="#" class="icofont-instagram" title="Instagram"></a></li>
-                          </ul>
+                      <div class="details-list-group">
+                        <label class="details-list-title" v-show="socialShares?.data?.length > 0"
+                          >Share:</label
+                        >
+                        <ul class="details-share-list">
+                          <li v-for="(socialShare, index) in socialShares?.data" :key="index">
+                            <a :href="socialURL(socialShare.title, socialShare.link)" target="_blank" title=""
+                              ><i :class="socialIcons(socialShare.title)"></i
+                            ></a>
+                          </li>
+                        </ul>
                       </div>
+                      
                       <div class="details-list-group mt-3">
                         <div class="quantity" :class="{'quantity-disabled' : (activeBtns === false) && (singleProduct?.variations?.data.length > 0)}">
                             <button class="minus" :disabled="(activeBtns === false) && (singleProduct?.variations?.data.length > 0)"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>

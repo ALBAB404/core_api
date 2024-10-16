@@ -120,10 +120,10 @@ onMounted(() => {
                 <img :src="logo?.image" alt="logo" />
               </router-link>
               <p class="footer-desc text-light">{{ description?.value }}</p>
-              <ul class="footer-social" v-show="socialShares.length > 0">
-                <li v-for="(socialShare, index) in socialShares" :key="index">
-                  <a :href="socialURL(socialShare.type, socialShare.contact)" target="_blank" title="">
-                    <i :class="socialIcons(socialShare.type)"></i>
+              <ul class="footer-social" v-show="socialShares?.data?.length > 0">
+                <li v-for="(socialShare, index) in socialShares?.data" :key="index">
+                  <a :href="socialURL(socialShare.title, socialShare.link)" target="_blank" title="">
+                    <i :class="socialIcons(socialShare.title)"></i>
                   </a>
                 </li>
               </ul>
