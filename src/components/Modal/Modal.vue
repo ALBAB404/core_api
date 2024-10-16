@@ -11,14 +11,14 @@ const modal =  useModal()
       <div class="modal-dialog">
         <div class="modal-content">
           <button
-            class="modal-close icofont-close"
+            class="modal-close"
             data-bs-dismiss="modal"
             @click.prevent="modal.toggleModal()"
-          ></button>
+          ><i class="fas fa-times text-light"></i></button>
           <div class="product-view">
             <div class="row">
               <div class=" col-md-12 col-lg-12">
-                  
+
                 <slot />   
 
               </div>

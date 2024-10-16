@@ -36,8 +36,8 @@ const messengerId = ref("");
 // settings variables
 const addToCartButton      = ref('Add Cart');
 const orderButton          = ref('Order Now ');
-const productNameFontSize  = ref('16px');
-const productPriceFontSize = ref('26px');
+const productNameFontSize  = ref('18px');
+const productPriceFontSize = ref('20px');
 
 
 const price            = ref();
@@ -333,7 +333,7 @@ onMounted(() => {
               <span>add</span>
           </button> -->
 
-          <div class="row" v-if="product?.variations?.data?.length > 0">
+          <!-- <div class="row" v-if="product?.variations?.data?.length > 0">
             <div class="col-xl-6 col-lg-12 col-12 mt-2">
               <button  class="product-add btnColorOrder" :disabled="isButtonDisabled" :class="isButtonDisabled ? 'disabled btn border-dark' : ''" title="Add to Cart" @click.prevent="addToCart(product)">
                 <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
@@ -360,7 +360,7 @@ onMounted(() => {
                 <span>{{ orderButton }}</span>
               </router-link>
             </div>
-          </div>
+          </div> -->
       </div>
   </div>
 
@@ -370,7 +370,7 @@ onMounted(() => {
   <div class="modal fade" id="product-view" style="display: none;" aria-hidden="true">
     <div class="modal-dialog"> 
       <div class="modal-content">
-        <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
+        <button class="modal-close icofont-close" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
         <div class="product-view">
           <div class="row">
             <div class="col-md-6 col-lg-6">
@@ -453,7 +453,7 @@ onMounted(() => {
                     <div class="view-list-group">
                         <label class="view-list-title">Share:</label>
                         <ul class="view-share-list">
-                            <li><a href="#" class="icofont-facebook" title="Facebook"></a></li>
+                            <li><a href="#" class="icofont-facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
                             <li><a href="#" class="icofont-twitter" title="Twitter"></a></li>
                             <li><a href="#" class="icofont-linkedin" title="Linkedin"></a></li>
                             <li><a href="#" class="icofont-instagram" title="Instagram"></a></li>

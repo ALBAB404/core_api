@@ -5,29 +5,18 @@ import { storeToRefs } from 'pinia';
 import {useSetting} from '@/stores'
 import axiosInstance from "@/services/axiosService.js";
 // All Variable  Code Is Here.....................................................................................................
-const setting = useSetting();
+const setting      = useSetting();
 const { settings } = storeToRefs(setting);
-
-const email = ref()
-const logo = ref()
-const address = ref()
-const phone = ref()
-const description = ref()
-const facebook = ref()
-const whatsapp = ref()
-const title = ref()
-
-const fbPageUrl = ref('https://www.facebook.com/servicekeybd')
-
-// social Icons start
+const email        = ref()
+const logo         = ref()
+const address      = ref()
+const phone        = ref()
+const description  = ref()
+const facebook     = ref()
+const whatsapp     = ref()
+const title        = ref()
+const fbPageUrl    = ref('https://www.facebook.com/servicekeybd')
 const socialShares = ref("");
-// social Icons end
-
-// API Calling Code Is Here.....................................................................................................
-
-
-// All Function  Code Is Here.....................................................................................................
-
 
 
 const getSettingsData = async() => {
@@ -122,7 +111,7 @@ onMounted(() => {
 
 <template>
   <div>
- <footer class="mt-5 pt-5 main-section-footer">
+    <footer class="mt-5 pt-5 main-section-footer">
       <div class="container">
         <div class="row">
           <div class="col-sm-6 col-xl-3">
@@ -131,13 +120,13 @@ onMounted(() => {
                 <img :src="logo?.image" alt="logo" />
               </router-link>
               <p class="footer-desc text-light">{{ description?.value }}</p>
-              <!-- <ul class="footer-social" v-show="socialShares.length > 0">
+              <ul class="footer-social" v-show="socialShares.length > 0">
                 <li v-for="(socialShare, index) in socialShares" :key="index">
                   <a :href="socialURL(socialShare.type, socialShare.contact)" target="_blank" title="">
                     <i :class="socialIcons(socialShare.type)"></i>
                   </a>
                 </li>
-              </ul> -->
+              </ul>
             </div>
           </div>
           <div class="col-sm-6 col-xl-3">
