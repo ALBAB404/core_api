@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { useRoute } from "vue-router";
 import {
   useProduct,
@@ -70,6 +70,8 @@ const messengerId = ref("");
 // related product start
 const relatedProducts = ref("");
 // related product end
+
+const alertTimeout = ref("");
 
 // image working start
 
@@ -321,10 +323,23 @@ const socialURL = (socialType, socialUrl) => {
 
 // social media link  end
 
+const backgroundImageUrl = ref("https://wpmet.com/plugin/elementskit/popup-modal/wp-content/uploads/sites/9/2022/06/big_offer_item_02.png");
+
 onMounted(() => {
   stickyFooter();
   productByid();
   socialMedia();
+
+  alertTimeout.value = setTimeout(() => {
+    const modal = new bootstrap.Modal(document.getElementById('product-view'));
+    modal.show();
+  }, 1000); // 2 minutes
+});
+
+onBeforeUnmount(() => {
+  if (alertTimeout.value) {
+    clearTimeout(alertTimeout.value);
+  }
 });
 </script>
 
@@ -456,7 +471,7 @@ onMounted(() => {
 
               <!-- Product Variation Price Section start -->
 
-              <!-- <span v-if="singleProduct?.variations?.data.length > 0">
+              <span v-if="singleProduct?.variations?.data.length > 0">
                 <div
                   class="details-list-group"
                   v-for="(attribute, key, index) in productVariations"
@@ -495,11 +510,11 @@ onMounted(() => {
                 >
                   X clear
                 </button>
-              </span> -->
+              </span>
 
-              ...............................................
+              <!-- ...............................................
 
-              <ProductVariation :productVariations="productVariations" :allVariations="singleProduct?.variations?.data" />
+              <ProductVariation :productVariations="productVariations" :allVariations="singleProduct?.variations?.data" /> -->
 
               <!-- Product Variation Price Section end -->
 
@@ -743,6 +758,67 @@ onMounted(() => {
       </div>
     </section>
 
+    <!-- Product Modal Start -->
+
+    <div
+      class="modal fade"
+      id="product-view"
+      style="display: none"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <button class="modal-close icofont-close" data-bs-dismiss="modal">
+            <i class="fas fa-times"></i>
+          </button>
+          <div class="product-view">
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                <div class="view-gallery">
+                    <div class="product-imgs">
+                      <div class="img-display">
+                          <div class="img-showcase">
+                              <img :src="backgroundImageUrl" />
+                          </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6">
+                <div class="view-details">
+                  <h3 class="view-name">
+                      <a href="product-video.html">existing product name</a>
+                  </h3>
+                  <h3 class="view-price">
+                      <del>$38.00</del>
+                      <span>$24.00<small>/per kilo</small></span>
+                  </h3>
+                  <div class="view-add-group">
+                      <div class="row">
+                        <div class="col-lg-6 mt-2">
+                          <button class="product-add" title="Add to Cart">
+                            <i class="fas fa-shopping-basket"></i>
+                            <span>add to cart</span>
+                          </button>
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                          <button class="product-add" title="Add to Cart">
+                            <i class="fas fa-shopping-basket"></i>
+                            <span>Order Now</span>
+                          </button>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Modal End  -->
+
     <!-- Sticky Footer Start -->
     <div class="main-footer-nav-section">
       <div class="container">
@@ -859,6 +935,17 @@ onMounted(() => {
 
 <style scoped>
 @import "@/assets/css/product-details.css";
+
+/* MOdla css */
+.view-price {
+  margin-bottom: 0px !important;
+}
+
+.view-add-group {
+  margin: 20px 0px 15px;
+}
+
+/* MOdla css */
 
 /* Define the keyframes for the pulse animation */
 @keyframes pulse {
