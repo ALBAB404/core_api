@@ -352,7 +352,7 @@ onMounted(() => {
                         @click.prevent="decrementCartItem"
                         title="Quantity Minus"
                       >
-                        <i class="icofont-minus"></i>
+                        <i class="fas fa-minus"></i>
                       </button>
                       <input
                         class="action-input text-center"
@@ -368,7 +368,7 @@ onMounted(() => {
                         @click.prevent="incrementCartItem"
                         title="Quantity Plus"
                       >
-                        <i class="icofont-plus"></i>
+                        <i class="fas fa-plus"></i>
                       </button>
                     </div>
                   </div>
@@ -416,7 +416,7 @@ onMounted(() => {
                         @click.prevent="decrementCartItem"
                         title="Quantity Minus"
                       >
-                        <i class="icofont-minus"></i>
+                        <i class="fas fa-minus"></i>
                       </button>
                       <input
                         class="action-input text-center"
@@ -430,7 +430,7 @@ onMounted(() => {
                         @click.prevent="incrementCartItem"
                         title="Quantity Plus"
                       >
-                        <i class="icofont-plus"></i>
+                        <i class="fas fa-plus"></i>
                       </button>
                     </div>
                   </div>

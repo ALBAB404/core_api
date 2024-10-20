@@ -47,7 +47,7 @@ onMounted(() => {
                     <i class="fas fa-align-left"></i>
                     <span>categories</span>
                 </h4>
-                <button class="category-close"><i class="icofont-close"></i></button>
+                <button class="category-close"><i class="fas fa-times"></i></button>
             </div>
             <ul class="category-list">
                  <li class="category-item" v-for="(category, index) in categories?.data" :key="index">

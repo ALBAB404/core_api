@@ -80,7 +80,7 @@
                 </button>
                 <div class="product-action">
                   <button class="action-minus" title="Quantity Minus">
-                    <i class="icofont-minus"></i>
+                    <i class="fas fa-minus"></i>
                   </button>
                   <input
                     class="action-input"
@@ -90,7 +90,7 @@
                     value="1"
                   />
                   <button class="action-plus" title="Quantity Plus">
-                    <i class="icofont-plus"></i>
+                    <i class="fas fa-plus"></i>
                   </button>
                 </div>
               </div>
@@ -155,7 +155,7 @@
                 </button>
                 <div class="product-action">
                   <button class="action-minus" title="Quantity Minus">
-                    <i class="icofont-minus"></i>
+                    <i class="fas fa-minus"></i>
                   </button>
                   <input
                     class="action-input"
@@ -165,7 +165,7 @@
                     value="1"
                   />
                   <button class="action-plus" title="Quantity Plus">
-                    <i class="icofont-plus"></i>
+                    <i class="fas fa-plus"></i>
                   </button>
                 </div>
               </div>
@@ -230,7 +230,7 @@
                 </button>
                 <div class="product-action">
                   <button class="action-minus" title="Quantity Minus">
-                    <i class="icofont-minus"></i>
+                    <i class="fas fa-minus"></i>
                   </button>
                   <input
                     class="action-input"
@@ -240,7 +240,7 @@
                     value="1"
                   />
                   <button class="action-plus" title="Quantity Plus">
-                    <i class="icofont-plus"></i>
+                    <i class="fas fa-plus"></i>
                   </button>
                 </div>
               </div>
@@ -305,7 +305,7 @@
                 </button>
                 <div class="product-action">
                   <button class="action-minus" title="Quantity Minus">
-                    <i class="icofont-minus"></i>
+                    <i class="fas fa-minus"></i>
                   </button>
                   <input
                     class="action-input"
@@ -315,7 +315,7 @@
                     value="1"
                   />
                   <button class="action-plus" title="Quantity Plus">
-                    <i class="icofont-plus"></i>
+                    <i class="fas fa-plus"></i>
                   </button>
                 </div>
               </div>
@@ -380,7 +380,7 @@
                 </button>
                 <div class="product-action">
                   <button class="action-minus" title="Quantity Minus">
-                    <i class="icofont-minus"></i>
+                    <i class="fas fa-minus"></i>
                   </button>
                   <input
                     class="action-input"
@@ -390,7 +390,7 @@
                     value="1"
                   />
                   <button class="action-plus" title="Quantity Plus">
-                    <i class="icofont-plus"></i>
+                    <i class="fas fa-plus"></i>
                   </button>
                 </div>
               </div>
@@ -455,7 +455,7 @@
                 </button>
                 <div class="product-action">
                   <button class="action-minus" title="Quantity Minus">
-                    <i class="icofont-minus"></i>
+                    <i class="fas fa-minus"></i>
                   </button>
                   <input
                     class="action-input"
@@ -465,7 +465,7 @@
                     value="1"
                   />
                   <button class="action-plus" title="Quantity Plus">
-                    <i class="icofont-plus"></i>
+                    <i class="fas fa-plus"></i>
                   </button>
                 </div>
               </div>

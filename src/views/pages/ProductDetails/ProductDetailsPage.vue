@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import {
   useProduct,
@@ -325,15 +325,26 @@ const socialURL = (socialType, socialUrl) => {
 
 const backgroundImageUrl = ref("https://wpmet.com/plugin/elementskit/popup-modal/wp-content/uploads/sites/9/2022/06/big_offer_item_02.png");
 
+const handleBeforeUnload = (event) => {
+
+  event.preventDefault();
+  event.returnValue = 'fdsfsdf'; 
+  
+
+  setTimeout(() => {
+    const modal = new bootstrap.Modal(document.getElementById('product-view'));
+    modal.show();
+  }, 10); 
+};
+
 onMounted(() => {
   stickyFooter();
   productByid();
   socialMedia();
-
-  alertTimeout.value = setTimeout(() => {
-    const modal = new bootstrap.Modal(document.getElementById('product-view'));
-    modal.show();
-  }, 1000); // 2 minutes
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  // alertTimeout.value = setTimeout(() => {
+  //   handleBeforeUnload();
+  // }, 1000);
 });
 
 onBeforeUnmount(() => {
@@ -341,6 +352,15 @@ onBeforeUnmount(() => {
     clearTimeout(alertTimeout.value);
   }
 });
+
+onUnmounted(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload);
+});
+
+
+
+
+
 </script>
 
 <template>
@@ -457,7 +477,7 @@ onBeforeUnmount(() => {
                     class="discout_amount"
                     v-if="singleProduct.offer_price != 0"
                     >Save
-                    {{ singleProduct.mrp - singleProduct.offer_price }} ৳</a
+                    {{ Math.round(singleProduct.mrp - singleProduct.offer_price) }} ৳</a
                   >
                 </h3>
               </span>

@@ -50,7 +50,7 @@ onMounted(() => {
         <router-link :to="{ name: 'homePage'}">
             <img :src="logo?.image" alt="logo" />
         </router-link>
-        <button class="nav-close"><i class="icofont-close"></i></button>
+        <button class="nav-close"><i class="fas fa-times"></i></button>
       </div>
       <div class="nav-content">
         <ul class="nav-list">

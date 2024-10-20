@@ -307,13 +307,13 @@ onMounted(() => {
                                         <div class="quentyDefaultClass">
                                         <button class="action-minus" :disabled="productPrices == null ? true : false"
                                             @click.prevent="decrementCartItem" title="Quantity Minus">
-                                            <i class="icofont-minus"></i>
+                                            <i class="fas fa-minus"></i>
                                         </button>
                                         <input class="action-input text-center" :class="selectedSize == null ? 'disabled' : ''"
                                             title="Quantity Number" type="text" name="quantity" v-model="quantityInput" />
                                         <button class="action-plus" :disabled="productPrices == null ? true : false"
                                             @click.prevent="incrementCartItem" title="Quantity Plus">
-                                            <i class="icofont-plus"></i>
+                                            <i class="fas fa-plus"></i>
                                         </button>
                                         </div>
                                     </div>
@@ -342,11 +342,11 @@ onMounted(() => {
                                 <div class="col-md-6">
                                     <div class="quentyDefaultClass">
                                     <button class="action-minus" @click.prevent="decrementCartItem" title="Quantity Minus">
-                                        <i class="icofont-minus"></i>
+                                        <i class="fas fa-minus"></i>
                                     </button>
                                     <input class="action-input text-center" title="Quantity Number" type="text" name="quantity" v-model="quantityInput" />
                                     <button class="action-plus" @click.prevent="incrementCartItem" title="Quantity Plus">
-                                        <i class="icofont-plus"></i>
+                                        <i class="fas fa-plus"></i>
                                     </button>
                                     </div>
                                 </div>

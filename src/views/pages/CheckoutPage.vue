@@ -8,14 +8,16 @@ import { onMounted, ref } from "vue";
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
-// All Variable  Code Is Here.....................................................................................................
-const modal =  useModal()
-const auth = useAuth();
-const { isOrder } = storeToRefs(auth);
-const cart = useCart();
-const { cartItem, totalPrice, campaignId } = storeToRefs(cart);
-const order = useOrder();
+const modal                                  = useModal()
+const auth                                   = useAuth();
+const { isOrder }                            = storeToRefs(auth);
+const cart                                   = useCart();
+const { cartItem, totalPrice, campaignId }   = storeToRefs(cart);
+const order                                  = useOrder();
 const { storeOrder, backendErrors, loading } = storeToRefs(order);
+const isLoading                              = ref(false);
+const isFreeShipping                         = ref(true);
+
 
 const name                = ref(auth?.user?.user?.name);
 const phoneNumber         = ref(auth?.user?.user?.phone_number);
@@ -37,216 +39,211 @@ const couponId             = ref();
 const isOpen               = ref(false);
 
 // Refs for the input fields
-const nameFieldRef = ref(null);
+const nameFieldRef        = ref(null);
 const phoneNumberFieldRef = ref(null);
-const districtFieldRef = ref(null);
-const addressFieldRef = ref(null);
-const deliveryGatewayRef = ref(null);
-const paymentGatewayRef = ref(null);
+const districtFieldRef    = ref(null);
+const addressFieldRef     = ref(null);
+const deliveryGatewayRef  = ref(null);
+const paymentGatewayRef   = ref(null);
 
-const isOpenCoupon = () =>{
-  isOpen.value = !isOpen.value;
-}
-
-const getDeliveryGateway = async () => {
-  try {
-    const res = await axiosInstance.get("/delivery-gateway");
-    deliveryInfo.value = res.data.result;
-
-    if (cartItem.value.some((item) => item.free_shipping === 1)) {
-      delivery_gateway_id.value = 0;
-      deliverCharge.value = 0;
-    } else {
-      delivery_gateway_id.value = res.data.result.data[0].id;
-      deliverCharge.value = res.data.result.data[0].delivery_fee;
+    const isOpenCoupon = () =>{
+      isOpen.value = !isOpen.value;
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-const getDeliveryAmount = async () => {
-  try {
-    const res = await axiosInstance.get(
-      `/delivery-gateway/price/${delivery_gateway_id.value}`
-    );
-    deliverCharge.value = res.data.result.delivery_fee;
-  } catch (error) {
-    console.log(error);
-  }
-};
+    const getDeliveryGateway = async () => {
+      try {
+        const res = await axiosInstance.get("/delivery-gateway");
+        deliveryInfo.value = res.data.result;
 
-const getPaymentGetway = async () => {
-  try {
-    const res = await axiosInstance.get(`/payment-gateway`);
-    payment_gateways.value = res.data.result;
-  } catch (error) { }
-};
+        if (cartItem.value.some((item) => item.free_shipping === 1)) {
+          delivery_gateway_id.value = 0;
+          deliverCharge.value = 0;
+        } else {
+          delivery_gateway_id.value = res.data.result.data[0].id;
+          deliverCharge.value = res.data.result.data[0].delivery_fee;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getDeliveryAmount = async () => {
+      try {
+        const res = await axiosInstance.get(`/delivery-gateway/price/${delivery_gateway_id.value}`);
+        deliverCharge.value = res.data.result.delivery_fee;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getPaymentGetway = async () => {
+      try {
+        const res = await axiosInstance.get(`/payment-gateway`);
+        payment_gateways.value = res.data.result;
+      } catch (error) { }
+    };
 
 // order work start here 
 
-const orderSubmited = async () => {
-  await order.storeOrder({
-      name               : name.value,
-      phoneNumber        : phoneNumber.value,
-      district           : district.value,
-      address            : address.value,
-      orderNote          : orderNote.value,
-      items              : cartItem.value,
-      coupon_id          : couponId.value,
-      totalPrice         : totalPrice.value,
-      payment_gateway_id : payment_gateway_id.value,
-      delivery_gateway_id: delivery_gateway_id.value == 0 ? null    : delivery_gateway_id.value,
-      deliverCharge      : deliverCharge.value ? deliverCharge.value: null,
-      // campaign_id: campaignId.value,
-    });
-}
+    const orderSubmited = async () => {
+      await order.storeOrder({
+          name               : name.value,
+          phoneNumber        : phoneNumber.value,
+          district           : district.value,
+          address            : address.value,
+          orderNote          : orderNote.value,
+          items              : cartItem.value,
+          coupon_id          : couponId.value,
+          totalPrice         : totalPrice.value,
+          payment_gateway_id : payment_gateway_id.value,
+          delivery_gateway_id: delivery_gateway_id.value == 0 ? null    : delivery_gateway_id.value,
+          deliverCharge      : deliverCharge.value ? deliverCharge.value: null,
+          // campaign_id: campaignId.value,
+        });
+    }
 
-const isLoading = ref(false);
-const placeOrder = async() => {
-  isLoading.value = true;
-  try {
-    await orderSubmited();
-    // Handle successful order submission
-  } catch (error) {
-    // Handle error
-    console.error("Order submission failed:", error);
-  } finally {
-    isLoading.value = false; // Hide the preloader
-  }
-
-
-  // if (Object.keys(auth.user).length > 0) {
-  // }else{
-  //   const res = await auth.login({phone_number: phoneNumber.value, name: name.value});
-  //   if (res?.status == 200) {
-  //     modal.toggleModal() 
-  //   }
-  // }
-
-};
+    const placeOrder = async() => {
+      isLoading.value = true;
+      try {
+        await orderSubmited();
+        // Handle successful order submission
+      } catch (error) {
+        // Handle error
+        console.error("Order submission failed:", error);
+      } finally {
+        isLoading.value = false; // Hide the preloader
+      }
 
 
+      // if (Object.keys(auth.user).length > 0) {
+      // }else{
+      //   const res = await auth.login({phone_number: phoneNumber.value, name: name.value});
+      //   if (res?.status == 200) {
+      //     modal.toggleModal() 
+      //   }
+      // }
 
-const handleOrderSubmitted = () => {
-  orderSubmited(); 
-}
+    };
+
+
+
+    const handleOrderSubmitted = () => {
+      orderSubmited(); 
+    }
 
 // order work end here 
 
 // Scroll to the first error field
-const scrollToErrorField = () => {
-  if (!name.value) {
-    nameFieldRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
-    nameFieldRef.value?.focus();
-    return;
-  }
-  if (!phoneNumber.value) {
-    phoneNumberFieldRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
-    phoneNumberFieldRef.value?.focus();
-    return;
-  }
-  if (!district.value) {
-    districtFieldRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
-    districtFieldRef.value?.focus();
-    return;
-  }
-  if (!address.value) {
-    addressFieldRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
-    addressFieldRef.value?.focus();
-    return;
-  }
-  if (!delivery_gateway_id.value) {
-    deliveryGatewayRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
-    deliveryGatewayRef.value?.focus();
-    return;
-  }
-  if (!payment_gateway_id.value) {
-    paymentGatewayRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
-    paymentGatewayRef.value?.focus();
-    return;
-  }
-};
+    const scrollToErrorField = () => {
+      if (!name.value) {
+        nameFieldRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+        nameFieldRef.value?.focus();
+        return;
+      }
+      if (!phoneNumber.value) {
+        phoneNumberFieldRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+        phoneNumberFieldRef.value?.focus();
+        return;
+      }
+      if (!district.value) {
+        districtFieldRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+        districtFieldRef.value?.focus();
+        return;
+      }
+      if (!address.value) {
+        addressFieldRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+        addressFieldRef.value?.focus();
+        return;
+      }
+      if (!delivery_gateway_id.value) {
+        deliveryGatewayRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+        deliveryGatewayRef.value?.focus();
+        return;
+      }
+      if (!payment_gateway_id.value) {
+        paymentGatewayRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+        paymentGatewayRef.value?.focus();
+        return;
+      }
+    };
 
 
 // cart delete 
 
-const deleteCart = (index) => {
-  cart.destroy(index);
-};
+    const deleteCart = (index) => {
+      cart.destroy(index);
+    };
 
-const cartIncrement = (index) => {
-  cart.increment(index);
-};
+    const cartIncrement = (index) => {
+      cart.increment(index);
+    };
 
-const cartDecrement = (index) => {
-  cart.decrement(index);
-};
+    const cartDecrement = (index) => {
+      cart.decrement(index);
+    };
 
 // coupon 
 
 
-const couponCalculate = async() => {
-  try {
+    const couponCalculate = async() => {
+      try {
 
-      const res = await axiosInstance.get(`/coupons/check?coupon_code=${coupon.value}&cart_total_amount=${totalPrice.value}`);   
-      if (res.status == 200) {
-      couponDiscountAmount.value = res.data.result.discount_amount;
-      couponId.value = res.data.result.coupon_id;
-      isOpen.value = false
+          const res = await axiosInstance.get(`/coupons/check?coupon_code=${coupon.value}&cart_total_amount=${totalPrice.value}`);   
+          if (res.status == 200) {
+          couponDiscountAmount.value = res.data.result.discount_amount;
+          couponId.value = res.data.result.coupon_id;
+          isOpen.value = false
 
-    }else{
-      couponErrorMessage.value = res.data.message 
+        }else{
+          couponErrorMessage.value = res.data.message 
+        }
+      } catch (error) {
+        couponErrorMessage.value = error.response.data.message      
+      }
     }
-   } catch (error) {
-     couponErrorMessage.value = error.response.data.message      
-   }
-}
 
 
 // validation error
-const schema = yup.object({
-  name: yup.string().required("আপনার নাম IS REQUIRED"),
-  phone: yup.string().required("আপনার মোবাইল নাম্বার IS REQUIRED"),
-  district: yup.string().required("District Feild Is Required"),
-  address: yup.string().required("আপনার সম্পূর্ণ ঠিকানা IS REQUIRED"),
-  delivery_gateway_id: yup.string().required("Delivery Gateway Feild Is Required"),
-  payment_gateway_id: yup.string().required("Payment Gateway Feild Is Required"),
-
-});
+    const schema = yup.object({
+      name               : yup.string().required("আপনার নাম IS REQUIRED"),
+      phone              : yup.string().required("আপনার মোবাইল নাম্বার IS REQUIRED"),
+      district           : yup.string().required("District Feild Is Required"),
+      address            : yup.string().required("আপনার সম্পূর্ণ ঠিকানা IS REQUIRED"),
+      delivery_gateway_id: yup.string().required("Delivery Gateway Feild Is Required"),
+      payment_gateway_id : yup.string().required("Payment Gateway Feild Is Required"),
+    });
 
 // has free shipping function 
-const hasFreeShipping = () => {
+    const hasFreeShipping = () => {
       return cartItem.value.some(item => item.free_shipping === 1);
-}
+    }
 
 
 // total price section hide and show 
 
-const showTotalPriceSection = () => {
-  const hideAndShowTopSection = document.querySelector('.hide_and_show_top_section');
-  const hideAndShowButtomSection = document.querySelector('.hide_and_show_bottam_section');
-  const scrollScreenSize = window.screen.width;
-  
-  if (scrollScreenSize < 768) {            
-    hideAndShowTopSection.classList.add('price_section_hide');
-    hideAndShowButtomSection.classList.remove('price_section_show');
-  }else{
-    hideAndShowButtomSection.classList.add('price_section_hide');
-    hideAndShowTopSection.classList.remove('price_section_show');
-  }
-
-}
+    const showTotalPriceSection = () => {
+      const hideAndShowTopSection    = document.querySelector('.hide_and_show_top_section');
+      const hideAndShowButtomSection = document.querySelector('.hide_and_show_bottam_section');
+      const scrollScreenSize         = window.screen.width;
+      
+      if (scrollScreenSize < 768) {            
+        hideAndShowTopSection.classList.add('price_section_hide');
+        hideAndShowButtomSection.classList.remove('price_section_show');
+      }else{
+        hideAndShowButtomSection.classList.add('price_section_hide');
+        hideAndShowTopSection.classList.remove('price_section_show');
+      }
+    }
 
 // total price section hide and show 
 
 
-onMounted(() => {
-  getDeliveryGateway();
-  getPaymentGetway();
-  modal.Modalclose();
-  showTotalPriceSection();
-});
+    onMounted(() => {
+      getDeliveryGateway();
+      getPaymentGetway();
+      modal.Modalclose();
+      showTotalPriceSection();
+    });
 </script>
 
 <template>
@@ -285,7 +282,7 @@ onMounted(() => {
         <div class="row">
             <div class="col-lg-8">
                 <div class="table-responsive">
-                <table class="table table-hover">
+                    <table class="table table-hover">
                     <thead>
                         <tr>
                         <th scope="col">SL</th>
@@ -298,10 +295,10 @@ onMounted(() => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(product, index) in cartItem" :key="index">
+                        <tr v-for="(product, index) in cartItem" :key="index" class="checkoutTable">
                           <th scope="row">{{ 1 + index }}</th>
-                          <td><a href="" class="img"><img :src="product.image" class="" alt=""></a></td>
-                          <td class="text-wrap">{{ product.name }}</td>
+                          <td class="align-items-center"><a href="" class="img"><img :src="product.image" class="" alt=""></a></td>
+                          <td class="text-wrap align-items-center">{{ product.name }}</td>
                           <td>{{ Math.round(product.offer_price == 0 ? product.mrp : product.offer_price) }}</td>
                           <td class="w-25">
                             <div class="checkout-page-action">
@@ -310,7 +307,7 @@ onMounted(() => {
                                   title="Quantity Minus"
                                   @click.prevent="cartDecrement(index)"
                                 >
-                                  <i class="icofont-minus"></i>
+                                  <i class="fas fa-minus"></i>
                                 </button>
                                 <input
                                   class=""
@@ -325,7 +322,7 @@ onMounted(() => {
                                   title="Quantity Plus"
                                   @click.prevent="cartIncrement(index)"
                                 >
-                                  <i class="icofont-plus"></i>
+                                  <i class="fas fa-plus"></i>
                                 </button>
                             </div>
                           </td>
@@ -338,6 +335,12 @@ onMounted(() => {
                         </tr>
                     </tbody>
                     </table>
+                    <div class="continue-shopping" v-if="isFreeShipping && cartItem.length > 1 || (cartItem.length > 0 && cartItem[0].quantity > 1)">
+                      <router-link :to="{ name: 'shopPage'}"> <i class="fas fa-arrow-left"></i> Continue Shopping</router-link>
+                    </div>
+                    <div class="is-free-shipping" v-if="isFreeShipping && cartItem.length > 1 || (cartItem.length > 0 && cartItem[0].quantity > 1)">
+                      <p>Add 1 more product to get free shipping!</p>
+                    </div>
                     <div class="left my-3 p-0">
                       <div class="d-flex justify-content-between is-coupon" @click="isOpenCoupon">
                         <h6>Do you have any coupon ?</h6>
@@ -491,6 +494,43 @@ onMounted(() => {
 <style>
 @import "@/assets/css/checkout.css";
 
+/* checkoutTable start*/
+.checkoutTable th,
+.checkoutTable td {
+  text-align: center !important; /* Horizontal alignment */
+  vertical-align: middle !important; /* Vertical alignment */
+}
+/* checkoutTable end*/
+
+
+/* is free shipping start*/
+
+.continue-shopping a{
+  border: 2px solid var(--secondary-color);
+  padding: 8px 20px;
+  margin-bottom: 20px;
+  color: var(--secondary-color);
+  font-weight: 500;
+  transition: .2s;
+}
+
+.continue-shopping a:hover{
+  color: var(--black);
+  border: 2px solid var(--black);
+  transition: .2s;
+}
+
+.is-free-shipping{
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+}
+.is-free-shipping p{
+  font-size: 20px;
+  color: var(--red);
+}
+/* is free shipping end*/
 
 /* pre loader start*/
 .preloader {

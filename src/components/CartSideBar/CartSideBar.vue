@@ -57,7 +57,7 @@ const cartIncrement = (index) => {
           <i class="fas fa-shopping-basket"></i>
           <span>আপনার কার্টে কিছু নেই</span>
         </div>
-        <button class="cart-close"><i class="icofont-close"></i></button>
+        <button class="cart-close"><i class="fas fa-times"></i></button>
       </div>
       <Transition name="fade" mode="out-in">
         <TransitionGroup
@@ -96,7 +96,7 @@ const cartIncrement = (index) => {
                     title="Quantity Minus"
                     @click.prevent="cartDecrement(index)"
                   >
-                    <i class="icofont-minus"></i>
+                  <i class="fas fa-minus"></i>
                   </button>
                   <input
                     class="action-input"
@@ -111,7 +111,7 @@ const cartIncrement = (index) => {
                     title="Quantity Plus"
                     @click.prevent="cartIncrement(index)"
                   >
-                    <i class="icofont-plus"></i>
+                    <i class="fas fa-plus"></i>
                   </button>
                 </div>
                 <h6>

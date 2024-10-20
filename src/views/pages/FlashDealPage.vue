@@ -309,9 +309,9 @@ onBeforeUnmount(() => {
                                       </template>
                                 
                                 <div class="product-action">
-                                    <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                    <button class="action-minus" title="Quantity Minus"><i class="fas fa-minus"></i></button>
                                     <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
-                                    <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                    <button class="action-plus" title="Quantity Plus"><i class="fas fa-plus"></i></button>
                                 </div>
                             </div>
                             
