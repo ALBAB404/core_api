@@ -10,7 +10,7 @@ const { cartItemCount, totalPrice } = storeToRefs(cart);
 
         
 
-        <div class="addtocart-main-section cart-btn">
+        <div class="addtocart-main-section cart-btn"  v-if="cartItemCount > 0">
             <div class="top-section text-center">
                 <i class="fas fa-cart-arrow-down"></i>
                 <p><span class="me-2">{{ cartItemCount }}</span><span>ITEMS</span></p>

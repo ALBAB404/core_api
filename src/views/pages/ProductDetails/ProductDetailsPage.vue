@@ -785,6 +785,7 @@ onUnmounted(() => {
       id="product-view"
       style="display: none"
       aria-hidden="true"
+      v-if="singleProduct.coupon"
     >
       <div class="modal-dialog">
         <div class="modal-content">
@@ -807,11 +808,22 @@ onUnmounted(() => {
               <div class="col-md-6 col-lg-6">
                 <div class="view-details">
                   <h3 class="view-name">
-                      <a href="product-video.html">existing product name</a>
+                      <a href="product-video.html">{{ singleProduct.name }}</a>
                   </h3>
                   <h3 class="view-price">
+                    <span v-if="singleProduct.coupon.variations.length > 0">
                       <del>$38.00</del>
                       <span>$24.00<small>/per kilo</small></span>
+                    </span>
+                    <span v-else>
+                      <span v-if="singleProduct.coupon.offer_price != 0">
+                        <del>{{ $filters.currencySymbol(singleProduct.coupon.mrp) }}</del>
+                        <span>{{ $filters.currencySymbol(singleProduct.coupon.offer_price) }}</span>
+                      </span>
+                      <span v-else>
+                        <del>{{ $filters.currencySymbol(singleProduct.coupon.mrp) }}</del>
+                      </span>
+                    </span>
                   </h3>
                   <div class="view-add-group">
                       <div class="row">

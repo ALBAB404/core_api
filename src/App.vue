@@ -10,18 +10,18 @@ import { TopHeader, Navbar,  Footer,  Newsletter, ChatIcon, AddtoCartIcon } from
 
 
 
-    <ChatIcon />
+    <!-- <ChatIcon /> -->
 
-    <AddtoCartIcon />
+    <!-- <AddtoCartIcon /> -->
 
-    <TopHeader />
+    <!-- <TopHeader /> -->
 
-    <Navbar />
+    <!-- <Navbar /> -->
 
     <router-view></router-view>
 
 
-    <Footer /> 
+    <!-- <Footer />  -->
 
   </div>
 </template>

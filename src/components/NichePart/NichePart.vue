@@ -11,7 +11,7 @@
 
 <template>
   <div>
- <section class="section niche-part">
+ <!-- <section class="section niche-part">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
@@ -2213,7 +2213,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 

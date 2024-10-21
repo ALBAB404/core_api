@@ -298,9 +298,9 @@ onMounted(() => {
             <label class="label-text off"  v-if="product?.offer_percent != 0.00">-{{ product?.offer_percent }}%</label>
             <label class="label-text" :class="product?.type === 'feature-product'? 'feat': product?.type === 'top-product'? 'sale': product?.type === 'recent-product'? 'new': ''">{{ product?.type }}</label>
           </div>
-          <button class="product-wish wish">
+          <!-- <button class="product-wish wish">
               <i class="fas fa-heart"></i>
-          </button>
+          </button> -->
 
           <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" class="hover14 column hover01 column">
             <div class="product-image">

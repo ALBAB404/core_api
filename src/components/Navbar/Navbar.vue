@@ -1,16 +1,14 @@
 <script setup>
 // All Import File  Code Is Here......................................................................................................
-import { useAuth, useNotification, useFlashDeal, useCategory } from "@/stores";
+import { useAuth, useNotification, useCategory } from "@/stores";
 import { useRouter, useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { ref, onMounted } from "vue";
 import axiosInstance from "@/services/axiosService.js";
 // All Variable  Code Is Here.....................................................................................................
-const flashDeals = useFlashDeal();
 const auth = useAuth();
 const router = useRouter();
 const { user, loading } = storeToRefs(auth);
-const { campaignProduct } = storeToRefs(flashDeals);
 const notify = useNotification();
 const category = useCategory();
 const { categories } = storeToRefs(category);
@@ -27,10 +25,6 @@ const logout = async () => {
   }
 };
 
-const campaignData = async () => {
-  const res = await flashDeals.index();
-  campaignDataShowing.value = res;
-};
 
 // sticky Header
 
@@ -52,7 +46,6 @@ const stickyHeader = () => {
 // sticky Header
 
 onMounted(() => {
-  campaignData();
   stickyHeader();
 });
 </script>
@@ -95,7 +88,9 @@ onMounted(() => {
           <div class="col-xl-10">
             <span class="navbar-section">
                 <span><router-link :to="{ name: 'shopPage' }">All Product</router-link></span>
-                <span v-for="(category, index) in categories?.data" :key="index"><a href="">{{ category.name }}</a></span>
+                <span v-for="(category, index) in categories?.data" :key="index">
+                  <router-link :to="{ name: 'shopPage', query: { category: category.id } }">{{ category.name }}</router-link>
+              </span>
             </span>
           </div>
           <div class="col-xl-2 col-lg-2 text-center">

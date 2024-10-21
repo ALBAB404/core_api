@@ -61,7 +61,7 @@ const modules = ref([Pagination, Autoplay]);
                   <li class="fas fa-star"></li>
                   <li class="fas fa-star"></li>
                 </ul>
-                <img src="@/assets/images/avatar/01.jpg" alt="testimonial" />
+                <!-- <img src="@/assets/images/avatar/01.jpg" alt="testimonial" /> --> 
               </div>
                 </swiper-slide>
                 <swiper-slide>
@@ -80,7 +80,7 @@ const modules = ref([Pagination, Autoplay]);
                   <li class="fas fa-star"></li>
                   <li class="fas fa-star"></li>
                 </ul>
-                <img src="@/assets/images/avatar/01.jpg" alt="testimonial" />
+                <!-- <img src="@/assets/images/avatar/01.jpg" alt="testimonial" /> --> 
               </div>
                 </swiper-slide>
                 <swiper-slide>
@@ -99,7 +99,7 @@ const modules = ref([Pagination, Autoplay]);
                   <li class="fas fa-star"></li>
                   <li class="fas fa-star"></li>
                 </ul>
-                <img src="@/assets/images/avatar/01.jpg" alt="testimonial" />
+                <!-- <img src="@/assets/images/avatar/01.jpg" alt="testimonial" /> -->
               </div>
                 </swiper-slide>
                 <swiper-slide>
@@ -118,7 +118,7 @@ const modules = ref([Pagination, Autoplay]);
                   <li class="fas fa-star"></li>
                   <li class="fas fa-star"></li>
                 </ul>
-                <img src="@/assets/images/avatar/01.jpg" alt="testimonial" />
+                <!-- <img src="@/assets/images/avatar/01.jpg" alt="testimonial" /> -->
               </div>
                 </swiper-slide>
                 <swiper-slide>
@@ -137,7 +137,7 @@ const modules = ref([Pagination, Autoplay]);
                   <li class="fas fa-star"></li>
                   <li class="fas fa-star"></li>
                 </ul>
-                <img src="@/assets/images/avatar/01.jpg" alt="testimonial" />
+                <!-- <img src="@/assets/images/avatar/01.jpg" alt="testimonial" /> -->
               </div>
                 </swiper-slide>
               </swiper>

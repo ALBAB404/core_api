@@ -182,7 +182,7 @@ onMounted(() => {
                             </ul>
                         </div>
                         <div class="blog-widget">
-                            <a href="#"><img class="img-fluid" src="@/assets/images/promo/blog/01.jpg" alt="promo"></a>
+                            <!-- <a href="#"><img class="img-fluid" src="@/assets/images/promo/blog/01.jpg" alt="promo"></a> -->
                         </div>
                     </div>
                 </div>

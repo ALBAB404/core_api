@@ -26,8 +26,7 @@ import {
   CampaignProductList
 } from "@/views/pages";
 import NProgress from "nprogress";
-import {useAuth} from '@/stores'
-import axiosInstance from "@/services/axiosService.js";
+import {useAuth, useCart} from '@/stores'
 
 let brandName = "Service Key";
 

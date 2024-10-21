@@ -1,36 +1,29 @@
 <script setup>
 // All Import File  Code Is Here......................................................................................................
 
-
 // All Variable  Code Is Here.....................................................................................................
-
 
 // API Calling Code Is Here.....................................................................................................
 
 // All Function  Code Is Here.....................................................................................................
 
 defineProps({
-    title: String,
-})
-
+  title: String,
+});
 </script>
 
 <template>
-    <div>
-       <!--=====================================
+  <div>
+    <!--=====================================
                     BANNER PART START
         =======================================-->
-        <section class="inner-section single-banner">
-            <div class="container">
-                <h2>{{ title }}</h2>
-            </div>
-        </section>
-        <!--=====================================
+    <section class="banner-section">
+      <img src="@/assets/images/banner-img.png" alt="" width="100%"/>
+    </section>
+    <!--=====================================
                     BANNER PART END
         =======================================-->
-    </div>
+  </div>
 </template>
 
-<style scope>
-
-</style>
+<style scope></style>

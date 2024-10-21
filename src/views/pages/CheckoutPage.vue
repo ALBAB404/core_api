@@ -3,12 +3,14 @@ import { CartSideBar, MobileMenu, BannerPart, ProductView } from "@/components";
 import axiosInstance from "@/services/axiosService.js";
 import { useCart, useOrder, useAuth, useModal } from "@/stores";
 import { storeToRefs } from "pinia";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onUpdated } from "vue";
+import { useRouter } from "vue-router";
 // validation error
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
 const modal                                  = useModal()
+const router                                  = useRouter()
 const auth                                   = useAuth();
 const { isOrder }                            = storeToRefs(auth);
 const cart                                   = useCart();
@@ -237,13 +239,25 @@ const paymentGatewayRef   = ref(null);
 
 // total price section hide and show 
 
+// is cart item empty then fall back start
+ const isCartItemEmpty = () => {
+  if (cartItem.value.length <= 0) {
+    router.push({ name:'shopPage'});
+  }
+ }
+// is cart item empty then fall back end
 
-    onMounted(() => {
-      getDeliveryGateway();
-      getPaymentGetway();
-      modal.Modalclose();
-      showTotalPriceSection();
-    });
+
+  onMounted(() => {
+    getDeliveryGateway();
+    getPaymentGetway();
+    modal.Modalclose();
+    showTotalPriceSection();  
+  });
+
+  onUpdated(() => {
+    isCartItemEmpty();
+  });
 </script>
 
 <template>
@@ -335,10 +349,13 @@ const paymentGatewayRef   = ref(null);
                         </tr>
                     </tbody>
                     </table>
-                    <div class="continue-shopping" v-if="isFreeShipping && cartItem.length > 1 || (cartItem.length > 0 && cartItem[0].quantity > 1)">
+                    <div class="continue-shopping">
                       <router-link :to="{ name: 'shopPage'}"> <i class="fas fa-arrow-left"></i> Continue Shopping</router-link>
                     </div>
-                    <div class="is-free-shipping" v-if="isFreeShipping && cartItem.length > 1 || (cartItem.length > 0 && cartItem[0].quantity > 1)">
+                    <div class="is-free-shipping-active" v-if="isFreeShipping && cartItem.length > 1 || (cartItem.length > 0 && cartItem[0].quantity > 1)">
+                      <p>You are Enjoying Free Shipping!</p>
+                    </div>
+                    <div class="is-free-shipping" v-else>
                       <p>Add 1 more product to get free shipping!</p>
                     </div>
                     <div class="left my-3 p-0">
@@ -347,7 +364,8 @@ const paymentGatewayRef   = ref(null);
                         <button class="btn-danger btn-sm" ><i class="fas fa-chevron-down " :class="{'isRoted' : isOpen}"></i></button>
                       </div>
                       <div class="input-group p-3" :class="{'d-none' : !isOpen}">
-                        <input type="text" class="form-control" placeholder="Apply Your Coupon Here" aria-label="Input group example" aria-describedby="btnGroupAddon" v-model="coupon">
+                        <input type="text" class="form-control" placeholder="Apply Your 
+                        Coupon Here" aria-label="Input group example" aria-describedby="btnGroupAddon" v-model="coupon">
                         <div class="input-group-text btn-danger" id="btnGroupAddon" @click.prevent="couponCalculate()">Apply</div>
                       </div>
                       <span v-if="couponErrorMessage" class="text-danger ps-3">{{ couponErrorMessage }}</span>
@@ -471,7 +489,7 @@ const paymentGatewayRef   = ref(null);
                     </div>
                     <div class="text-note mt-3">
                       <p class="">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
-                        <textarea class="p-2" name="" id="" cols="35" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
+                        <textarea class="p-2" name="" id="" cols="30" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
                     </div>
                     <div v-if="isLoading" class="preloader"></div>
                   <button type="submit"  class="text-center orderBTN mt-3 w-100" @click="placeOrder()">
@@ -521,14 +539,25 @@ const paymentGatewayRef   = ref(null);
 }
 
 .is-free-shipping{
-  border: 2px solid var(--primary);
+  border: 2px solid var(--secondary-color);
   border-radius: 5px;
   padding: 10px;
   text-align: center;
 }
 .is-free-shipping p{
   font-size: 20px;
-  color: var(--red);
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+.is-free-shipping-active{
+  border: 2px solid var(--green);
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+}
+.is-free-shipping-active p{
+  font-size: 20px;
+  color: var(--green);
 }
 /* is free shipping end*/
 

@@ -256,7 +256,7 @@ onMounted(() => {
             <router-link :to="{ name: 'homePage' }">
               <img :src="logo?.image" alt="logo" />
             </router-link>
-            <div class="mobile-header-menu dropdown-right">
+            <!-- <div class="mobile-header-menu dropdown-right">
               <button class="header-src">
                 <i class="fas fa-user me-2"></i>
               </button>
@@ -289,7 +289,7 @@ onMounted(() => {
                   >
                 </li>
               </ul>
-            </div>
+            </div> -->
           </div>
           <router-link :to="{ name: 'homePage' }" class="header-logo">
             <img :src="logo?.image" alt="logo" />
@@ -368,7 +368,7 @@ onMounted(() => {
             </ul>
           </form>
 
-          <div class="header-widget-group dropdown">
+          <!-- <div class="header-widget-group dropdown">
             <button class="header-widget" title="User">
               <i class="fas fa-user"></i>
               <span></span>
@@ -403,7 +403,7 @@ onMounted(() => {
               <i class="fas fa-heart"></i>
               <span></span>
             </button>
-          </div>
+          </div> -->
           <div class="header-widget-group">
             <button class="header-widget header-cart cart-btn" title="Cartlist">
               <i class="fas fa-shopping-basket"></i>

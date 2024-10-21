@@ -276,9 +276,6 @@ onMounted(() => {
         <div class="row">
           <div class="col-lg-3">
             <template v-if="sideBar.result">
-              <div class="shop-widget-promo">
-                <a href="#"><img :src="banners[0]?.image" alt="promo" /></a>
-              </div>
               <div class="shop-widget">
                 <h6 class="shop-widget-title">Filter by Price</h6>
                 <form>
@@ -292,6 +289,29 @@ onMounted(() => {
                     </template>
                     <template v-else><i class="fas fa-search"></i></template>
                     <span>search</span>
+                  </button>
+                </form>
+              </div>
+              <div class="shop-widget">
+                <h6 class="shop-widget-title">Filter by Variations</h6>
+                <form>
+                  <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchCategoryQuery" />
+                  <ul class="shop-widget-list shop-widget-scroll">
+                    <li v-for="(category, index) in searchCategories" :key="index">
+                      <div class="shop-widget-content">
+                        <input type="checkbox" :id="`cate${index}`" :value="category.id" @change="getProducts"
+                          v-model="selectedCategoryIds" />
+                        <label :for="`cate${index}`">{{ category.name }}</label>
+                      </div>
+                      <span class="shop-widget-number">({{ category.products_count }})</span>
+                    </li>
+                    <li v-show="searchCategories.length === 0">
+                      <img src="@/assets/images/nodatafound.png" class="image-fluid mt-5" alt="" />
+                    </li>
+                  </ul>
+                  <button class="shop-widget-btn" @click.prevent="clearFilter('category')">
+                    <i class="far fa-trash-alt"></i>
+                    <span>clear filter</span>
                   </button>
                 </form>
               </div>

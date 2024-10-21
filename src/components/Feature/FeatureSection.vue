@@ -11,7 +11,7 @@
 
 <template>
   <div>
-    <section class="section feature-part">
+    <!-- <section class="section feature-part">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
@@ -483,7 +483,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 
