@@ -1,12 +1,11 @@
 <script setup>
 import { storeToRefs } from "pinia";
-import { ref, onMounted, watch, computed, defineAsyncComponent } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useCart, useNotification, useAuth, useModal, useProduct, useSetting } from "@/stores";
 import axiosInstance from "@/services/axiosService.js";
 import { mrpOrOfferPrice, addToCart } from '@/composables'
 import ProductCardModal from "./ProductCardModal.vue";
-
 
 // All Variable  Code Is Here.....................................................................................................
 const modal         = useModal()
@@ -21,13 +20,13 @@ const color         = "white";
 const size          = "8px";
 const quantityInput = ref(1);
 const setting       = useSetting();
-const props = defineProps({
-  product: Object,
-  types: String,
-  product_prices: Number,
-  required: true,
-});
 
+// Setting data start
+const websiteUrl  = ref("");
+const phone       = ref("");
+const whatsapp    = ref("");
+const messengerId = ref("");
+// Setting data end
 
 // settings variables
 const addToCartButton      = ref('Add Cart');
@@ -46,7 +45,7 @@ const productPrices    = ref();
 const sizeName         = ref();
 const selectedSize     = ref();
 const isButtonDisabled = ref(true);
-const modalProduct     = ref( );
+const modalProduct = ref('');
 
 // product variations start
 const productVariations     = ref([]);
@@ -255,91 +254,201 @@ const decrementCartItem = () => {
     }
 };
 
+ // setting data start
+ const getSettingsData = async() => {
+        const settingData = await setting.getData(); 
+        settingData.data.map((ele)=> {
+            if (ele.key == "phone_number" ) {
+              phone.value = ele
+            }
+            if (ele.key == "whatsapp_number" ) {
+              whatsapp.value = ele
+            }
+            if (ele.key == "website_url" ) {
+              websiteUrl.value = ele
+            }
+            if (ele.key == "messenger_id" ) {
+                messengerId.value = ele
+            }
+        })
+    }
+ // setting data end
+
+
 onMounted(() => {
   $(document).ready(function () {
     $(".venobox").venobox();
   });
+
+  getSettingsData();
+
 });
+
+const props = defineProps({
+  modalProduct: Object,
+  types: String,
+  product_prices: Number,
+  required: true,
+});
+
 </script>
 
 <template>
-  <div>
-    <div class="product-card" :class="product?.current_stock == 0 ? 'product-disable' : ''">
-      <div class="product-media">
-        <div class="product-label">
-            <label class="label-text off"  v-if="product?.offer_percent != 0.00">-{{ product?.offer_percent }}%</label>
-            <label class="label-text" :class="product?.type === 'feature-product'? 'feat': product?.type === 'top-product'? 'sale': product?.type === 'recent-product'? 'new': ''">{{ product?.type }}</label>
+  <div class="modal fade" id="product-view" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog"> 
+      <div class="modal-content">
+        <button class="modal-close icofont-close" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+        <div class="product-view">
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <div class="view-gallery">
+                  <div class="view-label-group">
+                      <label class="view-label new" v-if="modalProduct?.type">{{ modalProduct?.type }}</label>
+                      <label class="view-label off" v-if="modalProduct?.offer_percent != 0.00">-{{ modalProduct?.offer_percent }}%</label>
+                  </div>
+                  <div class="product-imgs">
+                    <div class="img-display">
+                        <div class="img-showcase">
+                            <img :src="modalProduct?.image" alt="shoe image" v-if="thumbnailImage == null" />
+                            <img :src="thumbnailImage" alt="shoe image" v-else />
+                        </div>
+                    </div>
+                    <div class="image-gallery">
+                        <div class="img-item" v-for="(img, index) in modalProduct?.images" :key="index" :class="[activeImage == index ? 'active-thumb' : '']" >
+                            <img :src="img.image" alt="shoe image" @click.prevent="changeImage(img.image, index)" />
+                        </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="view-details">
+                    <h3 class="view-name">
+                        <router-link :to="{name: 'productDetailsPage',params: { slug: modalProduct?.slug ? modalProduct?.slug : 0 },}" >{{ modalProduct?.name }}</router-link>
+                    </h3>
+                    <div class="view-meta">
+                        <p>SKU:<span>1234567</span></p>
+                        <p v-if="modalProduct?.brand">BRAND:<a href="#">{{ modalProduct?.brand?.name }}</a></p>
+                    </div>
+                    <div class="view-meta">
+                        <p v-if="modalProduct?.category">Category:<a href="#">{{ modalProduct?.category?.name }}</a></p>
+                        <p v-if="modalProduct?.sub_category">Sub Category:<a href="#">{{ modalProduct?.sub_category?.name }}</a></p>
+                    </div>
+
+                      <!-- Price Section start -->
+                      <!-- Product Variation Price Section start -->
+                        <span v-if="modalProduct?.variations?.data.length > 0">
+                          <h3 class="view-price" v-if="productVariationPrice == ''">
+                              <span>{{  $filters.currencySymbol(modalProduct.variation_price_range.min_price) }} - {{  $filters.currencySymbol(modalProduct.variation_price_range.max_price) }}</span> 
+                          </h3>
+                          <h3 class="view-price" v-else>
+                              <span>{{  $filters.currencySymbol(productVariationPrice.sell_price) }}</span> 
+                          </h3>
+                      </span>
+                    <!-- Product Variation Price Section end -->
+                      <span v-else>
+                          <h3 class="view-price">
+                              <del>{{  $filters.currencySymbol(modalProduct.mrp) }}</del>
+                              <span>{{  $filters.currencySymbol(mrpOrOfferPrice(modalProduct.mrp, modalProduct.offer_price)) }}</span>
+                              <a class="discout_amount" v-if="modalProduct.offer_price != 0">{{ Math.round(modalProduct.mrp -  modalProduct.offer_price) }} /- TK</a>
+                          </h3>
+                      </span>
+                    <!-- Price Section end -->
+                  
+                    <p class="details-desc" v-if="modalProduct?.short_description" v-html="modalProduct?.short_description"></p>
+
+                    <!-- Product Variation Price Section start -->
+                        <span v-if="modalProduct?.variations?.data.length > 0">
+                          <div class="details-list-group" v-for="(attribute, key, index) in productVariations" :key="index">
+                              <label class="details-list-title">{{ key }}:</label>
+                              <ul class="details-tag-list">
+                                  <li v-for="(attributeValue, indexAttributeValue) in attribute" :key="indexAttributeValue">
+                                      <a href="#" 
+                                      :class="{ 'is-active': activeAttributes[index] === attributeValue.attribute_value_id }"
+                                      @click.prevent="getProductVariation(modalProduct.id, attributeValue, index)">
+                                      {{ attributeValue.attribute_value }}
+                                      </a>
+                                  </li>
+                              </ul>
+                          </div>
+                          <button class="variationRemoveBtn" v-show="resetBtns" @click.prevent="removeAllVariation()">X clear</button>
+                      </span>
+                  
+
+                    <!-- Product Variation Price Section end -->
+
+                    <div class="view-list-group">
+                        <label class="view-list-title">Share:</label>
+                        <ul class="view-share-list">
+                            <li><a href="#" class="icofont-facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#" class="icofont-twitter" title="Twitter"></a></li>
+                            <li><a href="#" class="icofont-linkedin" title="Linkedin"></a></li>
+                            <li><a href="#" class="icofont-instagram" title="Instagram"></a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="view-list-group mt-3">
+                      <div class="quantity" :class="{'quantity-disabled' : (activeBtns === false) && (modalProduct?.variations?.data.length > 0)}">
+                          <button class="minus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>
+                          <input type="number" class="input-box"  min="1" max="10" v-model="quantityInput">
+                          <button class="plus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
+                      </div>
+                    </div>
+                    
+                    <div class="view-add-group">
+                      <div class="row" v-if="modalProduct?.variations?.data.length > 0">
+                          <div class="col-md-6 mt-lg-0 mt-3">
+                              <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput, productVariationData, productVariationPrice)">
+                                  <i :class="loading == modalProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
+                                  <span>{{ addToCartButton }}</span>
+                              </button>
+                          </div>
+                          <div class="col-md-6 mt-lg-0 mt-3">
+                              <router-link :to="{ name: 'checkoutPage' }" class="product-add main-order-btn" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput, productVariationData, productVariationPrice)">
+                                  <i class="fas fa-cart-plus"></i>
+                                  <span>Buy Now</span>
+                              </router-link>
+                          </div>
+                      </div>    
+                      <div class="row" v-else>
+                          <div class="col-md-6 mt-lg-0 mt-3">
+                              <button class="product-add"  title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput)">
+                                  <i :class="loading == modalProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
+                                  <span>{{ addToCartButton }}</span>
+                              </button>
+                          </div>
+                          <div class="col-md-6 mt-lg-0 mt-3">
+                              <router-link :to="{ name: 'checkoutPage' }" class="product-add main-order-btn" title="Add to Cart" @click.prevent="addToCart(modalProduct, quantityInput)" >
+                                  <i class="fas fa-cart-plus"></i>
+                                  <span>Buy Now</span>
+                              </router-link>
+                          </div>
+                      </div>    
+                    </div>
+                    <div class="view-action-group">
+                      <a :href="`https://wa.me/+88${whatsapp}?text=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
+                        class="product-add bg-success text-light" target="_blank">
+                        <i class="fab fa-whatsapp"></i><span>হোয়াটসঅ্যাপ</span>
+                      </a>
+                      <a :href="`https://m.me/${messengerId}?ref=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
+                        class="product-add bg-primary text-light" target="_blank">
+                        <i class="fab fa-facebook-messenger"></i><span>মেসেঞ্জার</span>
+                      </a>
+                      <a class="view-wish wish bg-warning text-dark" :href="`tel:+88${phone}`" title="Add Your Wishlist">
+                          <i class="fas fa-phone-alt"></i>
+                          <span >Phone</span>
+                      </a>
+                  </div>
+
+                </div>
+            </div>
           </div>
-          <!-- <button class="product-wish wish">
-              <i class="fas fa-heart"></i>
-          </button> -->
-
-          <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" class="hover14 column hover01 column">
-            <div class="product-image">
-              <figure><img :src="product?.image"></figure>
-            </div>
-          </router-link>
-          
-          <div class="product-widget">
-            <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view" @click.prevent="getProductDetails(product?.id)"></a>
-            <a title="Product Video" v-show="product?.video_url" :href="product?.video_url" class="venobox fas fa-play" data-vbtype="video" data-autoplay="true"></a>
-          </div>
-      </div>
-      <div class="product-content">
-          
-          <h6 class="product-name">
-              <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" :style="`font-size: ${productNameFontSize ? productNameFontSize : ''}`">{{ product?.name }}</router-link>
-          </h6>
-
-
-          <h6 class="product-price" v-if="product?.variations?.data?.length > 0" :style="`font-size: ${productPriceFontSize ? productPriceFontSize : ''}`">
-            <span>{{ product?.variation_price_range.min_price }} - {{ product?.variation_price_range.max_price }}</span>
-          </h6>
-          <h6 class="product-price" v-else :style="`font-size: ${productPriceFontSize ? productPriceFontSize : ''}`">
-            <span v-html="$filters.productPrice(product)"></span>
-          </h6>
-
-
-          <!-- <button class="product-add" title="Add to Cart" @click.prevent="addToCart(product)">
-              <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
-              <span>add</span>
-          </button> -->
-
-          <!-- <div class="row" v-if="product?.variations?.data?.length > 0">
-            <div class="col-xl-6 col-lg-12 col-12 mt-2">
-              <button  class="product-add btnColorOrder" :disabled="isButtonDisabled" :class="isButtonDisabled ? 'disabled btn border-dark' : ''" title="Add to Cart" @click.prevent="addToCart(product)">
-                <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
-                <span>{{ addToCartButton }}</span>
-              </button>
-            </div>
-            <div class="col-xl-6 col-lg-12 col-12 mt-2">
-              <router-link :to="{ name: 'checkoutPage' }"  class="product-add standard-wishs" :class="isButtonDisabled ? 'disabled btn border-danger' : ''" @click.prevent="addToCart(product)">
-                <i class="fas fa-shopping-basket"></i>
-                <span>{{ orderButton }}</span>
-              </router-link>
-            </div>
-          </div>
-          <div class="row" v-else>
-            <div class="col-xl-6 col-lg-12 col-12 mt-2">
-              <button  class="product-add btnColorOrder"  title="Add to Cart" @click.prevent="addToCart(product)">
-                <i :class="loading == product.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
-                <span>{{ addToCartButton }}</span>
-              </button>
-            </div>
-            <div class="col-xl-6 col-lg-12 col-12 mt-2">
-              <router-link :to="{ name: 'checkoutPage' }"  class="product-add standard-wishs" @click.prevent="addToCart(product)">
-                <i class="fas fa-shopping-basket"></i>
-                <span>{{ orderButton }}</span>
-              </router-link>
-            </div>
-          </div> -->
-      </div>
-  </div>
-
-  <ProductCardModal :modalProduct="modalProduct" />
-
+        </div>
+     </div> 
+   </div> 
   </div>
 </template>
+
 
 <style scoped>
 
