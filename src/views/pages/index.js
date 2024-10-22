@@ -22,3 +22,5 @@ export { default as PrivacyPolicy } from "./FooterPages/PrivacyPolicy.vue";
 export { default as ReturnRefund } from "./FooterPages/ReturnRefund.vue";
 export { default as CampaignBanner } from "./Campaign/CampaignBanner.vue";
 export { default as CampaignProductList } from "./Campaign/CampaignProductList.vue";
+export { default as Test } from "./Test.vue";
+

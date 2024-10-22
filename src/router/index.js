@@ -23,7 +23,8 @@ import {
   PrivacyPolicy,
   ReturnRefund,
   CampaignBanner,
-  CampaignProductList
+  CampaignProductList,
+  Test,
 } from "@/views/pages";
 import NProgress from "nprogress";
 import {useAuth, useCart} from '@/stores'
@@ -179,6 +180,12 @@ const routes = [
     name: "ReturnRefund",
     component: ReturnRefund,
     meta: { title: "Glossit | Return & Refund Page" },
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: Test,
+    meta: { title: "Glossit | Test Page" },
   },
 ];
 

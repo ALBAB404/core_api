@@ -32,21 +32,20 @@ export const useOrder = defineStore('order', {
             payment_gateway_id: orderInfo.payment_gateway_id,
             district: orderInfo.district,
             coupon_id: orderInfo.coupon_id,
-            // campaign_id: orderInfo.campaign_id,
           });
-                if (response.status === 200) {
-                    const cart = useCart();
-                    cart.removeAllItems();
-
-                    if (response.data.result) {
-                        let url = response.data.result;
-                        window.location.href = url;
-                    } else {
-                        router.push({ name: 'thankYou.page', query: {orderInfo: JSON.stringify(orderInfo)} });
-                    }
-                }else{
-                  this.backendErrors = response.data.message
-                }
+              if (response.status === 200) {
+                  if (response.data.result) {
+                      let url = response.data.result;
+                      window.location.href = url;
+                  } else {
+                      router.push({ name: 'thankYou.page', query: {orderInfo: JSON.stringify(orderInfo)} });
+                      const cart = useCart();
+                      cart.removeAllItems();
+                  }
+                return response
+              }else{
+                this.backendErrors = response.data.message
+              }
             } catch (error) {
                 console.log(error);
             } finally {

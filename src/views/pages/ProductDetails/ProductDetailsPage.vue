@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, onUnmounted, watch, onUpdated } from "vue";
 import { useRoute } from "vue-router";
 import {
   useProduct,
@@ -23,34 +23,35 @@ import { SingleProductPageSkeleton } from "@/components/skeleton";
 import { mrpOrOfferPrice, addToCart } from "@/composables";
 import axiosInstance from "@/services/axiosService.js";
 
-const product = useProduct();
+const product       = useProduct();
 const singleProduct = ref("");
-const sizeName = ref("");
+const sizeName      = ref("");
 const productPrices = ref("");
-const route = useRoute();
-const shop = useShop();
-const { products } = storeToRefs(shop);
-const cart = useCart();
-const { loading } = storeToRefs(cart);
-const notify = useNotification();
-const price = ref();
+const route         = useRoute();
+const shop          = useShop();
+const { products }  = storeToRefs(shop);
+const cart          = useCart();
+const { loading }   = storeToRefs(cart);
+const notify        = useNotification();
+const price         = ref();
 const quantityInput = ref(1);
-const categoryId = ref([]);
-const setting = useSetting();
+const categoryId    = ref([]);
+const setting       = useSetting();
+const playUtube     = ref(false);
 
 // product variations start
-const productVariations = ref([]);
-const attribute_id_1 = ref(null);
-const attribute_id_2 = ref(null);
-const attribute_id_3 = ref(null);
-const attribute_value_id_1 = ref(null);
-const attribute_value_id_2 = ref(null);
-const attribute_value_id_3 = ref(null);
-const productVariationData = ref("");
+const productVariations     = ref([]);
+const attribute_id_1        = ref(null);
+const attribute_id_2        = ref(null);
+const attribute_id_3        = ref(null);
+const attribute_value_id_1  = ref(null);
+const attribute_value_id_2  = ref(null);
+const attribute_value_id_3  = ref(null);
+const productVariationData  = ref("");
 const productVariationPrice = ref("");
-const resetBtns = ref(false);
-const activeBtns = ref(false);
-const variationRemoveBtn = ref(false);
+const resetBtns             = ref(false);
+const activeBtns            = ref(false);
+const variationRemoveBtn    = ref(false);
 const activeAttributes = ref({
   0: [],
   1: [],
@@ -62,9 +63,9 @@ const activeAttributes = ref({
 const socialShares = ref("");
 // social Icons end
 // Setting data start
-const websiteUrl = ref("");
-const phone = ref("");
-const whatsapp = ref("");
+const websiteUrl  = ref("");
+const phone       = ref("");
+const whatsapp    = ref("");
 const messengerId = ref("");
 // Setting data end
 // related product start
@@ -82,6 +83,8 @@ const images = ref([]);
 const changeImage = (img, index) => {
   thumbnailImage.value = img;
   activeImage.value = index;
+  playUtube.value = false;
+  console.log(playUtube.value);
 };
 // image working end
 
@@ -337,6 +340,135 @@ const handleBeforeUnload = (event) => {
   }, 10); 
 };
 
+
+// image zooming effect start 
+
+// Refs to elements
+const image = ref(null);
+const lens = ref(null);
+
+// To handle zoom activation for touch devices
+let isZooming = ref(false);
+
+// Check if the device is a touch device
+const isTouchDevice = () => {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+};
+
+// Function to handle mouse movement
+const moveLens = (event) => {
+
+if (isTouchDevice()) return; // Avoid mouse-based zoom on touch devices
+
+  const img = image.value;
+  const lensEl = lens.value;
+  
+// Get the bounding rectangle of the image
+ const rect = img.getBoundingClientRect();
+
+  // Get mouse position relative to image
+  const x = event.pageX - rect.left;
+  const y = event.pageY - rect.top;
+
+  // Check bounds to prevent lens from going outside the image
+  const lensWidth = lensEl.offsetWidth / 2;
+  const lensHeight = lensEl.offsetHeight / 2;
+  let lensX = x - lensWidth;
+  let lensY = y - lensHeight;
+
+  if (lensX < 0) lensX = 0;
+  if (lensY < 0) lensY = 0;
+  if (lensX > img.width - lensEl.offsetWidth) lensX = img.width - lensEl.offsetWidth;
+  if (lensY > img.height - lensEl.offsetHeight) lensY = img.height - lensEl.offsetHeight;
+
+  // Move the zoom lens
+  lensEl.style.left = lensX + 'px';
+  lensEl.style.top = lensY + 'px';
+
+  // Show the zoom lens
+  lensEl.style.visibility = 'visible';
+
+ // Zoom effect by changing background position of the zoomed image
+  const backgroundX = (x / img.width) * 100;
+  const backgroundY = (y / img.height) * 100;
+  lensEl.style.backgroundPosition = `${backgroundX}% ${backgroundY}%`;
+};
+
+// Function to hide the lens when mouse leaves the image
+const hideLens = () => {
+  lens.value.style.visibility = 'hidden';
+  isZooming.value = false;
+};
+
+// Function to start zooming when touch starts (for mobile)
+const startZoom = (event) => {
+  if (!isTouchDevice()) return; // Only for touch devices
+
+  const img = image.value;
+  const lensEl = lens.value;
+  
+  isZooming.value = true;
+
+  // Set lens background size based on the image
+  lensEl.style.backgroundImage = `url(${img.src})`;
+  lensEl.style.backgroundSize = `${img.width * 2}px ${img.height * 2}px`;
+
+  // Immediately trigger touch move to position the lens
+  moveTouchLens(event);
+};
+
+// Function to handle zooming on touch move (for mobile)
+const moveTouchLens = (event) => {
+  if (!isZooming.value || !isTouchDevice()) return; // Only for touch devices
+
+  const img = image.value;
+  const lensEl = lens.value;
+
+  // Get the bounding rectangle of the image
+  const rect = img.getBoundingClientRect();
+
+  // Get touch position relative to the image container
+  const touch = event.touches[0];
+  const x = touch.clientX - rect.left;
+  const y = touch.clientY - rect.top;
+
+  // Check bounds to prevent lens from going outside the image
+  const lensWidth = lensEl.offsetWidth / 2;
+  const lensHeight = lensEl.offsetHeight / 2;
+  let lensX = x - lensWidth;
+  let lensY = y - lensHeight;
+
+  if (lensX < 0) lensX = 0;
+  if (lensY < 0) lensY = 0;
+  if (lensX > img.width - lensEl.offsetWidth) lensX = img.width - lensEl.offsetWidth;
+  if (lensY > img.height - lensEl.offsetHeight) lensY = img.height - lensEl.offsetHeight;
+
+  // Move the zoom lens
+  lensEl.style.left = lensX + 'px';
+  lensEl.style.top = lensY + 'px';
+
+  // Show the zoom lens
+  lensEl.style.visibility = 'visible';
+
+  // Zoom effect by changing background position of the zoomed image
+  const backgroundX = (x / img.width) * 100;
+  const backgroundY = (y / img.height) * 100;
+  lensEl.style.backgroundPosition = `${backgroundX}% ${backgroundY}%`;
+};
+// image zooming effect end 
+
+// video url setup start
+
+const getEmbedUrl = (watchUrl) => {
+  const videoIdMatch = watchUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+  const videoId = (videoIdMatch && videoIdMatch[1]) || '';
+  
+  return `https://www.youtube.com/embed/${videoId}`;
+}
+
+// video url setup end
+
+
 onMounted(() => {
   stickyFooter();
   productByid();
@@ -345,7 +477,17 @@ onMounted(() => {
   // alertTimeout.value = setTimeout(() => {
   //   handleBeforeUnload();
   // }, 1000);
+
 });
+
+onUpdated(() => {
+  // image zooming start
+  const lensEl = lens.value;
+  const img = image.value;  
+  lensEl.style.backgroundImage = `url(${img.src})`;
+  lensEl.style.backgroundSize = `${img.width * 2}px ${img.height * 2}px`;
+  // image zooming end
+})
 
 onBeforeUnmount(() => {
   if (alertTimeout.value) {
@@ -356,10 +498,6 @@ onBeforeUnmount(() => {
 onUnmounted(() => {
   window.removeEventListener('beforeunload', handleBeforeUnload);
 });
-
-
-
-
 
 </script>
 
@@ -379,25 +517,36 @@ onUnmounted(() => {
           <div class="col-lg-6">
             <div class="details-gallery">
               <div class="details-label-group">
-                <label class="details-label new" v-if="singleProduct.type">{{
-                  singleProduct.type
-                }}</label>
-                <label
-                  class="details-label off"
-                  v-if="singleProduct.offer_percent != 0.0"
-                  >-{{ singleProduct.offer_percent }}%</label
-                >
+                <label class="details-label new" v-if="singleProduct.type">{{ singleProduct.type }}</label>
+                <label class="details-label off" v-if="singleProduct.offer_percent != 0.0" >-{{ singleProduct.offer_percent }}%</label>
               </div>
               <div class="product-imgs">
                 <div class="img-display">
-                  <div class="img-showcase">
-                    <img
-                      :src="singleProduct?.image"
-                      alt="shoe image"
-                      v-if="thumbnailImage == null"
-                    />
-                    <img :src="thumbnailImage" alt="shoe image" v-else />
+                  <div :class="playUtube ? 'img-utube-video' : 'img-showcase image-container'" 
+                    @mousemove="moveLens"
+                    @mouseleave="hideLens"
+                    @touchstart="startZoom" 
+                    @touchmove="moveTouchLens" 
+                    @touchend="hideLens">
+                    {{ playUtube }}
+                    <span v-if="playUtube">
+                      <div class="videoHW">
+                        <iframe class="mt-5" :src="getEmbedUrl(singleProduct?.video_url)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>              
+                      </div>
+                    </span>
+                    <span v-else>
+                      <div ref="lens" class="zoom-lens"></div>
+                      <img
+                        :src="singleProduct?.image"
+                        alt="shoe image"
+                        ref="image"
+                        class="image"
+                        v-if="thumbnailImage == null"
+                      />
+                      <img :src="thumbnailImage" ref="image" class="image" alt="shoe image" v-else />
+                    </span>
                   </div>
+                  
                 </div>
                 <div class="image-gallery">
                   <div
@@ -411,6 +560,9 @@ onUnmounted(() => {
                       alt="shoe image"
                       @click.prevent="changeImage(img.image, index)"
                     />
+                  </div>
+                  <div class="img-item d-flex align-items-center p-3" v-if="singleProduct?.video_url">
+                    <img src="@/assets/images/utubeplaybtn.png" alt="shoe image" @click.prevent="playUtube =! playUtube"/>
                   </div>
                 </div>
               </div>
@@ -967,6 +1119,34 @@ onUnmounted(() => {
 
 <style scoped>
 @import "@/assets/css/product-details.css";
+
+/* image zooming start*/
+.image-container {
+  position: relative;
+  width: 400px;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.zoom-lens {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border: 2px solid #000;
+    background-repeat: no-repeat;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 10;
+    border-radius: 10px;
+}
+/* image zooming end*/
+
 
 /* MOdla css */
 .view-price {

@@ -3,7 +3,7 @@ import { CartSideBar, MobileMenu, BannerPart, ProductView } from "@/components";
 import axiosInstance from "@/services/axiosService.js";
 import { useCart, useOrder, useAuth, useModal } from "@/stores";
 import { storeToRefs } from "pinia";
-import { onMounted, ref, onUpdated } from "vue";
+import { onMounted, ref, onUpdated, onBeforeUpdate, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 // validation error
 import { Form, Field } from "vee-validate";
@@ -19,6 +19,7 @@ const order                                  = useOrder();
 const { storeOrder, backendErrors, loading } = storeToRefs(order);
 const isLoading                              = ref(false);
 const isFreeShipping                         = ref(true);
+const clickIsOrder                           = ref(true);
 
 
 const name                = ref(auth?.user?.user?.name);
@@ -88,7 +89,7 @@ const paymentGatewayRef   = ref(null);
 // order work start here 
 
     const orderSubmited = async () => {
-      await order.storeOrder({
+     const res =   await order.storeOrder({
           name               : name.value,
           phoneNumber        : phoneNumber.value,
           district           : district.value,
@@ -102,6 +103,10 @@ const paymentGatewayRef   = ref(null);
           deliverCharge      : deliverCharge.value ? deliverCharge.value: null,
           // campaign_id: campaignId.value,
         });
+       if (res.status == 200) {
+          clickIsOrder.value = false;
+       } 
+      
     }
 
     const placeOrder = async() => {
@@ -256,8 +261,12 @@ const paymentGatewayRef   = ref(null);
   });
 
   onUpdated(() => {
-    isCartItemEmpty();
+    if (clickIsOrder.value) {
+      isCartItemEmpty();
+    }
   });
+
+
 </script>
 
 <template>
