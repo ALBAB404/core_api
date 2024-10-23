@@ -6,6 +6,7 @@ import { useCart, useNotification, useAuth, useModal, useProduct, useSetting } f
 import axiosInstance from "@/services/axiosService.js";
 import { mrpOrOfferPrice, addToCart } from '@/composables'
 import ProductCardModal from "./ProductCardModal.vue";
+import ProductImage from "./ProductImage.vue";
 
 // All Variable  Code Is Here.....................................................................................................
 const modal         = useModal()
@@ -301,25 +302,7 @@ const props = defineProps({
         <div class="product-view">
           <div class="row">
             <div class="col-md-6 col-lg-6">
-              <div class="view-gallery">
-                  <div class="view-label-group">
-                      <label class="view-label new" v-if="modalProduct?.type">{{ modalProduct?.type }}</label>
-                      <label class="view-label off" v-if="modalProduct?.offer_percent != 0.00">-{{ modalProduct?.offer_percent }}%</label>
-                  </div>
-                  <div class="product-imgs">
-                    <div class="img-display">
-                        <div class="img-showcase">
-                            <img :src="modalProduct?.image" alt="shoe image" v-if="thumbnailImage == null" />
-                            <img :src="thumbnailImage" alt="shoe image" v-else />
-                        </div>
-                    </div>
-                    <div class="image-gallery">
-                        <div class="img-item" v-for="(img, index) in modalProduct?.images" :key="index" :class="[activeImage == index ? 'active-thumb' : '']" >
-                            <img :src="img.image" alt="shoe image" @click.prevent="changeImage(img.image, index)" />
-                        </div>
-                    </div>
-                  </div>
-              </div>
+              <ProductImage :singleProduct="modalProduct" :type="'view'" />
             </div>
             <div class="col-md-6 col-lg-6">
                 <div class="view-details">
@@ -588,6 +571,13 @@ img{
 }
 .active-thumb{
 border: 2px solid #119744;
+}
+
+.image-gallery {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 5px;
 }
 
 

@@ -24,6 +24,7 @@ export { default as Newsletter } from "@/components/Newsletter/Newsletter.vue";
 export { default as Footer } from "@/components/Footer/Footer.vue";
 export { default as ProductCard } from "@/components/Product/ProductCard.vue";
 export { default as ProductCardModal } from "@/components/Product/ProductCardModal.vue";
+export { default as ProductImage } from "@/components/Product/ProductImage.vue";
 export { default as ProductVariation } from "@/components/Product/ProductVariation.vue";
 export { default as LoginFrom } from "@/components/LoginFrom/LoginFrom.vue";
 export { default as ChatIcon } from "@/components/ChatIcon/ChatIcon.vue";

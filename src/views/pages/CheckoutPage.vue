@@ -49,6 +49,13 @@ const addressFieldRef     = ref(null);
 const deliveryGatewayRef  = ref(null);
 const paymentGatewayRef   = ref(null);
 
+// payment getways details
+  const bkash               = ref('');
+  const nogod               = ref('');
+  const rocket              = ref('');
+  const cod                 = ref('');
+  const paymentGetwayName   = ref('');
+
     const isOpenCoupon = () =>{
       isOpen.value = !isOpen.value;
     }
@@ -85,6 +92,20 @@ const paymentGatewayRef   = ref(null);
         payment_gateways.value = res.data.result;
       } catch (error) { }
     };
+
+    const selectedGetway = (payment_gateway) => {
+      payment_gateway_id.value = payment_gateway.id;
+
+      if (payment_gateway.name === 'Bkash') {
+        paymentGetwayName.value = payment_gateway.name;
+      }
+      if (payment_gateway.name === 'COD') {
+        paymentGetwayName.value = payment_gateway.name;
+      }
+      if (payment_gateway.name === 'Nagad') {
+        paymentGetwayName.value = payment_gateway.name;
+      }  
+    }
 
 // order work start here 
 
@@ -245,11 +266,11 @@ const paymentGatewayRef   = ref(null);
 // total price section hide and show 
 
 // is cart item empty then fall back start
- const isCartItemEmpty = () => {
-  if (cartItem.value.length <= 0) {
-    router.push({ name:'shopPage'});
-  }
- }
+//  const isCartItemEmpty = () => {
+//   if (cartItem.value.length <= 0) {
+//     router.push({ name:'shopPage'});
+//   }
+//  }
 // is cart item empty then fall back end
 
 
@@ -260,11 +281,11 @@ const paymentGatewayRef   = ref(null);
     showTotalPriceSection();  
   });
 
-  onUpdated(() => {
-    if (clickIsOrder.value) {
-      isCartItemEmpty();
-    }
-  });
+  // onUpdated(() => {
+  //   if (clickIsOrder.value) {
+  //     isCartItemEmpty();
+  //   }
+  // });
 
 
 </script>
@@ -464,17 +485,53 @@ const paymentGatewayRef   = ref(null);
                     <div class="">
                       <div class="right-text fw-bolder text-dark text-center"><i class="fa-solid fa-lock"></i>সম্পূর্ণ নিরাপদ পেমেন্ট</div>
                     </div>
-                        <div class="formRadioControl" v-for="(payment_gateway, index) in payment_gateways.data" :key="index" @click="payment_gateway_id = payment_gateway.id">
-                          <input
-                            class="form-check-input me-2"
-                            type="radio"
-                            :id="'paymentGateway_' + index"
-                            name="payment_gateway_id"
-                            :value="payment_gateway.id"
-                            v-model="payment_gateway_id"
-                          >
-                          <label class="form-check-label" :for="'paymentGateway_' + index">{{ payment_gateway.name }}</label>
+                    <template v-for="(payment_gateway, index) in payment_gateways.data" :key="index">
+                      <div class="formRadioControl d-flex align-items-center"  @click="selectedGetway(payment_gateway)">
+                        <input
+                          class="form-check-input payment-getway-input me-2 mt-0"
+                          type="radio"
+                          :id="'paymentGateway_' + index"
+                          name="payment_gateway_id"
+                          :value="payment_gateway.id"
+                          v-model="payment_gateway_id"
+                        >
+                        <div class="d-flex justify-content-between w-100 align-items-center">
+                          <label class="form-check-label payment-getway-lebal" :for="'paymentGateway_' + index">{{ payment_gateway.name }}</label>
+                          <img :src="payment_gateway.image" alt="" style="width: 40px;">
                         </div>
+                      </div> 
+                      <div class="box box--top" v-if="paymentGetwayName === 'Bkash' && payment_gateway.name === paymentGetwayName">
+                        <span>
+                          <span class="text-danger font-weight-bold">"Upto 300 Taka Discount"</span><br>
+                            <span class="text-danger">➞</span> BKash Agent Number : 01873 046 404 <br>
+                            <div class="paymentgetway-customize-input-feilds">
+                              <span>bKash Number</span>
+                              <input type="email" class="form-control form-control-sm" placeholder="017XXXXXXXX">
+                            </div>
+                            <div class="paymentgetway-customize-input-feilds">
+                              <span>bKash Transaction ID</span>
+                              <input type="email" class="form-control form-control-sm" placeholder="8N7A6D5EE7M">
+                            </div>
+                          </span>
+                      </div>
+                      <div class="box box--top" v-else-if="paymentGetwayName === 'Nagad'  && payment_gateway.name === paymentGetwayName">
+                        <span>
+                          <span class="text-danger font-weight-bold">"Upto 300 Taka Discount"</span><br>
+                            <span class="text-danger">➞</span> Nagad Agent Number : 01894 689 206 <br>
+                            <div class="paymentgetway-customize-input-feilds">
+                              <span>Nagad  Number</span>
+                              <input type="email" class="form-control form-control-sm" placeholder="017XXXXXXXX">
+                            </div>
+                            <div class="paymentgetway-customize-input-feilds">
+                              <span>Nagad  Transaction ID</span>
+                              <input type="email" class="form-control form-control-sm" placeholder="8N7A6D5EE7M">
+                            </div>
+                          </span>
+                      </div>
+                      <div class="box box--top" v-else-if="paymentGetwayName === 'COD'  && payment_gateway.name === paymentGetwayName">
+                        <span class="text-danger">➞</span> Pay with cash upon delivery. 
+                      </div>
+                    </template>
                     </div>
                     <div class="left my-3 hide_and_show_bottam_section ">
                       <h5 class="text-wrap">Order Summery</h5>
@@ -520,6 +577,26 @@ const paymentGatewayRef   = ref(null);
 
 <style>
 @import "@/assets/css/checkout.css";
+
+/* paymentgetway customize input feilds */
+
+.paymentgetway-customize-input-feilds{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0px;
+}
+.paymentgetway-customize-input-feilds span{
+  font-size: 14px;
+  font-weight: 600;
+  font-style: italic;
+  color: #000;
+}
+.paymentgetway-customize-input-feilds input{
+  width: 50%;
+}
+
+/* paymentgetway customize input feilds */
 
 /* checkoutTable start*/
 .checkoutTable th,

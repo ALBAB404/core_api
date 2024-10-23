@@ -18,6 +18,7 @@ import {
   CategorySideBar,
   NavSideBar,
   ProductVariation,
+  ProductImage,
 } from "@/components";
 import { SingleProductPageSkeleton } from "@/components/skeleton";
 import { mrpOrOfferPrice, addToCart } from "@/composables";
@@ -73,18 +74,7 @@ const relatedProducts = ref("");
 
 const alertTimeout = ref("");
 
-// image working start
 
-const thumbnailImage = ref(null);
-const activeImage = ref(0);
-const images = ref([]);
-
-const changeImage = (img, index) => {
-  thumbnailImage.value = img;
-  activeImage.value = index;
-};
-
-// image working end
 
 // get products start
 const productByid = async () => {
@@ -339,121 +329,6 @@ const handleBeforeUnload = (event) => {
 };
 
 
-// image zooming effect start 
-
-// Refs to elements
-const image = ref(null);
-const lens = ref(null);
-
-// To handle zoom activation for touch devices
-let isZooming = ref(false);
-
-// Check if the device is a touch device
-const isTouchDevice = () => {
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-};
-
-// Function to handle mouse movement
-const moveLens = (event) => {
-
-if (isTouchDevice()) return; // Avoid mouse-based zoom on touch devices
-
-  const img = image.value;
-  const lensEl = lens.value;
-  
-// Get the bounding rectangle of the image
- const rect = img.getBoundingClientRect();
-
-  // Get mouse position relative to image
-  const x = event.pageX - rect.left;
-  const y = event.pageY - rect.top;
-
-  // Check bounds to prevent lens from going outside the image
-  const lensWidth = lensEl.offsetWidth / 2;
-  const lensHeight = lensEl.offsetHeight / 2;
-  let lensX = x - lensWidth;
-  let lensY = y - lensHeight;
-
-  if (lensX < 0) lensX = 0;
-  if (lensY < 0) lensY = 0;
-  if (lensX > img.width - lensEl.offsetWidth) lensX = img.width - lensEl.offsetWidth;
-  if (lensY > img.height - lensEl.offsetHeight) lensY = img.height - lensEl.offsetHeight;
-
-  // Move the zoom lens
-  lensEl.style.left = lensX + 'px';
-  lensEl.style.top = lensY + 'px';
-
-  // Show the zoom lens
-  lensEl.style.visibility = 'visible';
-
- // Zoom effect by changing background position of the zoomed image
-  const backgroundX = (x / img.width) * 100;
-  const backgroundY = (y / img.height) * 100;
-  lensEl.style.backgroundPosition = `${backgroundX}% ${backgroundY}%`;
-};
-
-// Function to hide the lens when mouse leaves the image
-const hideLens = () => {
-  lens.value.style.visibility = 'hidden';
-  isZooming.value = false;
-};
-
-// Function to start zooming when touch starts (for mobile)
-const startZoom = (event) => {
-  if (!isTouchDevice()) return; // Only for touch devices
-
-  const img = image.value;
-  const lensEl = lens.value;
-  
-  isZooming.value = true;
-
-  // Set lens background size based on the image
-  lensEl.style.backgroundImage = `url(${img.src})`;
-  lensEl.style.backgroundSize = `${img.width * 2}px ${img.height * 2}px`;
-
-  // Immediately trigger touch move to position the lens
-  moveTouchLens(event);
-};
-
-// Function to handle zooming on touch move (for mobile)
-const moveTouchLens = (event) => {
-  if (!isZooming.value || !isTouchDevice()) return; // Only for touch devices
-
-  const img = image.value;
-  const lensEl = lens.value;
-
-  // Get the bounding rectangle of the image
-  const rect = img.getBoundingClientRect();
-
-  // Get touch position relative to the image container
-  const touch = event.touches[0];
-  const x = touch.clientX - rect.left;
-  const y = touch.clientY - rect.top;
-
-  // Check bounds to prevent lens from going outside the image
-  const lensWidth = lensEl.offsetWidth / 2;
-  const lensHeight = lensEl.offsetHeight / 2;
-  let lensX = x - lensWidth;
-  let lensY = y - lensHeight;
-
-  if (lensX < 0) lensX = 0;
-  if (lensY < 0) lensY = 0;
-  if (lensX > img.width - lensEl.offsetWidth) lensX = img.width - lensEl.offsetWidth;
-  if (lensY > img.height - lensEl.offsetHeight) lensY = img.height - lensEl.offsetHeight;
-
-  // Move the zoom lens
-  lensEl.style.left = lensX + 'px';
-  lensEl.style.top = lensY + 'px';
-
-  // Show the zoom lens
-  lensEl.style.visibility = 'visible';
-
-  // Zoom effect by changing background position of the zoomed image
-  const backgroundX = (x / img.width) * 100;
-  const backgroundY = (y / img.height) * 100;
-  lensEl.style.backgroundPosition = `${backgroundX}% ${backgroundY}%`;
-};
-// image zooming effect end 
 
 // video url setup start
 
@@ -478,15 +353,7 @@ onMounted(() => {
 
 });
 
-onUpdated(() => {
-  
-  // image zooming start
-  const lensEl = lens.value;
-  const img = image.value;  
-  lensEl.style.backgroundImage = `url(${img.src})`;
-  lensEl.style.backgroundSize = `${img.width * 2}px ${img.height * 2}px`;
-  // image zooming end
-})
+
 
 onBeforeUnmount(() => {
   if (alertTimeout.value) {
@@ -514,47 +381,7 @@ onUnmounted(() => {
       <div class="container">
         <div class="row">
           <div class="col-lg-6">
-            <div class="details-gallery">
-              <div class="details-label-group">
-                <label class="details-label new" v-if="singleProduct.type">{{ singleProduct.type }}</label>
-                <label class="details-label off" v-if="singleProduct.offer_percent != 0.0" >-{{ singleProduct.offer_percent }}%</label>
-              </div>
-              <div class="product-imgs">
-                <div class="img-display">
-                  <div class="img-showcase image-container" 
-                    @mousemove="moveLens"
-                    @mouseleave="hideLens"
-                    @touchstart="startZoom" 
-                    @touchmove="moveTouchLens" 
-                    @touchend="hideLens">
-                      <div ref="lens" class="zoom-lens"></div>
-                      <img
-                        :src="singleProduct?.image"
-                        alt="shoe image"
-                        ref="image"
-                        class="image"
-                        v-if="thumbnailImage == null"
-                      />
-                      <img :src="thumbnailImage" ref="image" class="image" alt="shoe image" v-else />
-                  </div>
-                  
-                </div>
-                <div class="image-gallery">
-                  <div
-                    class="img-item"
-                    v-for="(img, index) in singleProduct?.images"
-                    :key="index"
-                    :class="[activeImage == index ? 'active-thumb' : '']"
-                  >
-                    <img
-                      :src="img.image"
-                      alt="shoe image"
-                      @click.prevent="changeImage(img.image, index)"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ProductImage :singleProduct="singleProduct" :type="'details'" />
           </div>
           <div class="col-lg-6">
             <div class="details-content">
@@ -1414,93 +1241,7 @@ input[type="number"]::-webkit-inner-spin-button {
   color: #8bc4a1;
 }
 
-/* sticky footer end */
 
-/*
-@media (max-width: 1399px) {
-  .details-label-group{
-    top: 17px;
-    left: 19rem;
- }
-  img {
-    width: 50%;
-    display: block;
-  }
-
-
-  .banner-category-list {
-    width: 14%;
-  }
-}
-
-@media (max-width: 1199px) {
-  .details-label-group{
-    top: 17px;
-    left: 15rem;
- }
-
- .couter-span-tag[data-v-c230a133] {
-    font-size: 15px;
-  }
-}
-
-
-@media (max-width: 1024px) {
-
-  .img-showcase {
-    width: 99%;
-  }
-
-  .img-showcase img{
-    width: 103%;
-  }
-
-  .videoHW iframe {
-    width: 466px !important;
-    height: 322px !important;
-}
-  
-  .details-label-group{
-    top: 17px;
-    left: 12rem;
-  }
-  
-  .main-footer-nav-section{
-    padding: 15px;
-  }
-
-  .footer-nav-left p {
-    font-size: 20px;
-    line-height: 27px;
-  }
-
-  .price{
-    display: flex;
-    flex-direction: column;
-  }
-  .price h3 {
-    font-size: 17px;
-}
-
-
-  .footer-nav-cart button {
-    padding: 6px 7px;
-  }
-
-
-  .btnColor{
-      padding: 9px 5px;
-  }
-
-  .couter-span-tag {
-    font-size: 19px;
-  }
-
-
-}
-
-
-*/
 @media (max-width: 991px) {
   .btnColor {
     padding: 10px 15px;
@@ -1579,116 +1320,4 @@ input[type="number"]::-webkit-inner-spin-button {
     margin-left: 0px;
   }
 }
-
-/*
-
-
-
-  .videoHW iframe{
-    width: 355px !important;
-    height: 220px !important;
-  }
-
-  .quentyDefaultClass {
-    margin: 16px 0px;
-  }
-
-  .quentyDefaultClass input {
-    width: 260px;
-  }
-
-  img {
-    width: 100%;
-    display: block;
-  }
-
-  .img-item{
-    margin-right: 10px !important;
-  }
-  
-  .img-select{
-    width: 100%;
-  }
-
-  .details-label-group{
-    top: 17px;
-    left: 1rem;
- }
-
-  .footer-nav-left{
-    display: none;
-  }
-
-  .price{
-    display: none;
-  }
-  .footer-nav-cart{
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .footer-nav-cart button {
-    padding: 6px 80px;
-  }
-
-  .main-nav-footer{
-    justify-content: space-around;
-  }
-
-  .couter-span-tag{
-    font-size: 18px;
-  }
-
-  .countdown-time{
-    padding: 5px 7px;
-  }
-
-
-@media (max-width: 375px) {
-
-
-
-  .videoHW iframe{
-    width: 305px !important;
-    height: 170px !important;
-  }
-
-  .quentyDefaultClass {
-    margin: 16px 0px;
-  }
-
-  .quentyDefaultClass input {
-    width: 200px;
-  }
-
-  .footer-nav-cart button {
-    padding: 6px 55px;
-  }
-  .couter-span-tag {
-    font-size: 14px !important;
-  }
-}
-
-@media (max-width: 320px) {
-
-  .videoHW iframe{
-    width: 251px !important;
-    height: 150px !important;
-  }
-  .quentyDefaultClass {
-    margin: 16px 0px;
-  }
-
-  .quentyDefaultClass input {
-    width: 150px;
-  }
-
-  .footer-nav-cart button {
-    padding: 6px 29px;
-  }
-  .couter-span-tag {
-    font-size: 14px !important;
-  }
-}
-*/
 </style>
