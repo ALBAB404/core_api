@@ -372,7 +372,7 @@ onMounted(() => {
                 <div class="top-filter">
                   <div class="filter-short">
                     <label class="filter-label">Short by :</label>
-                    <select class="form-select filter-select" @change="getProducts" v-model="productType">
+                    <select class="form-select filter-select filterSelectBorderPadding" @change="getProducts" v-model="productType">
                       <option value="" selected>All</option>
                       <option value="top-product">Top</option>
                       <option value="feature-product">Feature</option>
@@ -430,10 +430,52 @@ onMounted(() => {
 </template>
 
 <style scope>
+.shop-widget {
+  padding: 20px 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  background: var(--white);
+  border: 1px solid var(--white);
+  border-top: 4px solid var(--primary) !important;
+  border-left: 1px solid var(--primary) !important;
+  border-bottom: 4px solid var(--primary) !important;
+  border-right: 1px solid var(--primary) !important;
+  padding: 5px 10px 5px 10px !important;
+  transition: .5s;
+}
+.shop-widget:hover {
+  border-top: 4px solid var(--secondary-color) !important;
+  border-left: 1px solid var(--secondary-color) !important;
+  border-bottom: 4px solid var(--secondary-color) !important;
+  border-right: 1px solid var(--secondary-color) !important;
+  transition: .5s;
+}
+
+.formControl {
+  border-top: 4px solid var(--primary) !important;
+  border-left: 4px solid var(--primary) !important;
+  border-bottom: 1px solid var(--primary) !important;
+  border-right: 1px solid var(--primary) !important;
+  border-top-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;;
+  padding: 5px 10px 5px 10px !important;
+}
+
+.filterSelectBorderPadding {
+  border-top: 4px solid var(--primary) !important;
+  border-left: 4px solid var(--primary) !important;
+  border-bottom: 1px solid var(--primary) !important;
+  border-right: 1px solid var(--primary) !important;
+  border-top-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;;
+  padding: 5px 10px 5px 10px !important;
+}
+
 @media (max-width: 576px) {
   .formControl {
     width: 88% !important;
     height: 40px !important;
+    
   }
 }
 

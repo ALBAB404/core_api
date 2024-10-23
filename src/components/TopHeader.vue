@@ -3,12 +3,12 @@
 import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useCart, useSetting, useAuth } from "@/stores";
-const auth = useAuth();
-const { user, loading } = storeToRefs(auth);
 import axiosInstance from "@/services/axiosService.js";
 import { CategorySideBar, NavSideBar } from "@/components";
 
 // All Variable  Code Is Here.....................................................................................................
+const auth = useAuth();
+const { user, loading } = storeToRefs(auth);
 const setting = useSetting();
 const cart = useCart();
 const { cartItemCount, totalPrice } = storeToRefs(cart);

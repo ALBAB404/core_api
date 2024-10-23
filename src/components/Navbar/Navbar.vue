@@ -8,6 +8,7 @@ import axiosInstance from "@/services/axiosService.js";
 // All Variable  Code Is Here.....................................................................................................
 const auth = useAuth();
 const router = useRouter();
+const route = useRoute();
 const { user, loading } = storeToRefs(auth);
 const notify = useNotification();
 const category = useCategory();
@@ -87,9 +88,15 @@ onMounted(() => {
           </div> -->
           <div class="col-xl-10">
             <span class="navbar-section">
-                <span><router-link :to="{ name: 'shopPage' }">All Product</router-link></span>
-                <span v-for="(category, index) in categories?.data" :key="index">
-                  <router-link :to="{ name: 'shopPage', query: { category: category.id } }">{{ category.name }}</router-link>
+              <span>
+                <router-link :to="{ name: 'shopPage' }" :class="{ 'active-link': !route.query.category }">
+                  All Product
+                </router-link>
+              </span>
+              <span v-for="(category, index) in categories?.data" :key="index">
+                <router-link :to="{ name: 'shopPage', query: { category: category.id } }" :class="{ 'active-link': route.query.category == category.id }">
+                  {{ category.name }}
+                </router-link>
               </span>
             </span>
           </div>
@@ -110,6 +117,12 @@ onMounted(() => {
 </template>
 
 <style>
+
+.active-link {
+  color: var(--secondary-color) !important;
+  font-weight: bold;
+}
+
 .navbar-section{
     padding: 5px 0px; 
     display:inline-block;

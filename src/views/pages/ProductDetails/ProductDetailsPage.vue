@@ -37,7 +37,6 @@ const price         = ref();
 const quantityInput = ref(1);
 const categoryId    = ref([]);
 const setting       = useSetting();
-const playUtube     = ref(false);
 
 // product variations start
 const productVariations     = ref([]);
@@ -83,9 +82,8 @@ const images = ref([]);
 const changeImage = (img, index) => {
   thumbnailImage.value = img;
   activeImage.value = index;
-  playUtube.value = false;
-  console.log(playUtube.value);
 };
+
 // image working end
 
 // get products start
@@ -481,6 +479,7 @@ onMounted(() => {
 });
 
 onUpdated(() => {
+  
   // image zooming start
   const lensEl = lens.value;
   const img = image.value;  
@@ -522,19 +521,12 @@ onUnmounted(() => {
               </div>
               <div class="product-imgs">
                 <div class="img-display">
-                  <div :class="playUtube ? 'img-utube-video' : 'img-showcase image-container'" 
+                  <div class="img-showcase image-container" 
                     @mousemove="moveLens"
                     @mouseleave="hideLens"
                     @touchstart="startZoom" 
                     @touchmove="moveTouchLens" 
                     @touchend="hideLens">
-                    {{ playUtube }}
-                    <span v-if="playUtube">
-                      <div class="videoHW">
-                        <iframe class="mt-5" :src="getEmbedUrl(singleProduct?.video_url)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>              
-                      </div>
-                    </span>
-                    <span v-else>
                       <div ref="lens" class="zoom-lens"></div>
                       <img
                         :src="singleProduct?.image"
@@ -544,7 +536,6 @@ onUnmounted(() => {
                         v-if="thumbnailImage == null"
                       />
                       <img :src="thumbnailImage" ref="image" class="image" alt="shoe image" v-else />
-                    </span>
                   </div>
                   
                 </div>
@@ -560,9 +551,6 @@ onUnmounted(() => {
                       alt="shoe image"
                       @click.prevent="changeImage(img.image, index)"
                     />
-                  </div>
-                  <div class="img-item d-flex align-items-center p-3" v-if="singleProduct?.video_url">
-                    <img src="@/assets/images/utubeplaybtn.png" alt="shoe image" @click.prevent="playUtube =! playUtube"/>
                   </div>
                 </div>
               </div>
