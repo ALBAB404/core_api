@@ -2,6 +2,7 @@
 // All inport  Code Is Here.....................................................................................................
 import {
   ProductCard,
+  CoreDeveloperProductCard,
   ProductView,
   CartSideBar,
   MobileMenu,
@@ -277,8 +278,11 @@ onMounted(() => {
           <div class="col-lg-3">
             <template v-if="sideBar.result">
               <div class="shop-widget">
-                <h6 class="shop-widget-title">Filter by Price</h6>
-                <form>
+                <div class="shop-widget-title" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
+                  <h6>Filter by Price</h6>
+                  <a><i class="fa-solid fa-plus"></i></a>
+                </div>
+                <form class="collapse" id="collapseExample">
                   <div class="shop-widget-group">
                     <input type="text" v-model="sortingPrice[0]" :placeholder="`Min - ${$filters.currencySymbol(sideBar.result.min_price)}`" />
                     <input type="text" v-model="sortingPrice[1]" :placeholder="`Max - ${$filters.currencySymbol(sideBar.result.max_price)}`" />
@@ -293,8 +297,11 @@ onMounted(() => {
                 </form>
               </div>
               <div class="shop-widget">
-                <h6 class="shop-widget-title">Filter by Variations</h6>
-                <form>
+                <div class="shop-widget-header" data-bs-toggle="collapse" href="#size" role="button" aria-expanded="false" aria-controls="collapseExample">
+                  <h6>Filter by Size</h6>
+                  <a><i class="fa-solid fa-plus"></i></a>
+                </div>
+                <form class="collapse" id="size">
                   <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchCategoryQuery" />
                   <ul class="shop-widget-list shop-widget-scroll">
                     <li v-for="(category, index) in searchCategories" :key="index">
@@ -316,8 +323,11 @@ onMounted(() => {
                 </form>
               </div>
               <div class="shop-widget">
-                <h6 class="shop-widget-title">Filter by Category</h6>
-                <form>
+                <div class="shop-widget-header" data-bs-toggle="collapse" href="#category" role="button" aria-expanded="false" aria-controls="collapseExample">
+                  <h6>Filter by Category</h6>
+                  <a><i class="fa-solid fa-plus"></i></a>
+                </div>
+                <form class="collapse" id="category">
                   <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchCategoryQuery" />
                   <ul class="shop-widget-list shop-widget-scroll">
                     <li v-for="(category, index) in searchCategories" :key="index">
@@ -338,9 +348,12 @@ onMounted(() => {
                   </button>
                 </form>
               </div>
-              <div class="shop-widget">
-                <h6 class="shop-widget-title">Filter by Brand</h6>
-                <form>
+              <div class="shop-widget mb-4">
+                <div class="shop-widget-header" data-bs-toggle="collapse" href="#brand" role="button" aria-expanded="false" aria-controls="collapseExample">
+                  <h6>Filter by Brand</h6>
+                  <a><i class="fa-solid fa-plus"></i></a>
+                </div>
+                <form class="collapse" id="brand">
                   <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchBrandQuery" />
                   <TransitionGroup tag="ul" class="shop-widget-list shop-widget-scroll">
                     <li v-for="(brand, index) in searchBrands" :key="brand.id">
@@ -402,6 +415,7 @@ onMounted(() => {
                   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3">
                     <div class="col" v-for="(product, index) in products.data" :key="index">
                       <ProductCard :product="product" />
+                      <!-- <CoreDeveloperProductCard :product="product" /> -->
                     </div>
                   </div>
                 </template>
@@ -416,7 +430,8 @@ onMounted(() => {
                 <template v-else>
                   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-2">
                     <div class="col" v-for="(product, index) in products.data" :key="index">
-                      <ProductCard :product="product" />
+                      <CoreDeveloperProductCard :product="product" />
+                      <!-- <ProductCard :product="product" /> -->
                     </div>
                   </div>
                 </template>
@@ -430,6 +445,18 @@ onMounted(() => {
 </template>
 
 <style scope>
+
+.shop-widget-title{
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+.shop-widget-header{
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
 .shop-widget {
   padding: 20px 20px;
   border-radius: 8px;

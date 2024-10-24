@@ -453,6 +453,10 @@ onUnmounted(() => {
               <p
                 class="details-desc mt-2"
                 v-if="singleProduct.short_description"
+              >Quick Overview :</p>
+              <p
+                class="details-desc mt-2"
+                v-if="singleProduct.short_description"
                 v-html="singleProduct.short_description"
               ></p>
 

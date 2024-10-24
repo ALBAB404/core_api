@@ -703,10 +703,11 @@ const paymentGatewayRef   = ref(null);
 }
 
 .formRadioControl{
-  border: 1px solid rgb(192, 192, 192);
+  border: 1px solid rgb(0, 0, 0);
   border-radius: 5px;
   padding: 5px 10px;
   margin: 10px 0;
+  border-top: 3px solid var(--primary) !important;
 }
 
 .text-note textarea {
@@ -717,6 +718,11 @@ const paymentGatewayRef   = ref(null);
 
 .form-control.PlaceHolderColorChange::placeholder {
     color: var(--black) !important;
+}
+
+.form-control {
+  border: 1px solid var(--black) !important;
+  border-top: 3px solid var(--primary) !important;
 }
 
 /* Define the keyframes for the pulse animation */
