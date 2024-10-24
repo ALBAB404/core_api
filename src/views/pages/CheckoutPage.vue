@@ -27,7 +27,7 @@ const phoneNumber         = ref(auth?.user?.user?.phone_number);
 const district            = ref("");
 const address             = ref("");
 const payment_gateway_id  = ref(1);
-const delivery_gateway_id = ref(1);
+const delivery_gateway_id = ref(100);
 const deliverCharge       = ref();
 const deliveryInfo        = ref([]);
 const payment_gateways    = ref([]);
@@ -468,6 +468,16 @@ const paymentGatewayRef   = ref(null);
                       <span class="text-danger" v-if="errors.address">{{ errors.address }}</span>
                     </div>
                     <h6 class="delivary-charge text-center mb-3" >ডেলিভারি চার্জ</h6>
+                    <div class="formRadioControl"  v-if="isFreeShipping && cartItem.length > 1 || (cartItem.length > 0 && cartItem[0].quantity > 1)">
+                      <input
+                        class="form-check-input me-2"
+                        type="radio"
+                        id='deliveryGateway_'
+                        :value="100"
+                        v-model="delivery_gateway_id"
+                      >
+                      <label class="form-check-label" for='deliveryGateway'>Free Shipping</label>
+                    </div>
                     <div class="formRadioControl" v-for="(delivery, index) in deliveryInfo.data" :key="index" @click="delivery_gateway_id = delivery.id">
                       <input
                         class="form-check-input me-2"
