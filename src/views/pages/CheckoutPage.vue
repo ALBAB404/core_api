@@ -3,23 +3,23 @@ import { CartSideBar, MobileMenu, BannerPart, ProductView } from "@/components";
 import axiosInstance from "@/services/axiosService.js";
 import { useCart, useOrder, useAuth, useModal } from "@/stores";
 import { storeToRefs } from "pinia";
-import { onMounted, ref, onUpdated, onBeforeUpdate, onUnmounted } from "vue";
+import { onMounted, ref, onUpdated, onBeforeUpdate, onUnmounted, computed, watch  } from "vue";
 import { useRouter } from "vue-router";
 // validation error
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
-const modal                                  = useModal()
+const modal                                   = useModal()
 const router                                  = useRouter()
-const auth                                   = useAuth();
-const { isOrder }                            = storeToRefs(auth);
-const cart                                   = useCart();
-const { cartItem, totalPrice, campaignId }   = storeToRefs(cart);
-const order                                  = useOrder();
-const { storeOrder, backendErrors, loading } = storeToRefs(order);
-const isLoading                              = ref(false);
-const isFreeShipping                         = ref(true);
-const clickIsOrder                           = ref(true);
+const auth                                    = useAuth();
+const { isOrder }                             = storeToRefs(auth);
+const cart                                    = useCart();
+const { cartItem, totalPrice, cartItemCount } = storeToRefs(cart);
+const order                                   = useOrder();
+const { storeOrder, backendErrors, loading }  = storeToRefs(order);
+const isLoading                               = ref(false);
+const clickIsOrder                            = ref(true);
+const isFreeShippingChecking                  = ref();
 
 
 const name                = ref(auth?.user?.user?.name);
@@ -27,7 +27,7 @@ const phoneNumber         = ref(auth?.user?.user?.phone_number);
 const district            = ref("");
 const address             = ref("");
 const payment_gateway_id  = ref(1);
-const delivery_gateway_id = ref(100);
+const delivery_gateway_id = ref(1);
 const deliverCharge       = ref();
 const deliveryInfo        = ref([]);
 const payment_gateways    = ref([]);
@@ -212,7 +212,6 @@ const paymentGatewayRef   = ref(null);
 
 // coupon 
 
-
     const couponCalculate = async() => {
       try {
 
@@ -273,12 +272,58 @@ const paymentGatewayRef   = ref(null);
 //  }
 // is cart item empty then fall back end
 
+// free shipping section show and hide start
+    const freeShippingChecking = async () => {
+      const res = await axiosInstance.get("/free-delivery/get");
+      isFreeShippingChecking.value = res.data.result;    
+      delivery_gateway_id.value = 1;   
+      getDeliveryAmount();
+    }
+// free shipping section show and hide end
+
+// get Selected Delivery Id start
+    const getSelectedDeliveryId = (deliveryId) => {
+      // delivery_gateway_id.value = deliveryId;
+      // getDeliveryAmount();
+      // if (deliveryId != 3) {
+      // }
+      if (deliveryId != 3 && isFreeShippingChecking.value) {
+        delivery_gateway_id.value = deliveryId;
+        getDeliveryAmount();
+      }else if (deliveryId == 3 && isFreeShippingEligible.value){
+        delivery_gateway_id.value = deliveryId;
+        getDeliveryAmount();
+      }
+    }
+
+    const isFreeShippingEligible = computed(() => {
+      return (isFreeShippingChecking.value?.type === 'quantity' && cartItemCount.value >= isFreeShippingChecking.value.quantity) ||
+            (isFreeShippingChecking.value?.type === 'price' && totalPrice.value >= isFreeShippingChecking.value.price);
+    });
+    
+    // Automatically select free shipping when eligible
+    watch(isFreeShippingEligible, (newVal) => {
+      if (newVal) {        
+        const freeShippingOption = deliveryInfo.value.data.find((delivery) => delivery.id === 3);
+        if (freeShippingOption) {
+          delivery_gateway_id.value = freeShippingOption.id;
+          getDeliveryAmount();
+        }
+      } else if (delivery_gateway_id.value === 3) {
+        delivery_gateway_id.value = 1; 
+        getDeliveryAmount();
+      }
+    });
+
+// get Selected Delivery Id end
+
 
   onMounted(() => {
     getDeliveryGateway();
     getPaymentGetway();
     modal.Modalclose();
     showTotalPriceSection();  
+    freeShippingChecking();  
   });
 
   // onUpdated(() => {
@@ -382,11 +427,16 @@ const paymentGatewayRef   = ref(null);
                     <div class="continue-shopping">
                       <router-link :to="{ name: 'shopPage'}"> <i class="fas fa-arrow-left"></i> Continue Shopping</router-link>
                     </div>
-                    <div class="is-free-shipping-active" v-if="isFreeShipping && cartItem.length > 1 || (cartItem.length > 0 && cartItem[0].quantity > 1)">
+                    <div class="is-free-shipping-active" v-if="(isFreeShippingChecking?.type == 'quantity' && cartItemCount >= isFreeShippingChecking?.quantity) || (isFreeShippingChecking?.type == 'price' && totalPrice >= isFreeShippingChecking?.price)">
                       <p>You are Enjoying Free Shipping!</p>
                     </div>
                     <div class="is-free-shipping" v-else>
-                      <p>Add 1 more product to get free shipping!</p>
+                      <span v-if="isFreeShippingChecking?.type == 'price'">
+                        <p>Add {{ isFreeShippingChecking?.price -  totalPrice}} more Price to get free shipping!</p>
+                      </span>
+                      <span v-if="isFreeShippingChecking?.type == 'quantity'">
+                        <p>Add {{ isFreeShippingChecking?.quantity -  cartItemCount}} more product to get free shipping!</p>
+                      </span>
                     </div>
                     <div class="left my-3 p-0">
                       <div class="d-flex justify-content-between is-coupon" @click="isOpenCoupon">
@@ -468,17 +518,7 @@ const paymentGatewayRef   = ref(null);
                       <span class="text-danger" v-if="errors.address">{{ errors.address }}</span>
                     </div>
                     <h6 class="delivary-charge text-center mb-3" >ডেলিভারি চার্জ</h6>
-                    <div class="formRadioControl"  v-if="isFreeShipping && cartItem.length > 1 || (cartItem.length > 0 && cartItem[0].quantity > 1)">
-                      <input
-                        class="form-check-input me-2"
-                        type="radio"
-                        id='deliveryGateway_'
-                        :value="100"
-                        v-model="delivery_gateway_id"
-                      >
-                      <label class="form-check-label" for='deliveryGateway'>Free Shipping</label>
-                    </div>
-                    <div class="formRadioControl" v-for="(delivery, index) in deliveryInfo.data" :key="index" @click="delivery_gateway_id = delivery.id">
+                    <div class="formRadioControl" v-for="(delivery, index) in deliveryInfo.data" :key="index" @click="getSelectedDeliveryId(delivery.id)">
                       <input
                         class="form-check-input me-2"
                         type="radio"
@@ -486,7 +526,7 @@ const paymentGatewayRef   = ref(null);
                         name="delivery_gateway_id"
                         :value="delivery.id"
                         v-model="delivery_gateway_id"
-                        @change="getDeliveryAmount"
+                        :disabled="delivery.id === 3 && !(isFreeShippingEligible)"
                       >
                       <label class="form-check-label" :for="'deliveryGateway_' + index">{{ delivery.name + ' - ' + Number(delivery.delivery_fee) }} টাকা </label>
                     </div>

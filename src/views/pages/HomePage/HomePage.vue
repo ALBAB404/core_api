@@ -2,7 +2,6 @@
 import {
   CategorySideBar,
   CartSideBar,
-  ProductCard,
   NavSideBar,
   MobileMenu,
   Blog,
@@ -10,12 +9,8 @@ import {
   AnonLeatherCategorySection,
   PremiumCollection,
   HomePageBanner,
-  PromoPart,
   Banner,
-  IntroPart,
-  NewItem,
   Brand,
-  Footer,
 } from "@/components";
 // product data fetch
 import { useProduct, useSection } from "@/stores";
@@ -23,14 +18,11 @@ import { storeToRefs } from "pinia";
 import { ref, onMounted } from "vue";
 import { ProductSkeleton } from "@/components/skeleton";
 import axiosInstance from "@/services/axiosService.js";
-// All Variable  Code Is Here.....................................................................................................
+
 const product = useProduct();
 const section = useSection();
 const sections = ref("");
 const bannerAllItems = ref({});
-// API Calling Code Is Here.....................................................................................................
-
-// All Function  Code Is Here.....................................................................................................
 
 const getSections = async () => {
   sections.value = await section.getData();
@@ -52,6 +44,8 @@ onMounted(() => {
 
     <!-- <ProductView /> -->
 
+    <MobileMenu />
+
     <Banner />
 
     <AnonLeatherCategorySection />
@@ -65,16 +59,8 @@ onMounted(() => {
 
     <Brand />
 
-    <!--=====================================
-                      BLOG PART END
-        =======================================-->
-    <!--=====================================
-                      BLOG PART START
-        =======================================-->
     <Blog />
-    <!--=====================================
-                      BLOG PART END
-        =======================================-->
+
   </div>
 </template>
 

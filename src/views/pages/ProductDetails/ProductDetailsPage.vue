@@ -80,11 +80,21 @@ const alertTimeout = ref("");
 const productByid = async () => {
   singleProduct.value = await product.productById(route.params.slug);
   productVariations.value = singleProduct.value?.variations?.attributes;
+  
+  let i = 0;
+  for (const data of singleProduct.value?.variations?.data) {
+    getProductVariation(singleProduct.value?.id, data?.attribute_value_1, i);
+    //  console.log(data);
+     
+  }
+  i++;
 };
 // get products end
 // get products variation working start
 
 async function getProductVariation(productId, attributeValue, index) {
+  console.log(attributeValue);
+  
   resetBtns.value = true;
 
   // variation selected section start
@@ -468,12 +478,12 @@ onUnmounted(() => {
                   v-for="(attribute, key, index) in productVariations"
                   :key="index"
                 >
-                  <label class="details-list-title">{{ key }}:</label>
-                  <ul class="details-tag-list">
-                    <li
-                      v-for="(attributeValue, indexAttributeValue) in attribute"
-                      :key="indexAttributeValue"
-                    >
+                <label class="details-list-title">{{ key }}:</label>
+                <ul class="details-tag-list">
+                  <li
+                  v-for="(attributeValue, indexAttributeValue) in attribute"
+                  :key="indexAttributeValue"
+                  >
                       <a
                         href="#"
                         :class="{

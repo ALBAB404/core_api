@@ -48,6 +48,8 @@ const clearSearchBar = () => {
 
 const getSettingsData = async () => {
   const settingData = await setting.getData();
+      // console.log(settingData);
+      
   settingData.data.map((ele) => {
     if (ele.key == "header_logo") {
       logo.value = ele;
