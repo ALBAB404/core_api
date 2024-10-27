@@ -92,9 +92,7 @@ const productByid = async () => {
 // get products end
 // get products variation working start
 
-async function getProductVariation(productId, attributeValue, index) {
-  console.log(attributeValue);
-  
+async function getProductVariation(productId, attributeValue, index) {  
   resetBtns.value = true;
 
   // variation selected section start
@@ -351,6 +349,13 @@ const getEmbedUrl = (watchUrl) => {
 
 // video url setup end
 
+// product prices start
+const handleProductVariationPrice = (data) => {
+  productVariationPrice.value = data[0]
+  
+}
+// product prices end
+
 
 onMounted(() => {
   stickyFooter();
@@ -417,24 +422,13 @@ onUnmounted(() => {
               <!-- Price Section start -->
               <!-- Product Variation Price Section start -->
               <span v-if="singleProduct?.variations?.data.length > 0">
-                <h3 class="details-price" v-if="productVariationPrice == ''">
-                  <span
-                    >{{
-                      $filters.currencySymbol(
-                        singleProduct.variation_price_range.min_price
-                      )
-                    }}
-                    -
-                    {{
-                      $filters.currencySymbol(
-                        singleProduct.variation_price_range.max_price
-                      )
-                    }}</span
-                  >
+                <h3 class="details-price" v-if="productVariationPrice == '' || productVariationPrice == undefined">
+                  <span v-if="singleProduct.variation_price_range.min_price == singleProduct.variation_price_range.max_price">{{ $filters.currencySymbol( singleProduct.variation_price_range.min_price || singleProduct.variation_price_range.max_price ) }}</span>
+                  <span v-else>{{ $filters.currencySymbol( singleProduct.variation_price_range.min_price ) }} - {{ $filters.currencySymbol( singleProduct.variation_price_range.max_price ) }}</span>
                 </h3>
                 <h3 class="details-price" v-else>
                   <span>{{
-                    $filters.currencySymbol(productVariationPrice.sell_price)
+                    $filters.currencySymbol(productVariationPrice?.sell_price)
                   }}</span>
                 </h3>
               </span>
@@ -515,7 +509,7 @@ onUnmounted(() => {
 
               ...............................................
 
-              <ProductVariation :productVariations="productVariations" :allVariations="singleProduct?.variations?.data" />
+              <ProductVariation :productVariations="productVariations" :allVariations="singleProduct?.variations?.data" @productVariationPrice="handleProductVariationPrice" />
 
               <!-- Product Variation Price Section end -->
 

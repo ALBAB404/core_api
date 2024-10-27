@@ -293,7 +293,8 @@ onMounted(() => {
 
 
           <h6 class="product-price" v-if="product?.variations?.data?.length > 0" :style="`font-size: ${productPriceFontSize ? productPriceFontSize : ''}`">
-            <span>{{ product?.variation_price_range.min_price }} - {{ product?.variation_price_range.max_price }}</span>
+            <span v-if="product?.variation_price_range.min_price == product?.variation_price_range.max_price">{{ product?.variation_price_range.min_price || product?.variation_price_range.max_price }}</span>
+            <span v-else>{{ product?.variation_price_range.min_price }} - {{ product?.variation_price_range.max_price }}</span>
           </h6>
           <h6 class="product-price" v-else :style="`font-size: ${productPriceFontSize ? productPriceFontSize : ''}`">
             <span v-html="$filters.productPrice(product)"></span>

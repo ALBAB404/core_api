@@ -1,22 +1,85 @@
 <script setup>
-import { ref } from "vue";
-// Track selected attributes
-const selectedAttributes = ref({});
+import { ref, reactive, nextTick, computed, defineEmits  } from "vue";
 
-// Check if an attribute value is selected
-const isSelected = (attributeKey, attributeValue) => {
-  return selectedAttributes.value[attributeKey] === attributeValue;
+const emit = defineEmits(['productVariationPrice']);
+const selectedAttributes                      = ref({});
+const isAttributeDisabledUnSelectInitialStage = ref(false);
+const availableAttributes                     = ref({});
+const attribute_id_1                          = ref(null);
+const attribute_id_2                          = ref(null);
+const attribute_id_3                          = ref(null);
+const attribute_value_id_1                    = ref(null);
+const attribute_value_id_2                    = ref(null);
+const attribute_value_id_3                    = ref(null);
+const productVariationData                    = ref("");
+const productVariationPrice                   = ref("");
+
+const sendVariationProductPrice = (data) => {
+  emit('productVariationPrice', data);
 };
 
+// Check if an attribute value is selected start
+const isSelected = (attributeKey, attributeValue) => {
+  console.log(selectedAttributes.value[attributeKey] == attributeValue);
+  
+  return selectedAttributes.value[attributeKey] == attributeValue;
+};
+
+// Check if an attribute value is selected end
+
+// Reset function to clear selections start
+const resetSelections =  computed(() => {
+  selectedAttributes.value    = {};
+  availableAttributes.value    = {};
+  productVariationPrice.value = [];
+  productVariationData.value  = "";
+  attribute_id_1.value        = null;
+  attribute_id_2.value        = null;
+  attribute_id_3.value        = null;
+  attribute_value_id_1.value  = null;
+  attribute_value_id_2.value  = null;
+  attribute_value_id_3.value  = null;
+  sendVariationProductPrice(productVariationPrice.value);
+  isAttributeDisabledUnSelectInitialStage.value = false;
+})
+// Reset function to clear selections end
+
+// Computed property to check if any attribute is selected start
+const isAnyAttributeSelected = computed(() => {
+  return Object.keys(selectedAttributes.value).length > 0;
+});
+// Computed property to check if any attribute is selected end
+
+
+// Function to check if an attribute value should be disabled
+const isAttributeDisabled = (attributeKey, attributeValue) => {
+  // Check if the attribute key exists in availableAttributes
+  if (availableAttributes[attributeKey]) {
+    // If the attribute key exists, check if the value is present in availableAttributes
+    console.log(!availableAttributes[attributeKey].some(
+      (attr) => attr.value == attributeValue
+    ));
+    
+    return !availableAttributes[attributeKey].some(
+      (attr) => attr.value == attributeValue
+    );
+  }
+  // If the attribute key doesn't exist in availableAttributes, return false (not disabled)
+  return false;
+};
+
+
 // Function to filter variations by a specific size
-function getVariationsBySize(data, sizeValue) {
+function getVariationsByattribute1(data, sizeValue) {  
   // Step 1: Filter data based on attribute_value_1 (Size)
   const filteredBySize = data.filter(
-    (item) => item.attribute_value_1.value === sizeValue.attribute_value
+    (item) => item.attribute_value_1.value == sizeValue.attribute_value
   );
 
   // Step 2: Extract matching colors and weights, including their IDs
-  const variations = filteredBySize.map((item) => ({
+  
+  const variations = filteredBySize.map((item) =>({
+    
     [item.attribute_value_2.attribute.name]: {
       value: item.attribute_value_2.value,
       id: item.attribute_value_2.attribute.id, // Add ID here
@@ -29,28 +92,183 @@ function getVariationsBySize(data, sizeValue) {
 
   // Step 3: Remove duplicates based on value and ID
   const uniqueVariations = variations.filter((v, index, self) => 
-    index === self.findIndex((t) => {
+    index == self.findIndex((t) => {
       const keys = Object.keys(v);  // Get the keys dynamically
-      return t[keys[0]].value === v[keys[0]].value && 
-             t[keys[0]].id === v[keys[0]].id &&
-             t[keys[1]].value === v[keys[1]].value && 
-             t[keys[1]].id === v[keys[1]].id;
+      return t[keys[0]].value == v[keys[0]].value && 
+             t[keys[0]].id == v[keys[0]].id &&
+             t[keys[1]].value == v[keys[1]].value && 
+             t[keys[1]].id == v[keys[1]].id;
     })
   );
 
-  // console.log(uniqueVariations);
-
   return uniqueVariations;
+
 }
 
-const getVariations = (attributeKey, attributeValue, allVariations) => {
-  const uniqueVariations =  getVariationsBySize(allVariations, attributeValue);
-  console.log(uniqueVariations);
-  console.log(attributeValue);
+// Function to filter variations by a specific size
+function getVariationsByattribute2(data, attributeValue) {
+
+  // Step 1: Filter data based on attribute_value_1 (Size)
+  const filteredBySize = data.filter(
+    (item) => item.attribute_value_2.value == attributeValue.attribute_value
+  );
+
+  // Step 2: Extract matching colors and weights, including their IDs
+  const variations = filteredBySize.map((item) => ({
+    [item.attribute_value_1.attribute.name]: {
+      value: item.attribute_value_1.value,
+      id: item.attribute_value_1.attribute.id, // Add ID here
+    },
+    [item.attribute_value_3.attribute.name]: {
+      value: item.attribute_value_3.value,
+      id: item.attribute_value_3.attribute.id, // Add ID here
+    },
+  }));
+
+  // Step 3: Remove duplicates based on value and ID
+  const uniqueVariations = variations.filter((v, index, self) => 
+    index == self.findIndex((t) => {
+      const keys = Object.keys(v);  // Get the keys dynamically
+      return t[keys[0]].value == v[keys[0]].value && 
+             t[keys[0]].id == v[keys[0]].id &&
+             t[keys[1]].value == v[keys[1]].value && 
+             t[keys[1]].id == v[keys[1]].id;
+    })
+  );
+
+  return uniqueVariations;
+
+}
+
+// Function to filter variations by a specific size
+function getVariationsByattribute3(data, attributeValue) {
+
+  // Step 1: Filter data based on attribute_value_1 (Size)
+  const filteredBySize = data.filter(
+    (item) => item.attribute_value_3.value == attributeValue.attribute_value
+  );
+
+  // Step 2: Extract matching colors and weights, including their IDs
+  const variations = filteredBySize.map((item) => ({
+    [item.attribute_value_1.attribute.name]: {
+      value: item.attribute_value_1.value,
+      id: item.attribute_value_1.attribute.id, // Add ID here
+    },
+    [item.attribute_value_2.attribute.name]: {
+      value: item.attribute_value_2.value,
+      id: item.attribute_value_2.attribute.id, // Add ID here
+    },
+  }));
+
+  // Step 3: Remove duplicates based on value and ID
+  const uniqueVariations = variations.filter((v, index, self) => 
+    index == self.findIndex((t) => {
+      const keys = Object.keys(v);  // Get the keys dynamically
+      return t[keys[0]].value == v[keys[0]].value && 
+             t[keys[0]].id == v[keys[0]].id &&
+             t[keys[1]].value == v[keys[1]].value && 
+             t[keys[1]].id == v[keys[1]].id;
+    })
+  );
+
+  return uniqueVariations;
+
+}
+
+const getVariations = (attributeKey, attributeValue, allVariations, index) => {
+  // console.log(attributeKey);
+  // console.log(attributeValue);
+
+  // get prices filtering start
+  // if (index == 0) {
+  //   attribute_id_1.value = attributeValue.attribute_id;
+  //   attribute_value_id_1.value = attributeValue.attribute_value_id;
+  //   productVariationData.value = {
+  //     attribute_id_1: attribute_id_1.value || "",
+  //     attribute_value_id_1: attribute_value_id_1.value || "",
+  //     attribute_id_2: "",
+  //     attribute_value_id_2: attribute_value_id_2.value || "",
+  //     attribute_id_3: "",
+  //     attribute_value_id_3: attribute_value_id_3.value || "",
+  //   };
+  // }
+
+  // if (index == 1) {
+  //   attribute_id_2.value = attributeValue.attribute_id;
+  //   attribute_value_id_2.value = attributeValue.attribute_value_id;
+  //   productVariationData.value = {
+  //     attribute_id_1: "",
+  //     attribute_value_id_1: attribute_value_id_1.value || "",
+  //     attribute_id_2: attribute_id_2.value || "",
+  //     attribute_value_id_2: attribute_value_id_2.value || "",
+  //     attribute_id_3: "",
+  //     attribute_value_id_3: attribute_value_id_3.value || "",
+  //   };
+  // }
+  // if (index == 2) {
+  //   attribute_id_3.value = attributeValue.attribute_id;
+  //   attribute_value_id_3.value = attributeValue.attribute_value_id;
+  //   productVariationData.value = {
+  //     attribute_id_1: "",
+  //     attribute_value_id_1: attribute_value_id_1.value || "",
+  //     attribute_id_2: "",
+  //     attribute_value_id_2: attribute_value_id_2.value || "",
+  //     attribute_id_3: attribute_id_3.value || "",
+  //     attribute_value_id_3: attribute_value_id_3.value || "",
+  //   };
+  // }
+
+
+  productVariationPrice.value = allVariations.filter((e) => {
+    let isMatch = true;
+
+    if (productVariationData.value.attribute_value_id_1 && e.attribute_value_1) {
+      isMatch = isMatch && (e.attribute_value_1.id == productVariationData.value.attribute_value_id_1);
+    }
+    
+    if (productVariationData.value.attribute_value_id_2 && e.attribute_value_2) {
+      isMatch = isMatch && (e.attribute_value_2.id == productVariationData.value.attribute_value_id_2);
+    }
+    
+    if (productVariationData.value.attribute_value_id_3 && e.attribute_value_3) {
+      isMatch = isMatch && (e.attribute_value_3.id == productVariationData.value.attribute_value_id_3);
+    }
+
+    return isMatch;
+  });
+
+  sendVariationProductPrice(productVariationPrice.value);
+
+// get prices filtering end
+
+
   
+
+
+  isAttributeDisabledUnSelectInitialStage.value = true;
+  const uniqueVariations = getVariationsByattribute1(allVariations, attributeValue);
+  const uniqueVariationsAttribute2 = getVariationsByattribute2(allVariations, attributeValue);
+  const uniqueVariationsAttribute3 = getVariationsByattribute3(allVariations, attributeValue);
+  // console.log(uniqueVariations);
+   allVariations.filter(e => {
+    // Update available attributes if the size is selected
+    if (attributeKey == e.attribute_value_1.attribute.name) {
+      // Store available colors and weights
+      availableAttributes[e.attribute_value_2.attribute.name] = uniqueVariations.map((v) => v[e.attribute_value_2.attribute.name]);
+      availableAttributes[e.attribute_value_3.attribute.name] = uniqueVariations.map((v) => v[e.attribute_value_3.attribute.name]);
+    }else if(attributeKey == e.attribute_value_2.attribute.name){
+      availableAttributes[e.attribute_value_1.attribute.name] = uniqueVariationsAttribute2.map((v) => v[e.attribute_value_1.attribute.name]);
+      availableAttributes[e.attribute_value_3.attribute.name] = uniqueVariationsAttribute2.map((v) => v[e.attribute_value_3.attribute.name]);
+    }else if(attributeKey == e.attribute_value_3.attribute.name){
+      availableAttributes[e.attribute_value_1.attribute.name] = uniqueVariationsAttribute3.map((v) => v[e.attribute_value_1.attribute.name]);
+      availableAttributes[e.attribute_value_2.attribute.name] = uniqueVariationsAttribute3.map((v) => v[e.attribute_value_2.attribute.name]);
+    }
+  })
+  
+
   // select and unselect attributes start
   if (
-    selectedAttributes.value[attributeKey] === attributeValue.attribute_value
+    selectedAttributes.value[attributeKey] == attributeValue.attribute_value
   ) {
     // Unselect if already selected
     delete selectedAttributes.value[attributeKey];
@@ -61,11 +279,31 @@ const getVariations = (attributeKey, attributeValue, allVariations) => {
   // select and unselect attributes end
 };
 
+// get Is Default Attribute start
+const getIsDefaultAttribute = (allVariations) => {
+  // Find attributes where is_default is true
+  const defaultAttributes = allVariations.filter(e => e.is_default);
+
+  // Set selected attributes based on the default values
+  defaultAttributes.forEach(attribute => {
+    selectedAttributes.value[attribute.attribute_value_1.attribute.name] = attribute.attribute_value_1.value;
+    selectedAttributes.value[attribute.attribute_value_2.attribute.name] = attribute.attribute_value_2.value;
+    selectedAttributes.value[attribute.attribute_value_3.attribute.name] = attribute.attribute_value_3.value;
+  });
+};
+// get Is Default Attribute end
+
 const props = defineProps({
   productVariations: Object,
   allVariations: Object,
   required: true,
 });
+
+
+nextTick(() => {
+  getIsDefaultAttribute(props.allVariations);
+});
+
 </script>
 
 <template>
@@ -84,22 +322,48 @@ const props = defineProps({
           <a
             href="#"
             :class="{
-              'is-active': isSelected(key, attributeValue.attribute_value),
+              'is-active': !isAttributeDisabled(key, attributeValue.attribute_value) && isSelected(key, attributeValue.attribute_value),
+              'is-disabled': isAttributeDisabled(key, attributeValue.attribute_value) && isAttributeDisabledUnSelectInitialStage,
             }"
-            @click.prevent="getVariations(key, attributeValue, allVariations)"
+            @click.prevent="!isAttributeDisabled(key, attributeValue.attribute_value) && getVariations(key, attributeValue, allVariations, index) && isSelected(key, attributeValue.attribute_value)"
           >
             {{ attributeValue.attribute_value }}
           </a>
         </li>
       </ul>
     </div>
+    <!-- Reset button -->
+    <button v-if="isAnyAttributeSelected" @click="resetSelections" class="reset-btn">
+      Reset
+    </button>
+    <h1>{{ productVariationPrice[0]?.sell_price }}</h1>
   </span>
 </template>
 
 <style scoped>
 @import "@/assets/css/product-details.css";
+
+.reset-btn{
+  cursor: pointer;
+  border: 1px solid red;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: red;
+  color: white;
+}
+
 .is-active {
   color: var(--white) !important;
   background-color: var(--secondary-color) !important;
+}
+
+.is-disabled {
+  background: rgb(199, 40, 40);
+  color: white;
+  border: 0;
+  cursor: pointer;
+  padding: 1em;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>
