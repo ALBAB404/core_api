@@ -88,7 +88,7 @@ const props = defineProps({
             }"
             @click.prevent="getVariations(key, attributeValue, allVariations)"
           >
-            {{ attributeValue }}
+            {{ attributeValue.attribute_value }}
           </a>
         </li>
       </ul>
