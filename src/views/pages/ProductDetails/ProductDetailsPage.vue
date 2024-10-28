@@ -81,13 +81,13 @@ const productByid = async () => {
   singleProduct.value = await product.productById(route.params.slug);
   productVariations.value = singleProduct.value?.variations?.attributes;
   
-  let i = 0;
-  for (const data of singleProduct.value?.variations?.data) {
-    getProductVariation(singleProduct.value?.id, data?.attribute_value_1, i);
-    //  console.log(data);
+  // let i = 0;
+  // for (const data of singleProduct.value?.variations?.data) {
+  //   getProductVariation(singleProduct.value?.id, data?.attribute_value_1, i);
+  //   //  console.log(data);
      
-  }
-  i++;
+  // }
+  // i++;
 };
 // get products end
 // get products variation working start
