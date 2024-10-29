@@ -356,6 +356,12 @@ const handleProductVariationPrice = (data) => {
 }
 // product prices end
 
+// product prices start
+const handleProductVariationData = (data) => {
+  productVariationData.value = data  
+}
+// product prices end
+
 
 onMounted(() => {
   stickyFooter();
@@ -509,7 +515,7 @@ onUnmounted(() => {
 
               ...............................................
 
-              <ProductVariation :productVariations="productVariations" :allVariations="singleProduct?.variations?.data" @productVariationPrice="handleProductVariationPrice" />
+              <ProductVariation :productVariations="productVariations" :allVariations="singleProduct?.variations?.data" @productVariationPrice="handleProductVariationPrice" @productVariationData="handleProductVariationData" />
 
               <!-- Product Variation Price Section end -->
 
