@@ -85,8 +85,8 @@ const cartIncrement = (index) => {
                 <p>
                   Unit Price -
                   <!-- {{ $filters.currencySymbol(cart.offer_price) }} -->
-                  <!-- {{ $filters.currencySymbol(cart.price) }} -->
-                  <span v-html="$filters.productPrice(cart)"></span>
+                  {{ $filters.currencySymbol(Math.round(cart.sell_price)) }}
+                  <!-- <span v-html="$filters.productPrice(cart)"></span> -->
                 </p>
               </div>
               <div class="cart-action-group">
@@ -115,7 +115,7 @@ const cartIncrement = (index) => {
                   </button>
                 </div>
                 <h6>
-                  {{ $filters.currencySymbol(Math.round((cart.offer_price <= 0 ? cart.mrp : cart.offer_price) * cart.quantity)) }}
+                  {{ $filters.currencySymbol(Math.round((cart.sell_price) * cart.quantity)) }}
                 </h6>
               </div>
             </div>

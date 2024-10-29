@@ -351,14 +351,19 @@ const getEmbedUrl = (watchUrl) => {
 
 // product prices start
 const handleProductVariationPrice = (data) => {
-  productVariationPrice.value = data[0]
-  
+  productVariationPrice.value = data[0]  
 }
 // product prices end
 
 // product prices start
 const handleProductVariationData = (data) => {
   productVariationData.value = data  
+}
+// product prices end
+
+// product prices start
+const handleActiveBtns = (data) => {
+  activeBtns.value = data  
 }
 // product prices end
 
@@ -515,7 +520,7 @@ onUnmounted(() => {
 
               ...............................................
 
-              <ProductVariation :productVariations="productVariations" :allVariations="singleProduct?.variations?.data" @productVariationPrice="handleProductVariationPrice" @productVariationData="handleProductVariationData" />
+              <ProductVariation :productVariations="productVariations" :allVariations="singleProduct?.variations?.data" @productVariationPrice="handleProductVariationPrice" @productVariationData="handleProductVariationData" @activeBtns="handleActiveBtns"  />
 
               <!-- Product Variation Price Section end -->
 

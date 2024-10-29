@@ -388,7 +388,7 @@ const paymentGatewayRef   = ref(null);
                           <th scope="row">{{ 1 + index }}</th>
                           <td class="align-items-center"><a href="" class="img"><img :src="product.image" class="" alt=""></a></td>
                           <td class="text-wrap align-items-center">{{ product.name }}</td>
-                          <td>{{ Math.round(product.offer_price == 0 ? product.mrp : product.offer_price) }}</td>
+                          <td>{{ Math.round(product.sell_price) }}</td>
                           <td class="w-25">
                             <div class="checkout-page-action">
                                 <button
@@ -415,7 +415,7 @@ const paymentGatewayRef   = ref(null);
                                 </button>
                             </div>
                           </td>
-                          <td>{{ (Math.round(product.offer_price == 0 ? product.mrp : product.offer_price)) * product.quantity }}</td>
+                          <td>{{ (Math.round(product.sell_price)) * product.quantity }}</td>
                           <td>
                             <button class="cart-delete" @click.prevent="deleteCart(index)">
                               <i class="far fa-trash-alt text-danger"></i>

@@ -18,7 +18,8 @@ export const useCart = defineStore("cart", {
     totalPrice: (state) => {
       let price = 0;
       state.cartItem.map((el) => {
-        const itemPrice = el["offer_price"] == 0 ? el["mrp"] : el["offer_price"];
+        console.log(el);
+        const itemPrice = el["sell_price"];
         price += itemPrice * el["quantity"];
       });
 
