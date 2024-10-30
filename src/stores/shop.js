@@ -13,8 +13,10 @@ export const useShop = defineStore("shop", {
   actions: {
     // API Calling Code Is Here.....................................................................................................
 
-    async getData(type = "", brand, category, subCategory, price, search, paginateSize) {
+    async getData(type = "", brand, category, subCategory, attributeIds, price, search, paginateSize) {
         this.loading = true
+        console.log(attributeIds);
+        
       try {
         const res = await axiosInstance.get(`/products`, {
           params: {
@@ -47,6 +49,20 @@ export const useShop = defineStore("shop", {
         const res = await axiosInstance.get("/products/shop-sideBar");
         if (res.status === 200) {
           this.sideBar = res.data;
+        }
+      } catch (error) {
+        console.log(error);
+        
+      }
+    },
+
+
+    async sideBarAttributeData() {
+      try {
+        const res = await axiosInstance.get("/attributes");
+        
+        if (res.status === 200) {
+           return res.data.result.data;
         }
       } catch (error) {
         console.log(error);

@@ -1,37 +1,40 @@
 <script setup>
 // All Import File  Code Is Here......................................................................................................
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onBeforeUnmount  } from "vue";
 import { storeToRefs } from "pinia";
 import { useCart, useSetting, useAuth } from "@/stores";
 import axiosInstance from "@/services/axiosService.js";
 import { CategorySideBar, NavSideBar } from "@/components";
 
 // All Variable  Code Is Here.....................................................................................................
-const auth = useAuth();
-const { user, loading } = storeToRefs(auth);
-const setting = useSetting();
-const cart = useCart();
+const auth                          = useAuth();
+const { user, loading }             = storeToRefs(auth);
+const setting                       = useSetting();
+const cart                          = useCart();
 const { cartItemCount, totalPrice } = storeToRefs(cart);
-const searchData = ref([]);
-const name = ref("");
-const logo = ref("");
-const primaryColor = ref("");
-const secondaryColor = ref("");
-const faviconFile = ref("maxfit.png");
-const gtmId = ref("GTM-TMP9GG8Q");
-const headerTextOne = ref("");
-const headerTextTwo = ref("");
-const headerTextThree = ref("");
-const isNavTrue = ref(false);
+const searchData                    = ref([]);
+const name                          = ref("");
+const logo                          = ref("");
+const primaryColor                  = ref("");
+const secondaryColor                = ref("");
+const faviconFile                   = ref("maxfit.png");
+const gtmId                         = ref("GTM-TMP9GG8Q");
+const headerTextOne                 = ref("");
+const headerTextTwo                 = ref("");
+const headerTextThree               = ref("");
+const isDropdownOpen                = ref(false)
 
 const getProducts = async () => {
+  console.log('ddd');
+  
+  isDropdownOpen.value = true
   try {
     const res = await axiosInstance.get(
       `/products`,
 
       {
         params: {
-          name: name.value,
+          search_key: name.value,
           paginate_size: 5,
         },
       }
@@ -44,6 +47,7 @@ const getProducts = async () => {
 
 const clearSearchBar = () => {
   name.value = "";
+  isDropdownOpen.value = false
 };
 
 const getSettingsData = async () => {
@@ -186,11 +190,28 @@ const stickyHeader = () => {
 
 // sticky Header
 
+// Opens dropdown
+const openDropdown = () => {
+  isDropdownOpen.value = true
+}
+
+// Closes dropdown when clicked outside
+const onClickOutside = (event) => {
+  if (!event.target.closest('.header-form')) {
+    isDropdownOpen.value = false
+  }
+}
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onClickOutside)
+})
+
 onMounted(() => {
   getSettingsData();
   fetchPrimaryColor();
   changeFavicon();
   // addGTM();
+  document.addEventListener('click', onClickOutside)
   stickyHeader();
 });
 </script>
@@ -297,22 +318,22 @@ onMounted(() => {
             <img :src="logo?.image" alt="logo" />
           </router-link>
 
-          <form class="header-form active">
+          <form class="header-form active" @click.stop="openDropdown">
             <input
               type="search"
               placeholder="Search anything..."
               v-model="name"
-              @input="getProducts()"
+              @input="getProducts"
             />
             <button type="submit">
               <i class="fas fa-search"></i>
             </button>
-            <ul class="search-data" v-if="name != ''">
+            <ul class="search-data" v-if="name !== '' && isDropdownOpen">
               <li v-for="(product, index) in searchData" :key="index">
                 <router-link
                   :to="{
                     name: 'productDetailsPage',
-                    params: { id: product.id, slug: product.slug },
+                    params: { slug: product.slug },
                   }"
                   @click="clearSearchBar"
                   class="product-info"
@@ -329,38 +350,32 @@ onMounted(() => {
                       <p style="color: #000; margin: 0; line-height: 1.2">
                         {{ product.name }}
                       </p>
-                      <span style="font-size: 12px"
-                        ><span style="color: #000; font-weight: 500"
-                          >Category :
-                        </span>
-                        {{ product.category.name }}</span
-                      >
+                      <span style="font-size: 12px">
+                        <span style="color: #000; font-weight: 500">Category: </span>
+                        {{ product.category.name }}
+                      </span>
                     </div>
                     <div class="col-md-4 col-sm-5 search-price">
                       <p>
                         <span
-                          v-if="product.offer_percent != 0"
+                          v-if="product.offer_percent !== 0"
                           class="featured_label"
-                          >{{ Math.floor(product.offer_percent) }}% Off</span
-                        >
+                        >{{ Math.floor(product.offer_percent) }}% Off</span>
                       </p>
                       <div>
                         <span
                           class="product-price"
-                          v-if="product.mrp != 0"
+                          v-if="product.mrp !== 0"
                           style="font-weight: 400"
                         >
-                          <del v-if="product.offer_price != 0"
-                            >{{ product.mrp }} tk
-                          </del>
-                          <span
-                            >{{
-                              product.offer_price != 0
+                          <del v-if="product.offer_price !== 0">{{ product.mrp }} tk</del>
+                          <span>
+                            {{
+                              product.offer_price !== 0
                                 ? product.offer_price
                                 : product.mrp
-                            }}
-                            tk</span
-                          >
+                            }} tk
+                          </span>
                         </span>
                       </div>
                     </div>

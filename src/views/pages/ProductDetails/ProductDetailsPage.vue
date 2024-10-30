@@ -80,14 +80,6 @@ const alertTimeout = ref("");
 const productByid = async () => {
   singleProduct.value = await product.productById(route.params.slug);
   productVariations.value = singleProduct.value?.variations?.attributes;
-  
-  // let i = 0;
-  // for (const data of singleProduct.value?.variations?.data) {
-  //   getProductVariation(singleProduct.value?.id, data?.attribute_value_1, i);
-  //   //  console.log(data);
-     
-  // }
-  // i++;
 };
 // get products end
 // get products variation working start
@@ -366,6 +358,36 @@ const handleActiveBtns = (data) => {
   activeBtns.value = data  
 }
 // product prices end
+
+// Related product  start
+  const getRelatedProductData = async (catId) => {
+    let type = "";
+    let brand = [];
+    let subCategory = [];
+    let price = [];
+    let search = "";
+    let paginateSize = 8;
+    const res = await shop.getData(type, brand, catId, subCategory, price, search, paginateSize);
+    console.log(res);
+    relatedProducts.value = res.data;
+  };
+
+// product changes function 
+
+// product detials changes start
+  watch(() => route.params.slug, (newValue, oldValue) => {
+    productByid();
+  });
+// product detials changes end
+  watch(
+    categoryId,
+    (newValue, oldValue) => {
+      getRelatedProductData(newValue);
+    },
+    { deep: true }
+  );
+
+// Related product end
 
 
 onMounted(() => {

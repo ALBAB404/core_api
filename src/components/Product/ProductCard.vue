@@ -22,10 +22,18 @@ const size          = "8px";
 const quantityInput = ref(1);
 const setting       = useSetting();
 const props = defineProps({
-  product: Object,
-  types: String,
-  product_prices: Number,
-  required: true,
+ product: {
+    type: Object,
+    default: "", // Empty object as default
+  },
+  types: {
+    type: String,
+    default: "", // Empty string as default
+  },
+  product_prices: {
+    type: Number,
+    default: 0, // 0 as default
+  },
 });
 
 

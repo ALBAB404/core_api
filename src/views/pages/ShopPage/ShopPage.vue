@@ -33,6 +33,7 @@ const { loadings } = storeToRefs(cart);
 const isloadings = ref(loadings);
 const notify = useNotification();
 const quantityInput = ref(1);
+const getAttributeDatas = ref();
 
 const shop = useShop();
 const { products, sideBar, loading } = storeToRefs(shop);
@@ -43,6 +44,7 @@ const searchCategoryQuery = ref("");
 const productType = ref("");
 const selectedBrandIds = ref([]);
 const selectedCategoryIds = ref([]);
+const selectedAttributeIds = ref([]);
 const selectedSubCategoryIds = ref("");
 const sortingPrice = ref([]);
 const searchQuery = ref("");
@@ -137,13 +139,18 @@ const searchBrands = computed(() => {
   });
 });
 
-const getProducts = () => {
+
+const getProducts = (attributeIndex = null, attributeValueSlug = null) => {
+  // console.log(attributeIndex);
+  // console.log(attributeIndex);
+  
   products.value = [];
   shop.getData(
     productType.value,
     selectedBrandIds.value,
     selectedCategoryIds.value,
     selectedSubCategoryIds.value,
+    selectedAttributeIds.value,
     sortingPrice.value,
     searchQuery.value,
     paginateSize.value,
@@ -153,8 +160,10 @@ const getProducts = () => {
 function clearFilter(data) {
   if (data == "brand") {
     selectedBrandIds.value = [];
-  } else {
+  }else if(data == "category") {
     selectedCategoryIds.value = [];
+  } else {
+    selectedAttributeIds.value = [];
   }
 
   getProducts();
@@ -165,6 +174,10 @@ function clearFilter(data) {
 const queryProducts = () => {
   selectedCategoryIds.value = [];
   selectedBrandIds.value = [];
+  selectedAttributeIds.value = [];
+  if (route.query.attribute) {
+    selectedAttributeIds.value.push(route.query.attribute);
+  }
   if (route.query.category) {
     selectedCategoryIds.value.push(route.query.category);
   }
@@ -223,8 +236,15 @@ function closeCategorySideBar() {
         $('.backdrop').fadeOut();
 }
 
+// attribute data 
+
+const getAttributeData = async() => {
+  getAttributeDatas.value = await shop.sideBarAttributeData();
+}
+
 onMounted(() => {
   closeCategorySideBar()
+  getAttributeData()
   queryProducts();
   getBanner();
   shop.getData();
@@ -248,7 +268,7 @@ onMounted(() => {
     <ProductView />
 
     <BannerPart :title="'Shop Page'" />
-
+    {{  getAttributeDatas }}
     <section class="inner-section shop-part mt-3">
       <div class="container">
         <div class="row">
@@ -273,27 +293,26 @@ onMounted(() => {
                   </button>
                 </form>
               </div>
-              <div class="shop-widget">
-                <div class="shop-widget-header" data-bs-toggle="collapse" href="#size" role="button" aria-expanded="false" aria-controls="collapseExample">
-                  <h6>Filter by Size</h6>
+              <div class="shop-widget" v-for="(getAttributeData, index) in getAttributeDatas" :key="index">
+                <div class="shop-widget-header" data-bs-toggle="collapse" :href="`#${getAttributeData.id}`" role="button" aria-expanded="false" aria-controls="collapseExample">
+                  <h6>Filter by {{ getAttributeData.name }}</h6>
                   <a><i class="fa-solid fa-plus"></i></a>
                 </div>
-                <form class="collapse" id="size">
-                  <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchCategoryQuery" />
+                <form class="collapse" :id="`${getAttributeData.id}`">
                   <ul class="shop-widget-list shop-widget-scroll">
-                    <li v-for="(category, index) in searchCategories" :key="index">
+                    <li v-for="(attributeValue, attributeValueIndex) in getAttributeData.attribute_values" :key="attributeValueIndex">
                       <div class="shop-widget-content">
-                        <input type="checkbox" :id="`cate${index}`" :value="category.id" @change="getProducts"
-                          v-model="selectedCategoryIds" />
-                        <label :for="`cate${index}`">{{ category.name }}</label>
+                        <input type="checkbox" :id="`cate${attributeValueIndex}`" :value="attributeValue.slug" @change="getProducts(index, attributeValue.slug)"
+                          v-model="selectedAttributeIds" />
+                        <label :for="`cate${attributeValueIndex}`">{{ attributeValue.value }}</label>
                       </div>
-                      <span class="shop-widget-number">({{ category.products_count }})</span>
+                      <!-- <span class="shop-widget-number">({{ attributeValue.products_count }})</span> -->
                     </li>
                     <li v-show="searchCategories.length === 0">
                       <img src="@/assets/images/nodatafound.png" class="image-fluid mt-5" alt="" />
                     </li>
                   </ul>
-                  <button class="shop-widget-btn" @click.prevent="clearFilter('category')">
+                  <button class="shop-widget-btn" @click.prevent="clearFilter('attributeValue')">
                     <i class="far fa-trash-alt"></i>
                     <span>clear filter</span>
                   </button>
@@ -407,8 +426,8 @@ onMounted(() => {
                 <template v-else>
                   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-2">
                     <div class="col" v-for="(product, index) in products.data" :key="index">
-                      <CoreDeveloperProductCard :product="product" />
-                      <!-- <ProductCard :product="product" /> -->
+                      <!-- <CoreDeveloperProductCard :product="product" /> -->
+                      <ProductCard :product="product" />
                     </div>
                   </div>
                 </template>

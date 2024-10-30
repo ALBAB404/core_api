@@ -138,7 +138,10 @@ const moveTouchLens = (event) => {
 // image zooming effect end
 
 const props = defineProps({
-  singleProduct: Object,
+  singleProduct: {
+    type: Object,
+    default: () => ({}), // Empty object as default
+  },
   type: String,
 });
 

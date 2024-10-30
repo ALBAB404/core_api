@@ -400,8 +400,6 @@ const getIsDefaultAttribute = (allVariations) => {
       }
     }
 
-    console.log('Default Variation:', defaultVariation.value);
-    console.log('Product Variation Data:', productVariationData.value);
     sendVariationProductPrice(productVariationPrice.value);
   }
 };
