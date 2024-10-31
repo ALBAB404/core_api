@@ -23,10 +23,11 @@ const headerTextOne                 = ref("");
 const headerTextTwo                 = ref("");
 const headerTextThree               = ref("");
 const isDropdownOpen                = ref(false)
+const fbPageUrl                     = ref('https://www.facebook.com/servicekeybd')
+const phoneNumber                     = ref('01686381998')
+
 
 const getProducts = async () => {
-  console.log('ddd');
-  
   isDropdownOpen.value = true
   try {
     const res = await axiosInstance.get(
@@ -76,6 +77,12 @@ const getSettingsData = async () => {
     if (ele.key == "header_text_three") {
       headerTextThree.value = ele;
     }
+    if (ele.key == "facebook_id" ) {
+      fbPageUrl.value = ele.value
+    } 
+    if (ele.key == "phone" ) {
+      phoneNumber.value = ele.value
+    } 
   });
 };
 //========================================
@@ -255,9 +262,9 @@ onMounted(() => {
                 </div>
                 <div>
                     <div class="social-icons-Ntext d-md-flex d-none gap-2 align-items-center text-light">
-                        <i class="fab fa-facebook"></i>
-                        <i class="fas fa-envelope-square"></i>
-                        <i class="fas fa-phone-alt"></i>
+                      <a :href="`${fbPageUrl}`" target="_blank"><i class="fab fa-facebook"></i></a>
+                      <a :href="`https://www.facebook.com/${fbPageUrl}`" target="_blank"><i class="fas fa-envelope-square"></i></a>
+                      <a :href="`tel:${phoneNumber}`" target="_blank"><i class="fas fa-phone-alt"></i></a>
                         <span>+8801873-046404</span>
                     </div>
                 </div>
@@ -435,6 +442,16 @@ onMounted(() => {
 </template>
 
 <style>
+
+.social-icons-Ntext a:hover, .social-icons-Ntext span:hover {
+  color: var(--secondary-color);
+  cursor: pointer;
+}
+.social-icons-Ntext a{
+  color: var(--white);
+  cursor: pointer;
+}
+
 /* mobile user menu dropdown*/
 .dropdown-right:hover .dropdown-position-list-right {
   visibility: visible;
