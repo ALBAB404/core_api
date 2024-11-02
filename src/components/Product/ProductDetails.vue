@@ -1,63 +1,44 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, onUnmounted, watch, onUpdated } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import {
-  useProduct,
-  useCart,
-  useNotification,
-  useShop,
-  useSetting,
-} from "@/stores";
+import { useProduct, useCart, useNotification, useShop, useSetting, } from "@/stores";
 import { storeToRefs } from "pinia";
-import {
-  CartSideBar,
-  MobileMenu,
-  BannerPart,
-  ProductCard,
-  ProductView,
-  CategorySideBar,
-  NavSideBar,
-  ProductVariation,
-  ProductImage,
-} from "@/components";
+import { ProductVariation } from "@/components";
 import { SingleProductPageSkeleton } from "@/components/skeleton";
 import { mrpOrOfferPrice, addToCart } from "@/composables";
 import axiosInstance from "@/services/axiosService.js";
 
-const product       = useProduct();
-const singleProduct = ref("");
+const props = defineProps({
+ singleProduct: {
+    type: Object,
+    default: {}, 
+  },
+ productVariations: {
+    type: Object,
+    default: {}, 
+  },
+ campaignId: {
+    type: Number,
+    default: null, 
+  },
+});
+
+
 const sizeName      = ref("");
 const productPrices = ref("");
 const route         = useRoute();
 const shop          = useShop();
-const { products }  = storeToRefs(shop);
 const cart          = useCart();
 const { loading }   = storeToRefs(cart);
 const notify        = useNotification();
-const price         = ref();
 const quantityInput = ref(1);
-const categoryId    = ref([]);
 const setting       = useSetting();
 
 // product variations start
-const productVariations     = ref([]);
-const attribute_id_1        = ref(null);
-const attribute_id_2        = ref(null);
-const attribute_id_3        = ref(null);
-const attribute_value_id_1  = ref(null);
-const attribute_value_id_2  = ref(null);
-const attribute_value_id_3  = ref(null);
 const productVariationData  = ref("");
 const productVariationPrice = ref("");
-const resetBtns             = ref(false);
 const activeBtns            = ref(false);
-const variationRemoveBtn    = ref(false);
-const activeAttributes = ref({
-  0: [],
-  1: [],
-  2: [],
-});
-// product variations end
+
 
 // social Icons start
 const socialShares = ref("");
@@ -68,142 +49,6 @@ const phone       = ref("");
 const whatsapp    = ref("");
 const messengerId = ref("");
 // Setting data end
-// related product start
-const relatedProducts = ref("");
-// related product end
-
-const alertTimeout = ref("");
-
-
-
-// get products start
-const productByid = async () => {
-  singleProduct.value = await product.productById(route.params.slug);
-  productVariations.value = singleProduct.value?.variations?.attributes;
-};
-// get products end
-// get products variation working start
-
-async function getProductVariation(productId, attributeValue, index) {  
-  resetBtns.value = true;
-
-  // variation selected section start
-  if (activeAttributes.value[index] === attributeValue.attribute_value_id) {
-    // যদি ক্লিক করা ভ্যালুটি ইতিমধ্যেই সক্রিয় থাকে, তাহলে নিষ্ক্রিয় করুন
-    activeAttributes.value[index] = null;
-  } else {
-    // যদি ক্লিক করা ভ্যালুটি সক্রিয় না থাকে, তাহলে এটিকে সক্রিয় করুন এবং অন্যান্য সক্রিয়গুলো নিষ্ক্রিয় করুন
-    activeAttributes.value[index] = attributeValue.attribute_value_id;
-  }
-  // variation selected section end
-
-  if (index === 0) {
-    attribute_id_1.value = attributeValue.attribute_id;
-    attribute_value_id_1.value = attributeValue.attribute_value_id;
-    productVariationData.value = {
-      product_id: productId,
-      attribute_id_1: attribute_id_1.value || "",
-      attribute_value_id_1: attribute_value_id_1.value || "",
-      attribute_id_2: "",
-      attribute_value_id_2: attribute_value_id_2.value || "",
-      attribute_id_3: "",
-      attribute_value_id_3: attribute_value_id_3.value || "",
-    };
-  }
-
-  if (index === 1) {
-    attribute_id_2.value = attributeValue.attribute_id;
-    attribute_value_id_2.value = attributeValue.attribute_value_id;
-    productVariationData.value = {
-      product_id: productId,
-      attribute_id_1: "",
-      attribute_value_id_1: attribute_value_id_1.value || "",
-      attribute_id_2: attribute_id_2.value || "",
-      attribute_value_id_2: attribute_value_id_2.value || "",
-      attribute_id_3: "",
-      attribute_value_id_3: attribute_value_id_3.value || "",
-    };
-  }
-  if (index === 2) {
-    attribute_id_3.value = attributeValue.attribute_id;
-    attribute_value_id_3.value = attributeValue.attribute_value_id;
-    productVariationData.value = {
-      product_id: productId,
-      attribute_id_1: "",
-      attribute_value_id_1: attribute_value_id_1.value || "",
-      attribute_id_2: "",
-      attribute_value_id_2: attribute_value_id_2.value || "",
-      attribute_id_3: attribute_id_3.value || "",
-      attribute_value_id_3: attribute_value_id_3.value || "",
-    };
-  }
-
-  const variations = await product.productVariations(
-    productVariationData.value
-  );
-
-  productVariations.value = variations.attributes;
-
-  // price jodi backend theke dubble na hoy eitar code start
-
-  if (
-    Object.keys(productVariations.value).length == 1 &&
-    attribute_value_id_1.value != null
-  ) {
-    productVariationPrice.value = variations.variation_price[0];
-    activeBtns.value = true;
-  }
-  if (
-    Object.keys(productVariations.value).length == 2 &&
-    attribute_value_id_2.value != null &&
-    attribute_value_id_1.value != null
-  ) {
-    productVariationPrice.value = variations.variation_price[0];
-    activeBtns.value = true;
-  }
-  if (
-    Object.keys(productVariations.value).length == 3 &&
-    attribute_value_id_3.value != null &&
-    attribute_value_id_2.value != null &&
-    attribute_value_id_1.value != null
-  ) {
-    productVariationPrice.value = variations.variation_price[0];
-    activeBtns.value = true;
-  }
-
-  // price jodi backend theke dubble na hoy eitar code end
-}
-
-const removeAllVariation = () => {
-  // Reset the product variations
-  productVariations.value = [];
-  quantityInput.value = 1;
-
-  // Reset the attribute value IDs
-  attribute_value_id_1.value = null;
-  attribute_value_id_2.value = null;
-  attribute_value_id_3.value = null;
-
-  // Reset the product variation data
-  productVariationData.value = "";
-
-  // Reset the product variation price
-  productVariationPrice.value = "";
-
-  // Reset the active buttons state
-  activeBtns.value = false;
-
-  // Reset the active attributes
-  activeAttributes.value = {
-    0: [],
-    1: [],
-    2: [],
-  };
-
-  productVariations.value = singleProduct.value?.variations?.attributes;
-
-  resetBtns.value = false;
-};
 
 // get products variation working end
 
@@ -236,44 +81,6 @@ const getSettingsData = async () => {
 };
 // setting data end
 
-// footer navbar Start
-
-const stickyFooter = () => {
-  const innerSection = document.querySelector(".inner-section");
-  const mainFooterNavSection = document.querySelector(
-    ".main-footer-nav-section"
-  );
-
-  window.addEventListener("scroll", () => {
-    const scrollTopWindow = window.pageYOffset;
-    if (scrollTopWindow > 80) {
-      mainFooterNavSection.style.bottom = "0px";
-      mainFooterNavSection.style.transition = "all .5s ease";
-      mainFooterNavSection.style.opacity = "1";
-    } else {
-      mainFooterNavSection.style.bottom = "-115px";
-      mainFooterNavSection.style.transition = "all .5s ease";
-      mainFooterNavSection.style.opacity = "0";
-    }
-  });
-
-  if (innerSection) {
-    innerSection.addEventListener("scroll", () => {
-      const scrollTopInnerSection = innerSection.scrollTop;
-      if (scrollTopInnerSection > 80) {
-        mainFooterNavSection.style.bottom = "0px";
-        mainFooterNavSection.style.transition = "all .5s ease";
-        mainFooterNavSection.style.opacity = "1";
-      } else {
-        mainFooterNavSection.style.bottom = "-115px";
-        mainFooterNavSection.style.transition = "all .5s ease";
-        mainFooterNavSection.style.opacity = "0";
-      }
-    });
-  }
-};
-
-// footer navbar end
 
 // social media link  start
 
@@ -359,58 +166,9 @@ const handleActiveBtns = (data) => {
 }
 // product prices end
 
-// Related product  start
-  const getRelatedProductData = async (catId) => {
-    let type = "";
-    let brand = [];
-    let subCategory = [];
-    let attributeIds = [];
-    let price = [];
-    let search = "";
-    let paginateSize = 8;
-    const res = await shop.getData(type, brand, catId, subCategory, attributeIds, price, search, paginateSize);
-    relatedProducts.value = res.data;
-  };
-
-// product changes function 
-
-// product detials changes start
-  watch(() => route.params.slug, (newValue, oldValue) => {
-    productByid();
-  });
-// product detials changes end
-  watch(
-    categoryId,
-    (newValue, oldValue) => {
-      getRelatedProductData(newValue);
-    },
-    { deep: true }
-  );
-
-// Related product end
-
 
 onMounted(() => {
-  stickyFooter();
-  productByid();
   socialMedia();
-  window.addEventListener('beforeunload', handleBeforeUnload);
-  // alertTimeout.value = setTimeout(() => {
-  //   handleBeforeUnload();
-  // }, 1000);
-
-});
-
-
-
-onBeforeUnmount(() => {
-  if (alertTimeout.value) {
-    clearTimeout(alertTimeout.value);
-  }
-});
-
-onUnmounted(() => {
-  window.removeEventListener('beforeunload', handleBeforeUnload);
 });
 
 </script>
@@ -556,7 +314,8 @@ onUnmounted(() => {
                 singleProduct,
                 quantityInput,
                 productVariationData,
-                productVariationPrice
+                productVariationPrice,
+                campaignId
               )
             "
           >
@@ -591,7 +350,8 @@ onUnmounted(() => {
                 singleProduct,
                 quantityInput,
                 productVariationData,
-                productVariationPrice
+                productVariationPrice,
+                campaignId
               )
             "
           >
@@ -605,7 +365,7 @@ onUnmounted(() => {
           <button
             class="product-add"
             title="Add to Cart"
-            @click.prevent="addToCart(singleProduct, quantityInput)"
+            @click.prevent="addToCart(singleProduct, quantityInput, null, 0, campaignId)"
           >
             <i
               :class="
@@ -622,7 +382,7 @@ onUnmounted(() => {
             :to="{ name: 'checkoutPage' }"
             class="product-add main-order-btn"
             title="Add to Cart"
-            @click.prevent="addToCart(singleProduct, quantityInput)"
+            @click.prevent="addToCart(singleProduct, quantityInput, null, 0, campaignId)"
           >
             <i class="fas fa-cart-plus"></i>
             <span>Buy Now</span>

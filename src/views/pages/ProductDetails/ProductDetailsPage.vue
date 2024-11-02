@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, onUnmounted, watch, onUpdated } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import {
   useProduct,
@@ -31,7 +31,6 @@ const sizeName      = ref("");
 const productPrices = ref("");
 const route         = useRoute();
 const shop          = useShop();
-const { products }  = storeToRefs(shop);
 const cart          = useCart();
 const { loading }   = storeToRefs(cart);
 const notify        = useNotification();
@@ -42,27 +41,9 @@ const setting       = useSetting();
 
 // product variations start
 const productVariations     = ref([]);
-const attribute_id_1        = ref(null);
-const attribute_id_2        = ref(null);
-const attribute_id_3        = ref(null);
-const attribute_value_id_1  = ref(null);
-const attribute_value_id_2  = ref(null);
-const attribute_value_id_3  = ref(null);
-const productVariationData  = ref("");
-const productVariationPrice = ref("");
-const resetBtns             = ref(false);
 const activeBtns            = ref(false);
-const variationRemoveBtn    = ref(false);
-const activeAttributes = ref({
-  0: [],
-  1: [],
-  2: [],
-});
 // product variations end
 
-// social Icons start
-const socialShares = ref("");
-// social Icons end
 // Setting data start
 const websiteUrl  = ref("");
 const phone       = ref("");
@@ -75,147 +56,12 @@ const relatedProducts = ref("");
 
 const alertTimeout = ref("");
 
-
-
 // get products start
 const productByid = async () => {
   singleProduct.value = await product.productById(route.params.slug);
   productVariations.value = singleProduct.value?.variations?.attributes;
 };
 // get products end
-// get products variation working start
-
-async function getProductVariation(productId, attributeValue, index) {  
-  resetBtns.value = true;
-
-  // variation selected section start
-  if (activeAttributes.value[index] === attributeValue.attribute_value_id) {
-    // যদি ক্লিক করা ভ্যালুটি ইতিমধ্যেই সক্রিয় থাকে, তাহলে নিষ্ক্রিয় করুন
-    activeAttributes.value[index] = null;
-  } else {
-    // যদি ক্লিক করা ভ্যালুটি সক্রিয় না থাকে, তাহলে এটিকে সক্রিয় করুন এবং অন্যান্য সক্রিয়গুলো নিষ্ক্রিয় করুন
-    activeAttributes.value[index] = attributeValue.attribute_value_id;
-  }
-  // variation selected section end
-
-  if (index === 0) {
-    attribute_id_1.value = attributeValue.attribute_id;
-    attribute_value_id_1.value = attributeValue.attribute_value_id;
-    productVariationData.value = {
-      product_id: productId,
-      attribute_id_1: attribute_id_1.value || "",
-      attribute_value_id_1: attribute_value_id_1.value || "",
-      attribute_id_2: "",
-      attribute_value_id_2: attribute_value_id_2.value || "",
-      attribute_id_3: "",
-      attribute_value_id_3: attribute_value_id_3.value || "",
-    };
-  }
-
-  if (index === 1) {
-    attribute_id_2.value = attributeValue.attribute_id;
-    attribute_value_id_2.value = attributeValue.attribute_value_id;
-    productVariationData.value = {
-      product_id: productId,
-      attribute_id_1: "",
-      attribute_value_id_1: attribute_value_id_1.value || "",
-      attribute_id_2: attribute_id_2.value || "",
-      attribute_value_id_2: attribute_value_id_2.value || "",
-      attribute_id_3: "",
-      attribute_value_id_3: attribute_value_id_3.value || "",
-    };
-  }
-  if (index === 2) {
-    attribute_id_3.value = attributeValue.attribute_id;
-    attribute_value_id_3.value = attributeValue.attribute_value_id;
-    productVariationData.value = {
-      product_id: productId,
-      attribute_id_1: "",
-      attribute_value_id_1: attribute_value_id_1.value || "",
-      attribute_id_2: "",
-      attribute_value_id_2: attribute_value_id_2.value || "",
-      attribute_id_3: attribute_id_3.value || "",
-      attribute_value_id_3: attribute_value_id_3.value || "",
-    };
-  }
-
-  const variations = await product.productVariations(
-    productVariationData.value
-  );
-
-  productVariations.value = variations.attributes;
-
-  // price jodi backend theke dubble na hoy eitar code start
-
-  if (
-    Object.keys(productVariations.value).length == 1 &&
-    attribute_value_id_1.value != null
-  ) {
-    productVariationPrice.value = variations.variation_price[0];
-    activeBtns.value = true;
-  }
-  if (
-    Object.keys(productVariations.value).length == 2 &&
-    attribute_value_id_2.value != null &&
-    attribute_value_id_1.value != null
-  ) {
-    productVariationPrice.value = variations.variation_price[0];
-    activeBtns.value = true;
-  }
-  if (
-    Object.keys(productVariations.value).length == 3 &&
-    attribute_value_id_3.value != null &&
-    attribute_value_id_2.value != null &&
-    attribute_value_id_1.value != null
-  ) {
-    productVariationPrice.value = variations.variation_price[0];
-    activeBtns.value = true;
-  }
-
-  // price jodi backend theke dubble na hoy eitar code end
-}
-
-const removeAllVariation = () => {
-  // Reset the product variations
-  productVariations.value = [];
-  quantityInput.value = 1;
-
-  // Reset the attribute value IDs
-  attribute_value_id_1.value = null;
-  attribute_value_id_2.value = null;
-  attribute_value_id_3.value = null;
-
-  // Reset the product variation data
-  productVariationData.value = "";
-
-  // Reset the product variation price
-  productVariationPrice.value = "";
-
-  // Reset the active buttons state
-  activeBtns.value = false;
-
-  // Reset the active attributes
-  activeAttributes.value = {
-    0: [],
-    1: [],
-    2: [],
-  };
-
-  productVariations.value = singleProduct.value?.variations?.attributes;
-
-  resetBtns.value = false;
-};
-
-// get products variation working end
-
-const incrementCartItem = () => {
-  quantityInput.value = parseInt(quantityInput.value) + 1;
-};
-const decrementCartItem = () => {
-  if (quantityInput.value != 1) {
-    quantityInput.value = parseInt(quantityInput.value) - 1;
-  }
-};
 
 // setting data start
 const getSettingsData = async () => {
@@ -276,89 +122,8 @@ const stickyFooter = () => {
 
 // footer navbar end
 
-// social media link  start
-
-const socialMedia = async () => {
-  try {
-    const res = await axiosInstance.get("/social-medias");
-    socialShares.value = res.data.result;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const socialIcons = (socialType) => {
-  const iconMapping = {
-    Facebook: "fab fa-facebook-f",
-    Twitter: "fab fa-twitter",
-    Whatsapp: "fab fa-whatsapp",
-    Messenger: "fab fa-facebook-messenger",
-    Linkedin: "fab fa-linkedin",
-    Instagram: "fab fa-instagram",
-    Phone: "fas fa-phone",
-  };
-  return iconMapping[socialType] || "default-icon-class";
-};
-
-const socialURL = (socialType, socialUrl) => {
-  const iconMapping = {
-    Facebook: `https://www.facebook.com/${socialUrl}/`,
-    Twitter: `https://www.twitter.com/${socialUrl}/`,
-    Whatsapp: `https://wa.me/+88${socialUrl}?text=Hello!`,
-    Messenger: `https://www.messenger.com/t/${socialUrl}/`,
-    Linkedin: `https://www.linkedin.com/${socialUrl}/`,
-    Instagram: `https://www.instagram.com/${socialUrl}/`,
-    Phone: `https://m.me/+88${socialUrl}`,
-  };
-  return iconMapping[socialType] || "default-icon-class";
-};
-
-// social media link  end
-
-const backgroundImageUrl = ref("https://wpmet.com/plugin/elementskit/popup-modal/wp-content/uploads/sites/9/2022/06/big_offer_item_02.png");
-
-const handleBeforeUnload = (event) => {
-
-  event.preventDefault();
-  event.returnValue = 'fdsfsdf'; 
-  
-
-  setTimeout(() => {
-    const modal = new bootstrap.Modal(document.getElementById('product-view'));
-    modal.show();
-  }, 10); 
-};
 
 
-
-// video url setup start
-
-const getEmbedUrl = (watchUrl) => {
-  const videoIdMatch = watchUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-  const videoId = (videoIdMatch && videoIdMatch[1]) || '';
-  
-  return `https://www.youtube.com/embed/${videoId}`;
-}
-
-// video url setup end
-
-// product prices start
-const handleProductVariationPrice = (data) => {
-  productVariationPrice.value = data[0]  
-}
-// product prices end
-
-// product prices start
-const handleProductVariationData = (data) => {
-  productVariationData.value = data  
-}
-// product prices end
-
-// product prices start
-const handleActiveBtns = (data) => {
-  activeBtns.value = data  
-}
-// product prices end
 
 // Related product  start
   const getRelatedProductData = async (catId) => {
@@ -394,24 +159,6 @@ const handleActiveBtns = (data) => {
 onMounted(() => {
   stickyFooter();
   productByid();
-  socialMedia();
-  window.addEventListener('beforeunload', handleBeforeUnload);
-  // alertTimeout.value = setTimeout(() => {
-  //   handleBeforeUnload();
-  // }, 1000);
-
-});
-
-
-
-onBeforeUnmount(() => {
-  if (alertTimeout.value) {
-    clearTimeout(alertTimeout.value);
-  }
-});
-
-onUnmounted(() => {
-  window.removeEventListener('beforeunload', handleBeforeUnload);
 });
 
 </script>
@@ -433,7 +180,7 @@ onUnmounted(() => {
             <ProductImage :singleProduct="singleProduct" :type="'details'" />
           </div>
           <div class="col-lg-6">
-            <ProductDetails />
+            <ProductDetails :singleProduct="singleProduct" :productVariations="productVariations" />
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { useCart, useNotification } from "@/stores";
 
-export function addToCart(tProduct, quantity = 1, variationProduct = null, productVariationPrice = 0) {
+export function addToCart(tProduct, quantity = 1, variationProduct = null, productVariationPrice = 0, campaignId = null) {
     const cart           = useCart();
     const notify         = useNotification();
   
@@ -19,6 +19,7 @@ export function addToCart(tProduct, quantity = 1, variationProduct = null, produ
         attribute_value_id_3  : variationProduct.attribute_value_id_3,
         quantity              : quantity,
         free_shipping         : tProduct.free_shipping,
+        campaign_id           : campaignId,
       });
       
     }else{
@@ -33,6 +34,7 @@ export function addToCart(tProduct, quantity = 1, variationProduct = null, produ
         variations   : '',
         quantity     : quantity,
         free_shipping: tProduct.free_shipping,
+        campaign_id  : campaignId,
       });
   
     }

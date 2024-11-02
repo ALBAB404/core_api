@@ -435,7 +435,7 @@ onUnmounted(() => {
             <ProductImage :singleProduct="singleProduct" :type="'details'" />
           </div>
           <div class="col-lg-6">
-            <ProductDetails />
+            <ProductDetails :singleProduct="singleProduct" :productVariations="productVariations" :campaignId=""/>
           </div>
         </div>
       </div>

@@ -123,7 +123,6 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    {{ route }}
     <div class="banner_section text-center">
       <a href="">
         <img :src="campaigns?.image" alt="" style="width: 100%" />
