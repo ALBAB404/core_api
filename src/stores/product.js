@@ -6,6 +6,7 @@ export const useProduct = defineStore("product", {
   // All Variable  Code Is Here.....................................................................................................
   state: () => ({
     products: {},
+    campaignProductData: {},
     recentProducts: [],
     topProducts: [],
     featureProducts: [],
@@ -46,6 +47,22 @@ export const useProduct = defineStore("product", {
         const res = await axiosInstance.get(`/products/${id}`);
         if (res?.data?.success) {
           this.products = res.data?.result;
+          return res.data?.result;
+        }
+        
+      } catch (error) {
+          console.log(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async campaignProduct(campaignSlug, productSlug) {
+      this.loading = true;
+      try {
+        const res = await axiosInstance.get(`/campaigns/products/${campaignSlug}/${productSlug}`);
+        if (res?.data?.success) {
+          this.campaignProductData = res.data?.result;
           return res.data?.result;
         }
         

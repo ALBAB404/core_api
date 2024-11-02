@@ -7,10 +7,6 @@ import {
   thankyou,
   AboutPage,
   ContactPage,
-  FlashDealPage,
-  FlashDealDetailsPage,
-  campaignPage,
-  campaignDetailsPage,
   BlogPage,
   BlogDetailsPage,
   Login,
@@ -24,6 +20,7 @@ import {
   ReturnRefund,
   CampaignBanner,
   CampaignProductList,
+  CampaignProductDetails,
   Test,
 } from "@/views/pages";
 import NProgress from "nprogress";
@@ -114,43 +111,23 @@ const routes = [
     meta: { title: " Contact US" },
   },
   {
-    path: "/flash-deal",
-    name: "flashDealPage",
-    component: FlashDealPage,
-    meta: { title: " Flash Deals" },
-  },
-  // {
-  //   path: "/flash-deal-details/:campaignId/:productId",
-  //   name: "FlashDealDetailsPage",
-  //   component: FlashDealDetailsPage,
-  //   meta: { title: " Flash Deals Details" },
-  // },
-  // {
-  //   path: "/campaign-page",
-  //   name: "campaignPage",
-  //   component: campaignPage,
-  //   meta: { title: " Campaign Page" },
-  // },
-
-  {
     path: "/campaign",
     name: "CampaignBanner",
     component: CampaignBanner,
     meta: { title: " Campaign Page" },
   },
-
   {
     path: "/campaign-products/:campaignId?",
     name: "CampaignProductList",
     component: CampaignProductList,
     meta: { title: " Campaign products Page" },
   },
-  // {
-  //   path: "/campaign-details-page/:campaignId/:productId",
-  //   name: "campaignDetailsPage",
-  //   component: campaignDetailsPage,
-  //   meta: { title: " Campaign Details Page" },
-  // },
+  {
+    path: "/campaign-products-details/:campaign_slug?/:product_slug?",
+    name: "CampaignProductDetails",
+    component: CampaignProductDetails,
+    meta: { title: "Campaign Products Details Page" },
+  },  
   {
     path: "/blog-page",
     name: "blogPage",

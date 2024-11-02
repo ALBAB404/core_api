@@ -15,18 +15,18 @@ export const useShop = defineStore("shop", {
 
     async getData(type = "", brand, category, subCategory, attributeIds, price, search, paginateSize) {
         this.loading = true
-        console.log(attributeIds);
         
       try {
         const res = await axiosInstance.get(`/products`, {
           params: {
             type,
             price,
-            paginate_size  : paginateSize,
-            brand_ids      : brand,
-            category_ids   : category,
-            sub_category_id: subCategory,
-            search_key     : search,
+            paginate_size      : paginateSize,
+            brand_ids          : brand,
+            category_ids       : category,
+            sub_category_id    : subCategory,
+            attribute_value_ids: attributeIds,
+            search_key         : search,
           },
         });
         if (res.status === 200) {

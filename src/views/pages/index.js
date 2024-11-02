@@ -5,10 +5,6 @@ export { default as CheckoutPage } from "./CheckoutPage.vue";
 export { default as thankyou } from "./thankyou.vue";
 export { default as AboutPage } from "./AboutPage.vue";
 export { default as ContactPage } from "./ContactPage.vue";
-export { default as FlashDealPage } from "./FlashDealPage.vue";
-export { default as FlashDealDetailsPage } from "./FlashDealDetailsPage.vue";
-export { default as campaignPage } from "./campaignPage.vue";
-export { default as campaignDetailsPage } from "./campaignDetailsPage.vue";
 export { default as BlogPage } from "./BlogPage.vue";
 export { default as BlogDetailsPage } from "./BlogDetailsPage.vue";
 export { default as Login } from "./User/Login.vue";
@@ -22,5 +18,6 @@ export { default as PrivacyPolicy } from "./FooterPages/PrivacyPolicy.vue";
 export { default as ReturnRefund } from "./FooterPages/ReturnRefund.vue";
 export { default as CampaignBanner } from "./Campaign/CampaignBanner.vue";
 export { default as CampaignProductList } from "./Campaign/CampaignProductList.vue";
+export { default as CampaignProductDetails } from "./Campaign/CampaignProductDetails.vue";
 export { default as Test } from "./Test.vue";
 

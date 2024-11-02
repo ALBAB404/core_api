@@ -34,6 +34,12 @@ const props = defineProps({
     type: Number,
     default: 0, // 0 as default
   },
+  isCampaign: {
+    type: Boolean,
+  },
+  campaignSlug: {
+    type: String,
+  },
 });
 
 
@@ -281,13 +287,24 @@ onMounted(() => {
           <!-- <button class="product-wish wish">
               <i class="fas fa-heart"></i>
           </button> -->
-
-          <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" class="hover14 column hover01 column">
-            <div class="product-image">
-              <figure><img :src="product?.image"></figure>
-            </div>
-          </router-link>
+          <!-- campaign product er jonno ei route start -->
+           <span  v-if="isCampaign">
+            <router-link :to="{ name: 'CampaignProductDetails', params: { campaign_slug: campaignSlug ? campaignSlug : '', product_slug: product?.slug ? product?.slug : '' } }" class="hover14 column hover01 column">
+               <div class="product-image">
+                 <figure><img :src="product?.image"></figure>
+               </div>
+             </router-link>
+           </span>
+           <!-- campaign product er jonno ei route end -->
+           <span v-else>
+             <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" class="hover14 column hover01 column" >
+               <div class="product-image">
+                 <figure><img :src="product?.image"></figure>
+               </div>
+             </router-link>
+           </span>
           
+                    
           <div class="product-widget">
             <a title="Product View" href="#" class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#product-view" @click.prevent="getProductDetails(product?.id)"></a>
             <a title="Product Video" v-show="product?.video_url" :href="product?.video_url" class="venobox fas fa-play" data-vbtype="video" data-autoplay="true"></a>
@@ -296,7 +313,8 @@ onMounted(() => {
       <div class="product-content">
           
           <h6 class="product-name">
-              <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" :style="`font-size: ${productNameFontSize ? productNameFontSize : ''}`">{{ product?.name }}</router-link>
+              <router-link :to="{ name: 'CampaignProductDetails', params: { campaign_slug: campaignSlug ? campaignSlug : '', product_slug: product?.slug ? product?.slug : '' } }" :style="`font-size: ${productNameFontSize ? productNameFontSize : ''}`" v-if="isCampaign">{{ product?.name }}</router-link>
+              <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" :style="`font-size: ${productNameFontSize ? productNameFontSize : ''}`" v-else>{{ product?.name }}</router-link>
           </h6>
 
 
@@ -305,7 +323,7 @@ onMounted(() => {
             <span v-else>{{ product?.variation_price_range.min_price }} - {{ product?.variation_price_range.max_price }}</span>
           </h6>
           <h6 class="product-price" v-else :style="`font-size: ${productPriceFontSize ? productPriceFontSize : ''}`">
-            <span v-html="$filters.productPrice(product)"></span>
+            <span>{{ $filters.currencySymbol(Math.round(product?.sell_price)) }}</span>
           </h6>
 
 
@@ -345,7 +363,7 @@ onMounted(() => {
       </div>
   </div>
 
-  <ProductCardModal :modalProduct="modalProduct" />
+  <!-- <ProductCardModal :modalProduct="modalProduct" /> -->
 
   </div>
 </template>

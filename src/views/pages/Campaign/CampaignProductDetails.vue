@@ -79,7 +79,9 @@ const alertTimeout = ref("");
 
 // get products start
 const productByid = async () => {
-  singleProduct.value = await product.productById(route.params.slug);
+  singleProduct.value = await product.campaignProduct(route.params.campaign_slug, route.params.product_slug);
+  console.log(singleProduct.value);
+  
   productVariations.value = singleProduct.value?.variations?.attributes;
 };
 // get products end
@@ -475,7 +477,7 @@ onUnmounted(() => {
 
     <!-- Cross Sell Product -->
 
-    <section class="inner-section mt-3" v-if="singleProduct && singleProduct?.up_sell_products.length > 0">
+    <!-- <section class="inner-section mt-3" v-if="singleProduct && singleProduct?.up_sell_products.length > 0">
       <div class="container">
         <div class="row">
           <div class="col">
@@ -494,7 +496,7 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <!-- Cross Sell Product -->
     

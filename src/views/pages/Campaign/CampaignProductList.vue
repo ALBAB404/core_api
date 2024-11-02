@@ -123,6 +123,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    {{ route }}
     <div class="banner_section text-center">
       <a href="">
         <img :src="campaigns?.image" alt="" style="width: 100%" />
@@ -135,7 +136,7 @@ onMounted(() => {
           v-for="(product, index) in campaigns?.products"
           :key="index"
         >
-          <ProductCard :product="product" />
+          <ProductCard :product="product" :campaignSlug="route.params.campaignId" :isCampaign="true" />
         </div>
       </div>
       <div class="row">

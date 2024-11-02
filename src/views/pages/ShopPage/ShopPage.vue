@@ -140,10 +140,7 @@ const searchBrands = computed(() => {
 });
 
 
-const getProducts = (attributeIndex = null, attributeValueSlug = null) => {
-  // console.log(attributeIndex);
-  // console.log(attributeIndex);
-  
+const getProducts = () => {
   products.value = [];
   shop.getData(
     productType.value,
@@ -268,7 +265,6 @@ onMounted(() => {
     <ProductView />
 
     <BannerPart :title="'Shop Page'" />
-    {{  getAttributeDatas }}
     <section class="inner-section shop-part mt-3">
       <div class="container">
         <div class="row">
@@ -302,7 +298,7 @@ onMounted(() => {
                   <ul class="shop-widget-list shop-widget-scroll">
                     <li v-for="(attributeValue, attributeValueIndex) in getAttributeData.attribute_values" :key="attributeValueIndex">
                       <div class="shop-widget-content">
-                        <input type="checkbox" :id="`cate${attributeValueIndex}`" :value="attributeValue.slug" @change="getProducts(index, attributeValue.slug)"
+                        <input type="checkbox" :id="`cate${attributeValueIndex}`" :value="attributeValue.id" @change="getProducts()"
                           v-model="selectedAttributeIds" />
                         <label :for="`cate${attributeValueIndex}`">{{ attributeValue.value }}</label>
                       </div>
