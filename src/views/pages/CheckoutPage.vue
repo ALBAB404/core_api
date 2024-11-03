@@ -324,6 +324,8 @@ const paymentGatewayRef   = ref(null);
     modal.Modalclose();
     showTotalPriceSection();  
     freeShippingChecking();  
+    let uniqueID = localStorage.getItem('uniqueVisitorID')
+    console.log(uniqueID);
   });
 
   // onUpdated(() => {

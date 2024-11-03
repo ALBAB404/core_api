@@ -236,7 +236,7 @@ onMounted(() => {
               <i class="fas fa-list"></i>
             </button>
             <router-link :to="{ name: 'homePage' }">
-              <img :src="logo?.image" alt="logo" />
+              <img :src="logo?.value" alt="logo" />
             </router-link>
             <div class="mobile-header-menu dropdown-right">
               <button class="header-src">
@@ -274,7 +274,7 @@ onMounted(() => {
             </div>
           </div>
           <router-link :to="{ name: 'homePage' }" class="header-logo">
-            <img :src="logo?.image" alt="logo" />
+            <img :src="logo?.value" alt="logo" />
           </router-link>
 
           <form class="header-form active">

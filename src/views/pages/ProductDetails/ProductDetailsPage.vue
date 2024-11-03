@@ -24,6 +24,15 @@ import {
 import { SingleProductPageSkeleton } from "@/components/skeleton";
 import { mrpOrOfferPrice, addToCart } from "@/composables";
 import axiosInstance from "@/services/axiosService.js";
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from 'swiper/vue';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+
+// Import required modules
+import { Pagination } from 'swiper/modules';
 
 const product       = useProduct();
 const singleProduct = ref("");
@@ -203,6 +212,11 @@ onMounted(() => {
                   >descriptions</a
                 >
               </li>
+              <li>
+                <a href="#reviews" class="tab-link" data-bs-toggle="tab"
+                  >Reviews</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -212,6 +226,61 @@ onMounted(() => {
               <div class="product-details-frame">
                 <div class="tab-descrip">
                   <p v-html="singleProduct?.description"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade show active" id="reviews">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="product-details-frame">
+                <div class="row">
+
+                  <swiper
+                    :slidesPerView="3"
+                    :spaceBetween="30"
+                    :pagination="{ clickable: true }"
+                    :modules="[Pagination]"
+                    class="mySwiper"
+                  >
+                    <swiper-slide style="margin-left: 30px;">
+                      <div class="col-md-3">
+                        <div class="review-img-section">
+                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
+                        </div>
+                      </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                      <div class="col-md-3">
+                        <div class="review-img-section">
+                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
+                        </div>
+                      </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                      <div class="col-md-3">
+                        <div class="review-img-section">
+                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
+                        </div>
+                      </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                      <div class="col-md-3">
+                        <div class="review-img-section">
+                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
+                        </div>
+                      </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                      <div class="col-md-3">
+                        <div class="review-img-section">
+                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
+                        </div>
+                      </div>
+                    </swiper-slide>
+                  </swiper>
+                  
                 </div>
               </div>
             </div>
@@ -476,6 +545,7 @@ onMounted(() => {
 
 <style scoped>
 
+
 /* image zooming start*/
 .image-container {
   position: relative;
@@ -559,10 +629,6 @@ onMounted(() => {
   border-bottom-right-radius: 20px !important;
 }
 
-img {
-  width: 100%;
-  display: block;
-}
 
 .img-display {
   overflow: hidden;

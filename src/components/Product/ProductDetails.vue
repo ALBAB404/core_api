@@ -17,8 +17,8 @@ const props = defineProps({
     type: Object,
     default: {}, 
   },
- campaignId: {
-    type: Number,
+ campaignSlug: {
+    type: String,
     default: null, 
   },
 });
@@ -233,6 +233,12 @@ onMounted(() => {
 
     <!-- Product Variation Price Section end -->
 
+    <div class="details-list-group" v-if="singleProduct?.video_url">
+      <div class="videoHW">
+        <iframe class="mt-5"  :src="getEmbedUrl(singleProduct?.video_url)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>              
+      </div>
+    </div>
+
     <div class="details-list-group">
       <label
         class="details-list-title"
@@ -315,7 +321,7 @@ onMounted(() => {
                 quantityInput,
                 productVariationData,
                 productVariationPrice,
-                campaignId
+                campaignSlug
               )
             "
           >
@@ -351,7 +357,7 @@ onMounted(() => {
                 quantityInput,
                 productVariationData,
                 productVariationPrice,
-                campaignId
+                campaignSlug
               )
             "
           >
@@ -365,7 +371,7 @@ onMounted(() => {
           <button
             class="product-add"
             title="Add to Cart"
-            @click.prevent="addToCart(singleProduct, quantityInput, null, 0, campaignId)"
+            @click.prevent="addToCart(singleProduct, quantityInput, null, 0, campaignSlug)"
           >
             <i
               :class="
@@ -382,7 +388,7 @@ onMounted(() => {
             :to="{ name: 'checkoutPage' }"
             class="product-add main-order-btn"
             title="Add to Cart"
-            @click.prevent="addToCart(singleProduct, quantityInput, null, 0, campaignId)"
+            @click.prevent="addToCart(singleProduct, quantityInput, null, 0, campaignSlug)"
           >
             <i class="fas fa-cart-plus"></i>
             <span>Buy Now</span>
@@ -441,6 +447,13 @@ onMounted(() => {
 
 
 <style scoped>
+
+/* video section start */
+.videoHW iframe{
+  width: 560px !important;
+  height: 315px !important;
+}
+/* video section end */
 
 /* image zooming start*/
 .image-container {
@@ -748,6 +761,15 @@ input[type="number"]::-webkit-inner-spin-button {
   color: #8bc4a1;
 }
 
+@media (max-width: 1024px) {
+
+  .videoHW iframe{
+    width: 383px !important;
+    height: 190px!important;
+  }
+  
+}
+
 
 @media (max-width: 991px) {
   .btnColor {
@@ -822,9 +844,40 @@ input[type="number"]::-webkit-inner-spin-button {
   }
 }
 
+
+
+@media (max-width: 425px) {
+
+  .videoHW iframe{
+    width: 355px !important;
+    height: 220px !important;
+  }
+
+}
+
 @media (max-width: 375px) {
   .discout_amount {
     margin-left: 0px;
   }
+
+  .videoHW iframe{
+    width: 305px !important;
+    height: 170px !important;
+  }
+
+  .details-action-group{
+    grid-template-columns: none;
+  }
+
 }
+
+@media (max-width: 320px) {
+
+  .videoHW iframe{
+    width: 251px !important;
+    height: 150px !important;
+  }
+
+}
+
 </style>

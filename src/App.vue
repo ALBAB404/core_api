@@ -2,6 +2,8 @@
 // import { RouterLink, RouterView } from 'vue-router'
 import { Footer,  Newsletter, ChatIcon, AddtoCartIcon, Header, CoreDeveloperHeader } from '@/components'
 
+let uniqueID = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substring(2, 15);
+localStorage.setItem('uniqueVisitorID', uniqueID);
 
 </script>
 

@@ -26,7 +26,7 @@ onMounted(() => {
       </div>
       <div class="row">
         <div
-          class="col-lg-4 mb-4"
+          class="col-4 col-md-3  mb-4"
           v-for="(category, index) in categories?.data"
           :key="index"
         >
@@ -36,7 +36,7 @@ onMounted(() => {
             <img
               :src="category.image"
               alt=""
-              style="max-width: 100%"
+              width="100%"
             />
           </router-link>
         </div>
@@ -46,6 +46,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
 .section-header-text {
   background-color: #f5f6f7;
   padding: 10px 20px;

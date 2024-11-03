@@ -9,7 +9,7 @@ const setting = useSetting();
 const logo = ref('');
 const getSettingsData = async() => {
   const settingData = await setting.getData('header_logo');
-  logo.value = settingData.data[0].image;  
+  logo.value = settingData.data[0].value;  
 }
 
 onMounted(() => {

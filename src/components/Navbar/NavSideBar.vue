@@ -48,7 +48,7 @@ onMounted(() => {
     <aside class="nav-sidebar">
       <div class="nav-header">
         <router-link :to="{ name: 'homePage'}">
-            <img :src="logo?.image" alt="logo" />
+            <img :src="logo?.value" alt="logo" />
         </router-link>
         <button class="nav-close"><i class="fas fa-times"></i></button>
       </div>

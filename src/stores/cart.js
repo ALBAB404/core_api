@@ -6,19 +6,17 @@ export const useCart = defineStore("cart", {
   // All Variable  Code Is Here.....................................................................................................
   state: () => ({
     cartItem: [],
-    campaignId: 0,
     loading: false,
   }),
 
   persist: {
-    paths: ["cartItem", "campaignId"],
+    paths: ["cartItem"],
   },
 
   getters: {
     totalPrice: (state) => {
       let price = 0;
       state.cartItem.map((el) => {
-        console.log(el);
         const itemPrice = el["sell_price"];
         price += itemPrice * el["quantity"];
       });
@@ -75,15 +73,7 @@ export const useCart = defineStore("cart", {
     // },
 
     async addToCart(product) {
-        this.campaignId = product.campaign_id;
         this.loading = product.product_id;
-    
-        // let index = this.cartItem.findIndex((i) =>
-        //     i.product_id === product.product_id &&
-        //     ((!product.attribute_value_id_1 || i.attribute_value_id_1 === product.attribute_value_id_1) &&
-        //     (!product.attribute_value_id_2 || i.attribute_value_id_2 === product.attribute_value_id_2) &&
-        //     (!product.attribute_value_id_3 || i.attribute_value_id_3 === product.attribute_value_id_3))
-        // );
 
         let index = this.cartItem.findIndex((i) => {
             if (i.product_id !== product.product_id) {
