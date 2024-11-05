@@ -1,7 +1,7 @@
 <script setup>
 import { CartSideBar, MobileMenu, BannerPart, ProductView } from "@/components";
 import axiosInstance from "@/services/axiosService.js";
-import { useCart, useOrder, useAuth, useModal } from "@/stores";
+import { useCart, useOrder, useAuth, useModal, useCommonIsToggleFunctionality } from "@/stores";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, onUpdated, onBeforeUpdate, onUnmounted, computed, watch  } from "vue";
 import { useRouter } from "vue-router";
@@ -9,6 +9,8 @@ import { useRouter } from "vue-router";
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
+const commonIsToggleFunctionality             = useCommonIsToggleFunctionality();
+const { cartSideBar }                         = storeToRefs(commonIsToggleFunctionality);
 const isDesktop                               = ref(window.innerWidth > 768);
 const modal                                   = useModal()
 const router                                  = useRouter()
@@ -336,6 +338,7 @@ const checkScreenSize = () => {
     let uniqueID = localStorage.getItem('uniqueVisitorID')
     console.log(uniqueID);
     window.addEventListener('resize', checkScreenSize);
+    commonIsToggleFunctionality.cartSideBar = false;
   });
 
   onUnmounted(() => {

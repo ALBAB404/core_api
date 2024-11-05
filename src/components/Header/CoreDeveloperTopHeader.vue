@@ -387,7 +387,7 @@ onMounted(() => {
             </button>
           </div>
           <div class="header-widget-group">
-            <button class="header-widget header-cart cart-btn" title="Cartlist">
+            <button class="header-widget header-cart cart-btn" title="Cartlist"  @click="commonIsToggleFunctionality.isCartSideBartOpenOrClose">
               <i class="fas fa-shopping-basket"></i>
               <sup>{{ cartItemCount }}+</sup>
               <span>total price<small>{{ $filters.currencySymbol(totalPrice) }}</small></span>

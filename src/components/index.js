@@ -36,3 +36,4 @@ export { default as PremiumCollection } from "@/components/PremiumCollection/Pre
 export { default as Header } from "@/components/Header/Header.vue";
 export { default as CoreDeveloperHeader } from "@/components/Header/CoreDeveloperHeader.vue";
 export { default as CoreDeveloperTopHeader } from "@/components/Header/CoreDeveloperTopHeader.vue";
+export { default as ShopSideBar } from "@/components/ShopSideBar/ShopSideBar.vue";

@@ -8,7 +8,7 @@ const commonIsToggleFunctionality = useCommonIsToggleFunctionality();
 
 <template>
     <div>
-        <div class="addtocart-main-section"  v-if="cartItemCount > 0"  @click="commonIsToggleFunctionality.isCarSideBartOpenOrClose">
+        <div class="addtocart-main-section"  v-if="cartItemCount > 0"  @click="commonIsToggleFunctionality.isCartSideBartOpenOrClose">
             <div class="top-section text-center">
                 <i class="fas fa-cart-arrow-down"></i>
                 <p><span class="me-2">{{ cartItemCount }}</span><span>ITEMS</span></p>

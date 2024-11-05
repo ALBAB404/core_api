@@ -11,6 +11,7 @@ export const useCommonIsToggleFunctionality = defineStore('commonIsToggleFunctio
     cartSideBar    : false,
     navSideBar     : false,
     categorySideBar: false,
+    shopSideBar    : false,
   }),
   
   actions: {
@@ -23,8 +24,13 @@ export const useCommonIsToggleFunctionality = defineStore('commonIsToggleFunctio
     async isNavSideBarOpenOrClose(){
       this.navSideBar = !this.navSideBar;
     }, 
-    async isCarSideBartOpenOrClose(){
+
+    async isCartSideBartOpenOrClose(){
       this.cartSideBar = !this.cartSideBar;
+    },
+
+    async isShopSideBarOpenOrClose(){
+      this.shopSideBar = !this.shopSideBar;
     }, 
 
   },

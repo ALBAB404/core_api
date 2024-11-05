@@ -264,7 +264,7 @@ onMounted(() => {
             <router-link :to="{ name: 'homePage' }">
               <img :src="logo?.value" alt="logo" />
             </router-link>
-            <button title="Shop Page" class="header-cart-btn" @click="commonIsToggleFunctionality.isCarSideBartOpenOrClose">
+            <button title="Shop Page" class="header-cart-btn" @click="commonIsToggleFunctionality.isCartSideBartOpenOrClose">
               <i class="fas fa-shopping-basket"></i>
               <p>CartList</p>
             </button>
@@ -410,8 +410,8 @@ onMounted(() => {
               <span></span>
             </button>
           </div> -->
-          <div class="header-widget-group">
-            <button class="header-widget header-cart cart-btn" title="Cartlist">
+          <div class="header-widget-group"  @click="commonIsToggleFunctionality.isCartSideBartOpenOrClose">
+            <button class="header-widget header-cart " title="Cartlist">
               <i class="fas fa-shopping-basket"></i>
               <sup>{{ cartItemCount }}+</sup>
               <span>total price<small>{{ $filters.currencySymbol(totalPrice) }}</small></span>

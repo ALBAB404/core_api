@@ -62,19 +62,25 @@ onMounted(() => {
       <div class="nav-content">
         <ul class="nav-list">
           <li>
-            <a class="nav-link dropdown-link" href="#"
-              ><i class="icofont-lock"></i>authentic</a
-            >
+            <router-link :to="{ name: 'CampaignBanner' }" class="nav-link dropdown-link" ><i class="icofont-page"></i>Campaign</router-link>
           </li>
           <li>
-            <a class="nav-link dropdown-link" href="#"
-              ><i class="icofont-page"></i>Campaign</a
-            >
+            <router-link :to="{ name: 'blogPage' }" class="nav-link dropdown-link" ><i class="icofont-page"></i>Blogs</router-link>
           </li>
           <li>
-            <a class="nav-link dropdown-link" href="#"
-              ><i class="icofont-book-alt"></i>blogs</a
-            >
+            <router-link :to="{ name: 'TermsConditions' }" class="nav-link dropdown-link" ><i class="icofont-page"></i>Terms & Conditions</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'aboutPage' }" class="nav-link dropdown-link" ><i class="icofont-page"></i>About us</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'contactPage' }" class="nav-link dropdown-link" ><i class="icofont-page"></i>Contact us</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'PrivacyPolicy' }" class="nav-link dropdown-link" ><i class="icofont-page"></i>privacy policy</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'ReturnRefund' }" class="nav-link dropdown-link" ><i class="icofont-page"></i>Return & Refund</router-link>
           </li>
           <!-- <li>
               <a class="nav-link dropdown-link" href="#"

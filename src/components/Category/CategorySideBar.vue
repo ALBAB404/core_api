@@ -64,7 +64,7 @@ onMounted(() => {
                 </li>
             </ul>
             <div class="category-footer">
-                <p class="text-danger fw-bold">&copy; 2024 Maxfit Food</p>
+                <p class="text-danger fw-bold">&copy; 2024 Anon Leather</p>
             </div>
         </aside>
   </div>

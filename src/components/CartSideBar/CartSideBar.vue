@@ -36,7 +36,7 @@ const cartIncrement = (index) => {
 
 <template lang="">
   <div>
-    <div class="backdrop" :style="{ display: cartSideBar ? 'block' : 'none' }" @click="commonIsToggleFunctionality.isCarSideBartOpenOrClose"></div>
+    <div class="backdrop" :style="{ display: cartSideBar ? 'block' : 'none' }" @click="commonIsToggleFunctionality.isCartSideBartOpenOrClose"></div>
     
     <aside :class="['cart-sidebar', { active: cartSideBar }]">
       <div class="cart-header">
@@ -48,7 +48,7 @@ const cartIncrement = (index) => {
           <i class="fas fa-shopping-basket"></i>
           <span>আপনার কার্টে কিছু নেই</span>
         </div>
-        <button class="cart-close" @click="commonIsToggleFunctionality.isCarSideBartOpenOrClose"><i class="fas fa-times"></i></button>
+        <button class="cart-close" @click="commonIsToggleFunctionality.isCartSideBartOpenOrClose"><i class="fas fa-times"></i></button>
       </div>
       <Transition name="fade" mode="out-in">
         <TransitionGroup

@@ -8,6 +8,7 @@ import {
   MobileMenu,
   CategorySideBar,
   BannerPart,
+  ShopSideBar,
 } from "@/components";
 import { ProductSkeleton, ShopSideBarSkeleton } from "@/components/skeleton";
 import { useRoute, useRouter } from "vue-router";
@@ -17,14 +18,14 @@ import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import { gsap } from "gsap";
 // product data fetch
-import { useShop, useCart, useNotification, useAuth, useModal, useBanner } from "@/stores";
+import { useShop, useCart, useNotification, useAuth, useModal, useBanner, useCommonIsToggleFunctionality } from "@/stores";
 
 // All Variable  Code Is Here.....................................................................................................
 const route = useRoute();
 const router= useRouter();
 const auth = useAuth();
 // const modal =  useModal()
-
+const commonIsToggleFunctionality = useCommonIsToggleFunctionality();
 
 const banner = useBanner();
 
@@ -257,6 +258,8 @@ onMounted(() => {
   <div>
 
     <CategorySideBar />
+    
+    <ShopSideBar />
 
     <CartSideBar />
 
@@ -388,6 +391,9 @@ onMounted(() => {
                     <input type="search" class="form-control formControl" placeholder="Searching....."
                       v-model="searchQuery" />
                   </div>
+                  <div class="filter-icon" @click="commonIsToggleFunctionality.isShopSideBarOpenOrClose">
+                    <i class="fa fa-filter"></i>
+                  </div>
                   <div class="filter-action">
                     <a href="" @click.prevent="currentTab = 'three'" :class="currentTab === 'three' ? 'active' : ''"
                       title="Three Column"><i class="fas fa-th"></i></a>
@@ -438,6 +444,13 @@ onMounted(() => {
 </template>
 
 <style scope>
+
+.filter-icon{
+  padding: 10px;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 10%;
+}
 
 .shop-widget-title{
   cursor: pointer;
@@ -491,11 +504,18 @@ onMounted(() => {
   padding: 5px 10px 5px 10px !important;
 }
 
+.filter-icon{
+  display: none;
+}
+
 @media (max-width: 576px) {
   .formControl {
     width: 88% !important;
-    height: 40px !important;
-    
+    height: 40px !important; 
+  }
+
+  .filter-icon{
+    display: block;
   }
 }
 
