@@ -17,3 +17,4 @@ export * from "./banner";
 export * from "./aboutus";
 export * from "./contactus";
 export * from "./campaign";
+export * from "./commonIsToggleFunctionality";

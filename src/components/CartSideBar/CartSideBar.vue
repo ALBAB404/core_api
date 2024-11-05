@@ -2,10 +2,12 @@
 // All Import File  Code Is Here......................................................................................................
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
-import { useCart } from "@/stores";
+import { useCart, useCommonIsToggleFunctionality } from "@/stores";
 // All Variable  Code Is Here.....................................................................................................
 const cart = useCart();
 const { cartItemCount, cartItem, totalPrice } = storeToRefs(cart);
+const commonIsToggleFunctionality = useCommonIsToggleFunctionality();
+const { cartSideBar } = storeToRefs(commonIsToggleFunctionality);
 
 // coupon 
 const showCouponForm  = ref(false);
@@ -18,19 +20,6 @@ const toggleCouponForm = () => {
   showCouponForm.value = !showCouponForm.value;
 }
 
-
-$(".header-cart, .cart-btn").on("click", function () {
-  $(".cart-sidebar").addClass("active");
-  $(".cart-close").on("click", function () {
-    $(".cart-sidebar").removeClass("active");
-    $(".backdrop").fadeOut();
-  });
-});
-
-function cartClose() {
-    $(".cart-sidebar").removeClass("active"),
-    $(".backdrop").fadeOut();
-}
 
 const deleteCart = (index) => {
   cart.destroy(index);
@@ -47,7 +36,9 @@ const cartIncrement = (index) => {
 
 <template lang="">
   <div>
-    <aside class="cart-sidebar">
+    <div class="backdrop" :style="{ display: cartSideBar ? 'block' : 'none' }" @click="commonIsToggleFunctionality.isCarSideBartOpenOrClose"></div>
+    
+    <aside :class="['cart-sidebar', { active: cartSideBar }]">
       <div class="cart-header">
         <div class="cart-total" v-if="cartItemCount !== 0">
           <i class="fas fa-shopping-basket"></i>
@@ -57,7 +48,7 @@ const cartIncrement = (index) => {
           <i class="fas fa-shopping-basket"></i>
           <span>আপনার কার্টে কিছু নেই</span>
         </div>
-        <button class="cart-close"><i class="fas fa-times"></i></button>
+        <button class="cart-close" @click="commonIsToggleFunctionality.isCarSideBartOpenOrClose"><i class="fas fa-times"></i></button>
       </div>
       <Transition name="fade" mode="out-in">
         <TransitionGroup

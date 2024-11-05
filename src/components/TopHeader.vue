@@ -2,9 +2,10 @@
 // All Import File  Code Is Here......................................................................................................
 import { onMounted, ref, onBeforeUnmount  } from "vue";
 import { storeToRefs } from "pinia";
-import { useCart, useSetting, useAuth } from "@/stores";
+import { useCart, useSetting, useAuth, useCommonIsToggleFunctionality } from "@/stores";
 import axiosInstance from "@/services/axiosService.js";
 import { CategorySideBar, NavSideBar } from "@/components";
+const commonIsToggleFunctionality = useCommonIsToggleFunctionality();
 
 // All Variable  Code Is Here.....................................................................................................
 const auth                          = useAuth();
@@ -85,30 +86,7 @@ const getSettingsData = async () => {
     } 
   });
 };
-//========================================
-//        CATEGORY SIDEBAR FUNCTION
-//========================================
-function categorySideBar() {
-  $(".category-sidebar").addClass("active");
-  $(".category-close").on("click", function () {
-    $(".category-sidebar").removeClass("active");
-    $(".backdrop").fadeOut();
-  });
-}
 
-//========================================
-//        Nav SIDEBAR FUNCTION
-//========================================
-function navSideBar() {
-  $(".nav-sidebar").addClass("active");
-  $(".nav-close").on("click", function () {
-    $(".nav-sidebar").removeClass("active");
-    $(".backdrop").fadeOut();
-  });
-}
-//========================================
-//       RESPONSIVE SEARCH BAR
-//========================================
 
 // get primary and secondary color start
 
@@ -279,13 +257,17 @@ onMounted(() => {
             <button
               class="cate-btn"
               title="Category List"
-              @click="navSideBar()"
+              @click="commonIsToggleFunctionality.isNavSideBarOpenOrClose"
             >
               <i class="fas fa-list"></i>
             </button>
             <router-link :to="{ name: 'homePage' }">
               <img :src="logo?.value" alt="logo" />
             </router-link>
+            <button title="Shop Page" class="header-cart-btn" @click="commonIsToggleFunctionality.isCarSideBartOpenOrClose">
+              <i class="fas fa-shopping-basket"></i>
+              <p>CartList</p>
+            </button>
             <!-- <div class="mobile-header-menu dropdown-right">
               <button class="header-src">
                 <i class="fas fa-user me-2"></i>
@@ -442,6 +424,17 @@ onMounted(() => {
 </template>
 
 <style>
+
+.header-cart-btn{
+  line-height: 20px;
+}
+
+.header-cart-btn i {
+  font-size: 20px;
+}
+.header-cart-btn p {
+  font-size: 14px;
+}
 
 .social-icons-Ntext a:hover, .social-icons-Ntext span:hover {
   color: var(--secondary-color);

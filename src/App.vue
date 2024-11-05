@@ -11,7 +11,6 @@ localStorage.setItem('uniqueVisitorID', uniqueID);
   <div>
 
 
-
     <ChatIcon />
 
     <AddtoCartIcon />

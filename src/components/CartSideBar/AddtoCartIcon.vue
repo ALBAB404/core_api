@@ -1,16 +1,14 @@
 <script setup>
-import {useCart} from '@/stores'
+import {useCart, useCommonIsToggleFunctionality} from '@/stores'
 import { storeToRefs } from 'pinia';
 const cart = useCart();
 const { cartItemCount, totalPrice } = storeToRefs(cart);
+const commonIsToggleFunctionality = useCommonIsToggleFunctionality();
 </script>
 
 <template>
     <div>
-
-        
-
-        <div class="addtocart-main-section cart-btn"  v-if="cartItemCount > 0">
+        <div class="addtocart-main-section"  v-if="cartItemCount > 0"  @click="commonIsToggleFunctionality.isCarSideBartOpenOrClose">
             <div class="top-section text-center">
                 <i class="fas fa-cart-arrow-down"></i>
                 <p><span class="me-2">{{ cartItemCount }}</span><span>ITEMS</span></p>

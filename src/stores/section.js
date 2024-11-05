@@ -13,8 +13,8 @@ export const useSection = defineStore("section", {
                 try {
                     this.loading = true;
                     const res = await axiosInstance.get('/sections');
-                    if(res.data.success){
-                        // this.sections = res.data?.result              
+                    
+                    if(res.data.success){         
                         return res.data?.result
                     }
                 } catch (error) {

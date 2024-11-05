@@ -9,6 +9,7 @@ import { useRouter } from "vue-router";
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
+const isDesktop                               = ref(window.innerWidth > 768);
 const modal                                   = useModal()
 const router                                  = useRouter()
 const auth                                    = useAuth();
@@ -161,6 +162,12 @@ const paymentGatewayRef   = ref(null);
 
 // order work end here 
 
+// if destop version is available then show this order note start
+const checkScreenSize = () => {
+  isDesktop.value = window.innerWidth > 768;
+};
+// if destop version is available then show this order note end
+
 // Scroll to the first error field
     const scrollToErrorField = () => {
       if (!name.value) {
@@ -216,6 +223,8 @@ const paymentGatewayRef   = ref(null);
       try {
 
           const res = await axiosInstance.get(`/coupons/check?coupon_code=${coupon.value}&cart_total_amount=${totalPrice.value}`);   
+          console.log(res);
+          
           if (res.status == 200) {
           couponDiscountAmount.value = res.data.result.discount_amount;
           couponId.value = res.data.result.coupon_id;
@@ -326,6 +335,11 @@ const paymentGatewayRef   = ref(null);
     freeShippingChecking();  
     let uniqueID = localStorage.getItem('uniqueVisitorID')
     console.log(uniqueID);
+    window.addEventListener('resize', checkScreenSize);
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', checkScreenSize);
   });
 
   // onUpdated(() => {
@@ -432,7 +446,7 @@ const paymentGatewayRef   = ref(null);
                     <div class="is-free-shipping-active" v-if="(isFreeShippingChecking?.type == 'quantity' && cartItemCount >= isFreeShippingChecking?.quantity) || (isFreeShippingChecking?.type == 'price' && totalPrice >= isFreeShippingChecking?.price)">
                       <p>You are Enjoying Free Shipping!</p>
                     </div>
-                    <div class="is-free-shipping" v-else>
+                    <div :class="{ 'is-free-shipping': isFreeShippingChecking }" v-else>
                       <span v-if="isFreeShippingChecking?.type == 'price'">
                         <p>Add {{ isFreeShippingChecking?.price -  totalPrice}} more Price to get free shipping!</p>
                       </span>
@@ -446,9 +460,8 @@ const paymentGatewayRef   = ref(null);
                         <button class="btn-danger btn-sm" ><i class="fas fa-chevron-down " :class="{'isRoted' : isOpen}"></i></button>
                       </div>
                       <div class="input-group p-3" :class="{'d-none' : !isOpen}">
-                        <input type="text" class="form-control" placeholder="Apply Your 
-                        Coupon Here" aria-label="Input group example" aria-describedby="btnGroupAddon" v-model="coupon">
-                        <div class="input-group-text btn-danger" id="btnGroupAddon" @click.prevent="couponCalculate()">Apply</div>
+                        <input type="text" class="form-control" placeholder="Apply Your Coupon Here" aria-label="Input group example" aria-describedby="btnGroupAddon" v-model="coupon">
+                        <div class="input-group-text btn-danger" id="btnGroupAddon" @click.prevent="couponCalculate">Apply</div>
                       </div>
                       <span v-if="couponErrorMessage" class="text-danger ps-3">{{ couponErrorMessage }}</span>
                   </div>
@@ -471,6 +484,10 @@ const paymentGatewayRef   = ref(null);
                       <p class="text-dark">Total</p>
                       <p class="text-dark"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
                     </div>
+                  </div>
+                  <div class="text-note mt-3" v-if="isDesktop">
+                    <p class="">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
+                      <textarea class="p-2" name="" id="" cols="50" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
                   </div>
                 </div>
             </div>
@@ -605,7 +622,7 @@ const paymentGatewayRef   = ref(null);
                         <p class="text-danger"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
                       </div>
                     </div>
-                    <div class="text-note mt-3">
+                    <div class="text-note mt-3" v-if="!isDesktop">
                       <p class="">প্রয়োজনীয় কোনো তথ্য দিতে এই এখানে লিখুনঃ </p>
                         <textarea class="p-2" name="" id="" cols="30" rows="5" placeholder="দয়া করে আপনার অর্ডারের জন্য যে কোনও বিশেষ নির্দেশিকা বা পছন্দ দিন এখানে বলতে পারেন ।" v-model="orderNote"></textarea>
                     </div>

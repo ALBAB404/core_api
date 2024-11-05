@@ -297,7 +297,7 @@ onMounted(() => {
            </span>
            <!-- campaign product er jonno ei route end -->
            <span v-else>
-             <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : 0 },}" class="hover14 column hover01 column" >
+             <router-link :to="{name: 'productDetailsPage',params: { slug: product?.slug ? product?.slug : '' },}" class="hover14 column hover01 column" >
                <div class="product-image">
                  <figure><img :src="product?.image"></figure>
                </div>

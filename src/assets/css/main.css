@@ -5129,7 +5129,7 @@ tbody tr td:last-child {
   left: -320px;
   width: 280px;
   height: 100vh;
-  z-index: 5;
+  z-index: 99999;
   background: var(--white);
   -webkit-box-shadow: 15px 0px 25px 0px rgba(0, 0, 0, 0.15);
           box-shadow: 15px 0px 25px 0px rgba(0, 0, 0, 0.15);

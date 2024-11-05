@@ -69,6 +69,7 @@ const alertTimeout = ref("");
 const productByid = async () => {
   singleProduct.value = await product.productById(route.params.slug);
   productVariations.value = singleProduct.value?.variations?.attributes;
+  categoryId.value.push(singleProduct.value?.category.id);
 };
 // get products end
 
@@ -202,17 +203,17 @@ onMounted(() => {
 
     <!-- description feild  -->
 
-    <section class="inner-section" v-if="singleProduct?.description">
+    <section class="inner-section">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
             <ul class="nav nav-tabs">
-              <li>
+              <li v-if="singleProduct?.description">
                 <a href="#tab-desc" class="tab-link active" data-bs-toggle="tab"
                   >descriptions</a
                 >
               </li>
-              <li>
+              <li v-if="singleProduct?.review_images?.length > 0">
                 <a href="#reviews" class="tab-link" data-bs-toggle="tab"
                   >Reviews</a
                 >
@@ -220,7 +221,7 @@ onMounted(() => {
             </ul>
           </div>
         </div>
-        <div class="tab-pane fade show active" id="tab-desc">
+        <div class="tab-pane fade show active" id="tab-desc" v-if="singleProduct?.description">
           <div class="row">
             <div class="col-lg-12">
               <div class="product-details-frame">
@@ -231,7 +232,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <div class="tab-pane fade show active" id="reviews">
+        <div class="tab-pane fade show" id="reviews" v-if="singleProduct?.review_images?.length > 0">
           <div class="row">
             <div class="col-lg-12">
               <div class="product-details-frame">
@@ -244,38 +245,10 @@ onMounted(() => {
                     :modules="[Pagination]"
                     class="mySwiper"
                   >
-                    <swiper-slide style="margin-left: 30px;">
+                    <swiper-slide style="margin-left: 30px;" v-for="(img, index) in singleProduct?.review_images" :key="index">
                       <div class="col-md-3">
                         <div class="review-img-section">
-                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
-                        </div>
-                      </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                      <div class="col-md-3">
-                        <div class="review-img-section">
-                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
-                        </div>
-                      </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                      <div class="col-md-3">
-                        <div class="review-img-section">
-                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
-                        </div>
-                      </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                      <div class="col-md-3">
-                        <div class="review-img-section">
-                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
-                        </div>
-                      </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                      <div class="col-md-3">
-                        <div class="review-img-section">
-                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1MxQpdnaeXnxFs5jCVLMh1XOkC5ZHuksBw&s" alt="">
+                          <img :src="img.image" alt="">
                         </div>
                       </div>
                     </swiper-slide>
@@ -291,7 +264,7 @@ onMounted(() => {
 
     <!-- Cross Sell Product -->
 
-    <section class="inner-section mt-3" v-if="singleProduct && singleProduct?.up_sell_products.length > 0">
+    <section class="inner-section mt-5" v-if="singleProduct && singleProduct?.up_sell_products.length > 0">
       <div class="container">
         <div class="row">
           <div class="col">
@@ -317,7 +290,7 @@ onMounted(() => {
     
     <!-- Related Product -->
 
-    <!-- <section class="inner-section" v-if="relatedProducts.length > 0">
+    <section class="inner-section mt-3" v-if="relatedProducts.length > 0">
       <div class="container">
         <div class="row">
           <div class="col">
@@ -349,7 +322,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-    </section> -->
+    </section>
 
     <!-- Related Product -->
 

@@ -1,56 +1,63 @@
 <script setup>
-
 import { onMounted, ref } from "vue";
-import { storeToRefs } from 'pinia';
-import {useSetting} from '@/stores'
+import { storeToRefs } from "pinia";
+import { useSetting, useCommonIsToggleFunctionality } from "@/stores";
+
 const setting = useSetting();
+const commonIsToggleFunctionality = useCommonIsToggleFunctionality();
+const { navSideBar } = storeToRefs(commonIsToggleFunctionality);
+const email = ref();
+const logo = ref();
+const phone = ref();
+const title = ref();
 
-const email = ref()
-const logo = ref()
-const phone = ref()
-const title = ref()
-
-const getSettingsData = async() => {
-  const settingData = await setting.getData(); 
-  settingData.data.map((ele)=> {
-    if (ele.key == "header_logo" ) {
-      logo.value = ele
+const getSettingsData = async () => {
+  const settingData = await setting.getData();
+  settingData.data.map((ele) => {
+    if (ele.key == "header_logo") {
+      logo.value = ele;
     }
-    if (ele.key == "footer_email" ) {
-      email.value = ele
+    if (ele.key == "footer_email") {
+      email.value = ele;
     }
-    if (ele.key == "phone_number" ) {
-      phone.value = ele
+    if (ele.key == "phone_number") {
+      phone.value = ele;
     }
-    if (ele.key == "title" ) {
-      title.value = ele
-    } 
-  })
-}
-
+    if (ele.key == "title") {
+      title.value = ele;
+    }
+  });
+};
 
 const props = defineProps({
   isNavTrue: Boolean,
   required: true,
 });
 
-
-
 onMounted(() => {
-    getSettingsData();
-})
-
-
+  getSettingsData();
+});
 </script>
 
 <template lang="">
   <div>
-    <aside class="nav-sidebar">
+    <div
+      class="backdrop"
+      :style="{ display: navSideBar ? 'block' : 'none' }"
+      @click="commonIsToggleFunctionality.isNavSideBarOpenOrClose"
+    ></div>
+
+    <aside :class="['nav-sidebar', { active: navSideBar }]">
       <div class="nav-header">
-        <router-link :to="{ name: 'homePage'}">
-            <img :src="logo?.value" alt="logo" />
+        <router-link :to="{ name: 'homePage' }">
+          <img :src="logo?.value" alt="logo" />
         </router-link>
-        <button class="nav-close"><i class="fas fa-times"></i></button>
+        <button
+          class="nav-close"
+          @click="commonIsToggleFunctionality.isNavSideBarOpenOrClose"
+        >
+          <i class="fas fa-times"></i>
+        </button>
       </div>
       <div class="nav-content">
         <ul class="nav-list">
@@ -69,7 +76,7 @@ onMounted(() => {
               ><i class="icofont-book-alt"></i>blogs</a
             >
           </li>
-           <!-- <li>
+          <!-- <li>
               <a class="nav-link dropdown-link" href="#"
                 ><i class="icofont-bag-alt"></i>my account</a
               >
@@ -102,13 +109,13 @@ onMounted(() => {
           </div>
         </div>
         <div class="nav-footer">
-          <p>All Rights Reserved by <a href="#">{{ title?.value }}</a></p>
+          <p>
+            All Rights Reserved by <a href="#">{{ title?.value }}</a>
+          </p>
         </div>
       </div>
     </aside>
   </div>
 </template>
 
-<style>
-
-</style>
+<style></style>

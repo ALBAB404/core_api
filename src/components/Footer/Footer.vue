@@ -116,8 +116,8 @@ onMounted(() => {
         <div class="row">
           <div class="col-sm-6 col-xl-3">
             <div class="footer-widget">
-              <router-link :to="{ name: 'homePage'}" class="footer-logo" href="#">
-                <img :src="logo?.image" alt="logo" />
+              <router-link :to="{ name: 'homePage'}" class="footer-logo">
+                <img :src="logo?.value" alt="logo" />
               </router-link>
               <p class="footer-desc text-light">{{ description?.value }}</p>
               <ul class="footer-social" v-show="socialShares?.data?.length > 0">
