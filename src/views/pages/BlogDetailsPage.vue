@@ -61,7 +61,13 @@ onMounted(() => {
                                     </li>
                                 </ul>
                                 <h2 class="blog-details-title">{{ singleBlogPost?.result?.title }}</h2>
-                                <p class="blog-details-desc">{{ singleBlogPost?.result?.description }}</p>
+                                <p class="blog-details-desc" v-html="singleBlogPost?.result?.description"></p>
+                                <p class="mb-2">Tags : </p>
+                                <div class="tags">
+                                    <ul>
+                                        <li v-for="(tag, index) in singleBlogPost?.result?.tags" :key="index">{{ tag.name }}</li>
+                                    </ul>
+                                </div>
                             </div>
                         </article>
                     </div>
@@ -75,6 +81,32 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.tags {  
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  
+  .tags ul {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap; 
+  }
+  
+  .tags ul li {
+    border: 1px solid black;
+    padding: 2px 5px;
+    font-size: 14px;
+    background-color: var(--secondary-color);
+    color: var(--primary);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .5s;
+  }
+  .tags ul li:hover {
+    background-color: var(--primary);
+    color:  var(--secondary-color);
+    transition: .5s;
+  }
 
 .blog-img img {
     max-height: 380px

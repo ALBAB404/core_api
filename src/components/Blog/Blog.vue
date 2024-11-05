@@ -37,7 +37,16 @@ const getBlogPost = async (tagID = '', BlogPost = '') => {
 
 // Define a computed property to format the date
 const formattedDate = (createdAtString) => {
+  console.log(createdAtString);
+  
+  // Convert ISO string to Date object
   const createdAtDate = new Date(createdAtString);
+  
+  // Check if the date is valid
+  if (isNaN(createdAtDate.getTime())) {
+    return ""; // Return empty string if date is invalid
+  }
+  
   return createdAtDate.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -109,9 +118,12 @@ onMounted(() => {
                   <router-link :to="{ name: 'blogDetailsPage', params:{ postId: blogPost.id} }" class="blog-title">
                       <a href="blog-details.html">{{ blogPost.title }}</a>
                   </router-link>
-                  <p class="blog-desc">
-                      {{ $filters.textShort(blogPost.description, 100) }}
-                  </p>
+                  <p class="blog-desc" v-html="$filters.textShort(blogPost.description, 100)"></p>
+                  <div class="tags">
+                    <ul>
+                      <li v-for="(tag, index) in blogPost.tags" :key="index">{{ tag.name }}</li>
+                    </ul>
+                  </div>
                   <router-link :to="{ name: 'blogDetailsPage', params:{ postId: blogPost.id} }" class="blog-btn" href="#">
                       <span>read more</span>
                       <i class="icofont-arrow-right"></i>
@@ -138,6 +150,33 @@ onMounted(() => {
   </div>
 </template>
 <style scoped>
+
+.tags {  
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.tags ul {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap; 
+}
+
+.tags ul li {
+  border: 1px solid black;
+  padding: 2px 5px;
+  font-size: 14px;
+  background-color: var(--secondary-color);
+  color: var(--primary);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: .5s;
+ }
+.tags ul li:hover {
+  background-color: var(--primary);
+  color:  var(--secondary-color);
+  transition: .5s;
+}
 
 .blog-part{
   margin-top: 22px !important;
