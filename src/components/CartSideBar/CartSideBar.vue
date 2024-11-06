@@ -135,7 +135,7 @@ const cartIncrement = (index) => {
       </div>
 
       <div class="cart-footer" v-if="cartItemCount">
-          <router-link :to="{name: 'checkoutPage'}" class="cart-checkout-btn" @click="cartClose">
+          <router-link :to="{name: 'checkoutPage'}" class="cart-checkout-btn">
               <span class="checkout-label" style="width: 60%;">অর্ডার করুন</span>
               <span class="checkout-price">{{ $filters.currencySymbol(totalPrice)}} tk</span>
           </router-link>

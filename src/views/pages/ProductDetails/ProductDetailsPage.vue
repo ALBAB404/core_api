@@ -190,7 +190,7 @@ onMounted(() => {
             <ProductImage :singleProduct="singleProduct" :type="'details'" />
           </div>
           <div class="col-lg-6">
-            <ProductDetails :singleProduct="singleProduct" :productVariations="productVariations" />
+            <ProductDetails :singleProduct="singleProduct" :productVariations="productVariations" :type="'details'"/>
           </div>
         </div>
       </div>

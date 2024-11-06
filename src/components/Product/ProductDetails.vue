@@ -21,6 +21,10 @@ const props = defineProps({
     type: String,
     default: null, 
   },
+ type: {
+    type: String,
+    default: null, 
+  },
 });
 
 
@@ -174,17 +178,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="details-content">
-    <h3 class="details-name">
+  <div :class="`${type}-content`">
+    <h3 :class="`${type}-name`">
       <a href="#">{{ singleProduct?.name }}</a>
     </h3>
-    <div class="details-meta">
+    <div :class="`${type}-meta`">
       <p>SKU:<span>1234567</span></p>
       <p v-if="singleProduct?.brand">
         BRAND:<a href="#">{{ singleProduct?.brand?.name }}</a>
       </p>
     </div>
-    <div class="details-meta">
+    <div :class="`${type}-meta`">
       <p v-if="singleProduct?.category">
         Category:<a href="#">{{ singleProduct?.category?.name }}</a>
       </p>
@@ -197,11 +201,11 @@ onMounted(() => {
     <!-- Price Section start -->
     <!-- Product Variation Price Section start -->
     <span v-if="singleProduct?.variations?.data.length > 0">
-      <h3 class="details-price" v-if="productVariationPrice == '' || productVariationPrice == undefined">
+      <h3 :class="`${type}-price my-2`" v-if="productVariationPrice == '' || productVariationPrice == undefined">
         <span v-if="singleProduct.variation_price_range.min_price == singleProduct.variation_price_range.max_price">{{ $filters.currencySymbol( singleProduct.variation_price_range.min_price || singleProduct.variation_price_range.max_price ) }}</span>
         <span v-else>{{ $filters.currencySymbol( singleProduct.variation_price_range.min_price ) }} - {{ $filters.currencySymbol( singleProduct.variation_price_range.max_price ) }}</span>
       </h3>
-      <h3 class="details-price" v-else>
+      <h3 :class="`${type}-price my-2`" v-else>
         <span>{{
           $filters.currencySymbol(productVariationPrice?.sell_price)
         }}</span>
@@ -209,7 +213,7 @@ onMounted(() => {
     </span>
     <!-- Product Variation Price Section end -->
     <span v-else>
-      <h3 class="details-price">
+      <h3 :class="`${type}-price`">
         <del>{{ $filters.currencySymbol(singleProduct.mrp) }}</del>
         <span>{{ $filters.currencySymbol( mrpOrOfferPrice( singleProduct.mrp, singleProduct.offer_price ))}}</span>
         <a class="discout_amount" v-if="singleProduct.offer_price != 0" >Save {{ Math.round(singleProduct.mrp - singleProduct.offer_price) }}৳</a >
@@ -218,11 +222,11 @@ onMounted(() => {
     <!-- Price Section end -->
 
     <p
-      class="details-desc mt-2"
+      :class="`${type}-desc mt-2`" 
       v-if="singleProduct.short_description"
     >Quick Overview :</p>
     <p
-      class="details-desc mt-2"
+      :class="`${type}-desc mt-2`"
       v-if="singleProduct.short_description"
       v-html="singleProduct.short_description"
     ></p>
@@ -233,19 +237,19 @@ onMounted(() => {
 
     <!-- Product Variation Price Section end -->
 
-    <div class="details-list-group" v-if="singleProduct?.video_url">
+    <div :class="`${type}-list-group`" v-if="singleProduct?.video_url">
       <div class="videoHW">
         <iframe class="mt-5"  :src="getEmbedUrl(singleProduct?.video_url)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>              
       </div>
     </div>
 
-    <div class="details-list-group">
+    <div :class="`${type}-list-group`">
       <label
-        class="details-list-title"
+      :class="`${type}-list-title`"
         v-show="socialShares?.data?.length > 0"
         >Share:</label
       >
-      <ul class="details-share-list">
+      <ul :class="`${type}-share-list`">
         <li
           v-for="(socialShare, index) in socialShares?.data"
           :key="index"
@@ -260,7 +264,7 @@ onMounted(() => {
       </ul>
     </div>
 
-    <div class="details-list-group mt-3">
+    <div :class="`${type}-list-group mt-3`">
       <div
         class="quantity"
         :class="{
@@ -301,7 +305,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="details-add-group">
+    <div :class="`${type}-add-group`">
       <div
         class="row"
         v-if="singleProduct?.variations?.data.length > 0"
@@ -396,7 +400,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div class="details-action-group">
+    <div :class="`${type}-action-group`">
       <a
         :href="`https://wa.me/+88${whatsapp}?text=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${
           singleProduct?.id
@@ -433,7 +437,7 @@ onMounted(() => {
         ><span>মেসেঞ্জার</span>
       </a>
       <a
-        class="details-wish wish bg-warning text-dark"
+        :class="`${type}-wish wish bg-warning text-dark`"
         :href="`tel:+88${phone}`"
         title="Add Your Wishlist"
       >

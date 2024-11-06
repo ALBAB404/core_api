@@ -7,19 +7,12 @@ import axiosInstance from "@/services/axiosService.js";
 import { mrpOrOfferPrice, addToCart } from '@/composables'
 import ProductCardModal from "./ProductCardModal.vue";
 import ProductImage from "./ProductImage.vue";
+import ProductDetails from "./ProductDetails.vue";
 
 // All Variable  Code Is Here.....................................................................................................
-const modal         = useModal()
-const auth          = useAuth();
-const cart          = useCart();
-const { loading }   = storeToRefs(cart);
-const notify        = useNotification();
-const isloading     = ref(loading);
+
 const uProduct       = useProduct();
 const { products, variationProducts }   = storeToRefs(uProduct);
-const color         = "white";
-const size          = "8px";
-const quantityInput = ref(1);
 const setting       = useSetting();
 
 // Setting data start
@@ -28,45 +21,10 @@ const phone       = ref("");
 const whatsapp    = ref("");
 const messengerId = ref("");
 // Setting data end
-
-// settings variables
-const addToCartButton      = ref('Add Cart');
-const orderButton          = ref('Order Now ');
-const productNameFontSize  = ref('18px');
-const productPriceFontSize = ref('20px');
-
-
-const price            = ref();
-const route            = useRoute();
-const router           = useRouter();
-const sizeMrp          = ref();
-const sizeOfferPrice   = ref();
-const sizeId           = ref();
-const productPrices    = ref();
-const sizeName         = ref();
-const selectedSize     = ref();
-const isButtonDisabled = ref(true);
 const modalProduct = ref('');
 
 // product variations start
 const productVariations     = ref([]);
-const attribute_id_1        = ref(null);
-const attribute_id_2        = ref(null);
-const attribute_id_3        = ref(null);
-const attribute_value_id_1  = ref(null);
-const attribute_value_id_2  = ref(null);
-const attribute_value_id_3  = ref(null);
-const productVariationData  = ref('');
-const productVariationPrice = ref('');
-const resetBtns             = ref(false);
-const activeBtns            = ref(false);
-const variationRemoveBtn    = ref(false);
-const activeAttributes = ref({
-    0: [],
-    1: [],
-    2: [],
-});
-// product variations end
 
 // get modal data start
 
@@ -86,174 +44,6 @@ watch(products, (newProduct) => {
 // get modal data end
 
 
-// image working start
-  
-const thumbnailImage = ref(null);
-    const activeImage    = ref(0);
-    const images         = ref([]);
-
-    const changeImage = (img, index) => {
-        thumbnailImage.value = img;
-        activeImage.value = index;
-    };
-// image working end
-
-
-// sizes start
-
-const sizeByPrice = (mrp, offerPrice, sizeID) => {
-  sizeMrp.value        = mrp;
-  sizeOfferPrice.value = offerPrice;
-  sizeId.value         = sizeID;
-  isButtonDisabled.value = false;
-}
-
-// sizes end
-
-// auth login part start 
-const isLogin = (product) => {
-  if (Object.keys(auth.user).length > 0) {
-    addToCart(product)
-    router.push({ name: "checkoutPage" });
-  }else{
-    // $("#login-modal").modal("show")
-    modal.toggleModal();
-    addToCart(product)
-  }
-}
-// auth login part end
-
-
-// get products variation working start
-
-async function getProductVariation(productId,attributeValue, index) {
-    
-    resetBtns.value = true;
-
-    // variation selected section start
-        if (activeAttributes.value[index] === attributeValue.attribute_value_id) {
-            // যদি ক্লিক করা ভ্যালুটি ইতিমধ্যেই সক্রিয় থাকে, তাহলে নিষ্ক্রিয় করুন
-            activeAttributes.value[index] = null;
-        } else {
-            // যদি ক্লিক করা ভ্যালুটি সক্রিয় না থাকে, তাহলে এটিকে সক্রিয় করুন এবং অন্যান্য সক্রিয়গুলো নিষ্ক্রিয় করুন
-            activeAttributes.value[index] = attributeValue.attribute_value_id;
-        }
-    // variation selected section end
-
-   
-   if (index === 0) {
-       attribute_id_1.value = attributeValue.attribute_id;
-       attribute_value_id_1.value = attributeValue.attribute_value_id;
-       productVariationData.value = {
-            "product_id"          : productId,
-            "attribute_id_1"      : attribute_id_1.value || '',
-            "attribute_value_id_1": attribute_value_id_1.value || '',
-            "attribute_id_2"      : '',
-            "attribute_value_id_2": attribute_value_id_2.value || '',
-            "attribute_id_3"      : '',
-            "attribute_value_id_3": attribute_value_id_3.value || ''
-        };
-   } 
-   
-   if (index === 1) {
-        attribute_id_2.value = attributeValue.attribute_id;
-        attribute_value_id_2.value = attributeValue.attribute_value_id
-        productVariationData.value = {
-            "product_id"          : productId,
-            "attribute_id_1"      : '',
-            "attribute_value_id_1": attribute_value_id_1.value || '',
-            "attribute_id_2"      : attribute_id_2.value || '',
-            "attribute_value_id_2": attribute_value_id_2.value || '',
-            "attribute_id_3"      : '',
-            "attribute_value_id_3": attribute_value_id_3.value || ''
-        };
-   } 
-   if (index === 2) {     
-       attribute_id_3.value = attributeValue.attribute_id;
-       attribute_value_id_3.value = attributeValue.attribute_value_id
-       productVariationData.value = {
-            "product_id"          : productId,
-            "attribute_id_1"      : '',
-            "attribute_value_id_1": attribute_value_id_1.value || '',
-            "attribute_id_2"      : '',
-            "attribute_value_id_2": attribute_value_id_2.value || '',
-            "attribute_id_3"      : attribute_id_3.value || '',
-            "attribute_value_id_3": attribute_value_id_3.value || ''
-        };
-   } 
-   
-
-   const variations =  await uProduct.productVariations(productVariationData.value); 
-
-   productVariations.value =  variations.attributes;
-         
-   
-
-   // price jodi backend theke dubble na hoy eitar code start 
-   
-   if ((Object.keys(productVariations.value).length == 1) && (attribute_value_id_1.value != null)) {
-      productVariationPrice.value = variations.variation_price[0];
-      activeBtns.value            = true;
-   }
-   if ((Object.keys(productVariations.value).length == 2) && (attribute_value_id_2.value != null && attribute_value_id_1.value != null)) {
-      productVariationPrice.value = variations.variation_price[0];
-      activeBtns.value            = true;
-   }
-   if ((Object.keys(productVariations.value).length == 3) && (attribute_value_id_3.value != null && attribute_value_id_2.value != null && attribute_value_id_1.value != null)) {
-    
-      productVariationPrice.value = variations.variation_price[0];         
-      activeBtns.value = true; 
-   }
-   
-   // price jodi backend theke dubble na hoy eitar code end 
-   
-   
-}
-
-
-const removeAllVariation = () => {
-    // Reset the product variations
-    productVariations.value = [];
-    quantityInput.value = 1;
-    
-    // Reset the attribute value IDs
-    attribute_value_id_1.value = null;
-    attribute_value_id_2.value = null;
-    attribute_value_id_3.value = null;
-    
-    // Reset the product variation data
-    productVariationData.value = '';
-    
-    // Reset the product variation price
-    productVariationPrice.value = '';
-    
-    // Reset the active buttons state
-    activeBtns.value = false;
-    
-    // Reset the active attributes
-    activeAttributes.value = {
-        0: [],
-        1: [],
-        2: [],
-    };
-
-    productVariations.value = modalProduct.value?.variations?.attributes
-
-    resetBtns.value =false;
-
-};
-
-// get products variation working end
-
-const incrementCartItem = () => {        
-    quantityInput.value = parseInt(quantityInput.value) + 1;
-};
-
-const decrementCartItem = () => {
-    if (quantityInput.value != 1) {
-        quantityInput.value = parseInt(quantityInput.value) - 1;
-    }
-};
 
  // setting data start
  const getSettingsData = async() => {
@@ -304,126 +94,8 @@ const props = defineProps({
             <div class="col-md-6 col-lg-6">
               <ProductImage :singleProduct="modalProduct" :type="'view'" />
             </div>
-            <div class="col-md-6 col-lg-6">
-                <div class="view-details">
-                    <h3 class="view-name">
-                        <router-link :to="{name: 'productDetailsPage',params: { slug: modalProduct?.slug ? modalProduct?.slug : 0 },}" >{{ modalProduct?.name }}</router-link>
-                    </h3>
-                    <div class="view-meta">
-                        <p>SKU:<span>1234567</span></p>
-                        <p v-if="modalProduct?.brand">BRAND:<a href="#">{{ modalProduct?.brand?.name }}</a></p>
-                    </div>
-                    <div class="view-meta">
-                        <p v-if="modalProduct?.category">Category:<a href="#">{{ modalProduct?.category?.name }}</a></p>
-                        <p v-if="modalProduct?.sub_category">Sub Category:<a href="#">{{ modalProduct?.sub_category?.name }}</a></p>
-                    </div>
-
-                      <!-- Price Section start -->
-                      <!-- Product Variation Price Section start -->
-                        <span v-if="modalProduct?.variations?.data.length > 0">
-                          <h3 class="view-price" v-if="productVariationPrice == ''">
-                              <span>{{  $filters.currencySymbol(modalProduct.variation_price_range.min_price) }} - {{  $filters.currencySymbol(modalProduct.variation_price_range.max_price) }}</span> 
-                          </h3>
-                          <h3 class="view-price" v-else>
-                              <span>{{  $filters.currencySymbol(productVariationPrice.sell_price) }}</span> 
-                          </h3>
-                      </span>
-                    <!-- Product Variation Price Section end -->
-                      <span v-else>
-                          <h3 class="view-price">
-                              <del>{{  $filters.currencySymbol(modalProduct.mrp) }}</del>
-                              <span>{{  $filters.currencySymbol(mrpOrOfferPrice(modalProduct.mrp, modalProduct.offer_price)) }}</span>
-                              <a class="discout_amount" v-if="modalProduct.offer_price != 0">{{ Math.round(modalProduct.mrp -  modalProduct.offer_price) }} /- TK</a>
-                          </h3>
-                      </span>
-                    <!-- Price Section end -->
-                  
-                    <p class="details-desc" v-if="modalProduct?.short_description" v-html="modalProduct?.short_description"></p>
-
-                    <!-- Product Variation Price Section start -->
-                        <span v-if="modalProduct?.variations?.data.length > 0">
-                          <div class="details-list-group" v-for="(attribute, key, index) in productVariations" :key="index">
-                              <label class="details-list-title">{{ key }}:</label>
-                              <ul class="details-tag-list">
-                                  <li v-for="(attributeValue, indexAttributeValue) in attribute" :key="indexAttributeValue">
-                                      <a href="#" 
-                                      :class="{ 'is-active': activeAttributes[index] === attributeValue.attribute_value_id }"
-                                      @click.prevent="getProductVariation(modalProduct.id, attributeValue, index)">
-                                      {{ attributeValue.attribute_value }}
-                                      </a>
-                                  </li>
-                              </ul>
-                          </div>
-                          <button class="variationRemoveBtn" v-show="resetBtns" @click.prevent="removeAllVariation()">X clear</button>
-                      </span>
-                  
-
-                    <!-- Product Variation Price Section end -->
-
-                    <div class="view-list-group">
-                        <label class="view-list-title">Share:</label>
-                        <ul class="view-share-list">
-                            <li><a href="#" class="icofont-facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a href="#" class="icofont-twitter" title="Twitter"></a></li>
-                            <li><a href="#" class="icofont-linkedin" title="Linkedin"></a></li>
-                            <li><a href="#" class="icofont-instagram" title="Instagram"></a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="view-list-group mt-3">
-                      <div class="quantity" :class="{'quantity-disabled' : (activeBtns === false) && (modalProduct?.variations?.data.length > 0)}">
-                          <button class="minus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)"  aria-label="Decrease" @click.prevent="decrementCartItem">&minus;</button>
-                          <input type="number" class="input-box"  min="1" max="10" v-model="quantityInput">
-                          <button class="plus" :disabled="(activeBtns === false) && (modalProduct?.variations?.data.length > 0)" aria-label="Increase" @click.prevent="incrementCartItem">&plus;</button>
-                      </div>
-                    </div>
-                    
-                    <div class="view-add-group">
-                      <div class="row" v-if="modalProduct?.variations?.data.length > 0">
-                          <div class="col-md-6 mt-lg-0 mt-3">
-                              <button class="product-add" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput, productVariationData, productVariationPrice)">
-                                  <i :class="loading == modalProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
-                                  <span>{{ addToCartButton }}</span>
-                              </button>
-                          </div>
-                          <div class="col-md-6 mt-lg-0 mt-3">
-                              <router-link :to="{ name: 'checkoutPage' }" class="product-add main-order-btn" :class="{'singleProductBtn' : activeBtns === false}" title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput, productVariationData, productVariationPrice)">
-                                  <i class="fas fa-cart-plus"></i>
-                                  <span>Buy Now</span>
-                              </router-link>
-                          </div>
-                      </div>    
-                      <div class="row" v-else>
-                          <div class="col-md-6 mt-lg-0 mt-3">
-                              <button class="product-add"  title="Add to Cart"   @click.prevent="addToCart(modalProduct, quantityInput)">
-                                  <i :class="loading == modalProduct.id ? 'fa-solid fa-spinner fa-spin' : 'fas fa-shopping-basket'"></i>
-                                  <span>{{ addToCartButton }}</span>
-                              </button>
-                          </div>
-                          <div class="col-md-6 mt-lg-0 mt-3">
-                              <router-link :to="{ name: 'checkoutPage' }" class="product-add main-order-btn" title="Add to Cart" @click.prevent="addToCart(modalProduct, quantityInput)" >
-                                  <i class="fas fa-cart-plus"></i>
-                                  <span>Buy Now</span>
-                              </router-link>
-                          </div>
-                      </div>    
-                    </div>
-                    <div class="view-action-group">
-                      <a :href="`https://wa.me/+88${whatsapp}?text=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
-                        class="product-add bg-success text-light" target="_blank">
-                        <i class="fab fa-whatsapp"></i><span>হোয়াটসঅ্যাপ</span>
-                      </a>
-                      <a :href="`https://m.me/${messengerId}?ref=Product%20Details%0A%0AWebsite:%20${websiteUrl}/single-product/${modalProduct?.id}%0AProduct%20Name:%20${modalProduct?.name}%0AProduct%20Size:%20${sizeName}%0AOffer%20Price:%20${productPrices ? productPrices?.offer_price : modalProduct?.offer_price}৳%0ARegular%20Price:%20${productPrices ? productPrices?.mrp : modalProduct?.mrp}৳`" 
-                        class="product-add bg-primary text-light" target="_blank">
-                        <i class="fab fa-facebook-messenger"></i><span>মেসেঞ্জার</span>
-                      </a>
-                      <a class="view-wish wish bg-warning text-dark" :href="`tel:+88${phone}`" title="Add Your Wishlist">
-                          <i class="fas fa-phone-alt"></i>
-                          <span >Phone</span>
-                      </a>
-                  </div>
-
-                </div>
+            <div class="col-md-6 col-lg-6 p-5">
+              <ProductDetails :singleProduct="modalProduct" :productVariations="productVariations" :type="'view'"/>
             </div>
           </div>
         </div>

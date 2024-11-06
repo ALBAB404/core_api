@@ -210,11 +210,13 @@ const queryProducts = () => {
 
 // }
 // auth login part end
+console.log(route.query.category);
 
 // category slug wise product showing
 watch(
   () => route.query.category || route.query.brand || route.query.subCategory,
   async (newValue, oldValue) => {
+    console.log(newValue, oldValue);
     queryProducts();
     getProducts();
   }

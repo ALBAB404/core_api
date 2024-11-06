@@ -37,8 +37,6 @@ const getBlogPost = async (tagID = '', BlogPost = '') => {
 
 // Define a computed property to format the date
 const formattedDate = (createdAtString) => {
-  console.log(createdAtString);
-  
   // Convert ISO string to Date object
   const createdAtDate = new Date(createdAtString);
   

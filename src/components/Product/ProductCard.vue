@@ -363,7 +363,7 @@ onMounted(() => {
       </div>
   </div>
 
-  <!-- <ProductCardModal :modalProduct="modalProduct" /> -->
+  <ProductCardModal :modalProduct="modalProduct" />
 
   </div>
 </template>
