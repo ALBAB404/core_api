@@ -12,7 +12,7 @@ import {
 } from "@/components";
 import { ProductSkeleton, ShopSideBarSkeleton } from "@/components/skeleton";
 import { useRoute, useRouter } from "vue-router";
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed, watch  } from "vue";
 import { storeToRefs } from "pinia";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
@@ -278,7 +278,7 @@ onMounted(() => {
                   <h6>Filter by Price</h6>
                   <a><i class="fa-solid fa-plus"></i></a>
                 </div>
-                <form class="collapse" id="collapseExample">
+                <form class="collapse show" id="collapseExample">
                   <div class="shop-widget-group">
                     <input type="text" v-model="sortingPrice[0]" :placeholder="`Min - ${$filters.currencySymbol(sideBar.result.min_price)}`" />
                     <input type="text" v-model="sortingPrice[1]" :placeholder="`Max - ${$filters.currencySymbol(sideBar.result.max_price)}`" />
@@ -297,7 +297,7 @@ onMounted(() => {
                   <h6>Filter by {{ getAttributeData.name }}</h6>
                   <a><i class="fa-solid fa-plus"></i></a>
                 </div>
-                <form class="collapse" :id="`${getAttributeData.id}`">
+                <form class="collapse show" :id="`${getAttributeData.id}`">
                   <ul class="shop-widget-list shop-widget-scroll">
                     <li v-for="(attributeValue, attributeValueIndex) in getAttributeData.attribute_values" :key="attributeValueIndex">
                       <div class="shop-widget-content">
@@ -322,7 +322,7 @@ onMounted(() => {
                   <h6>Filter by Category</h6>
                   <a><i class="fa-solid fa-plus"></i></a>
                 </div>
-                <form class="collapse" id="category">
+                <form class="collapse show" id="category">
                   <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchCategoryQuery" />
                   <ul class="shop-widget-list shop-widget-scroll">
                     <li v-for="(category, index) in searchCategories" :key="index">
@@ -348,7 +348,7 @@ onMounted(() => {
                   <h6>Filter by Brand</h6>
                   <a><i class="fa-solid fa-plus"></i></a>
                 </div>
-                <form class="collapse" id="brand">
+                <form class="collapse show" id="brand">
                   <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchBrandQuery" />
                   <TransitionGroup tag="ul" class="shop-widget-list shop-widget-scroll">
                     <li v-for="(brand, index) in searchBrands" :key="brand.id">
@@ -508,14 +508,19 @@ onMounted(() => {
   display: none;
 }
 
+@media (max-width: 991px) {
+  .filter-icon{
+    display: block;
+  }
+  .shop-widget{
+    display: none;
+  }
+}
+
 @media (max-width: 576px) {
   .formControl {
     width: 88% !important;
     height: 40px !important; 
-  }
-
-  .filter-icon{
-    display: block;
   }
 }
 

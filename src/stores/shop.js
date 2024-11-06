@@ -66,9 +66,9 @@ export const useShop = defineStore("shop", {
         }
       } catch (error) {
         console.log(error);
-        
       }
     },
+
   },
 });
 // All Function  Code Is Here.....................................................................................................
