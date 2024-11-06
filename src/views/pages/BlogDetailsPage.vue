@@ -18,7 +18,7 @@ const singleBlogPost = ref()
 
 // tag data start
 const getBlogPostDetails = async () => {
-    const res = await blog.getSingleBlogPost(route.params.postId); 
+    const res = await blog.getSingleBlogPost(route.params.postSlug); 
     if (res.success) {
         singleBlogPost.value = res
     }

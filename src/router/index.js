@@ -135,7 +135,7 @@ const routes = [
     meta: { title: " Blog Page" },
   },
   {
-    path: "/blog-details-page/:postId",
+    path: "/blog-details-page/:postSlug?",
     name: "blogDetailsPage",
     component: BlogDetailsPage,
     meta: { title: " Blog Details Page" },

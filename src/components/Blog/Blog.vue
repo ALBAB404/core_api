@@ -75,6 +75,7 @@ onMounted(() => {
         <div class="row">
           <div class="col-12">
             <div class="section-heading">
+              {{ blogPostData }}
               <h2>Read our articles</h2>
             </div>
           </div>
@@ -98,7 +99,7 @@ onMounted(() => {
                 <swiper-slide v-for="(blogPost, index) in blogPostData" :key="index">
                  <div class="blog-card">
                 <div class="blog-media">
-                  <router-link :to="{ name: 'blogDetailsPage', params:{ postId: blogPost.id} }" class="blog-img" href="#">
+                  <router-link :to="{ name: 'blogDetailsPage', params:{ postSlug: blogPost.slug} }" class="blog-img" href="#">
                       <img :src="blogPost.image" alt="blog">
                   </router-link>
                 </div>
