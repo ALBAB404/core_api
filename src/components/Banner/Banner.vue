@@ -61,7 +61,6 @@ onMounted(() => {
 <template>
   <div>
     <section class="banner-part">
-      <div class="container">
         <div class="row">
           <div class="col-lg-12">
             <div class="row">
@@ -95,23 +94,6 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <!-- <div class="row mt-3">
-          <div class="col-md-6 col-lg-6 d-none d-sm-block" v-if="banner1[0]">
-            <div class="banner-promo">
-              <a href="#">
-                <img :src="banner1[0]?.image" alt="promo" />
-              </a>
-            </div>
-          </div>
-            <div class="col-md-6 col-lg-6 d-none d-sm-block" v-if="banner2[0]">
-              <div class="banner-promo">
-                <a href="#" > 
-                  <img :src="banner2[0]?.image" alt="promo" />
-                </a>
-              </div>
-            </div>  
-        </div> -->
-      </div>
     </section>
 
   </div>
@@ -137,7 +119,7 @@ onMounted(() => {
 
 
 .home-grid-slider {
-  margin-bottom: 25px;
+  margin-bottom: 0px !important;
 }
 
 .home-grid-slider img {

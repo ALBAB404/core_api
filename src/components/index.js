@@ -23,6 +23,7 @@ export { default as Testimonial } from "@/components/Testimonial/Testimonial.vue
 export { default as Blog } from "@/components/Blog/Blog.vue";
 export { default as Newsletter } from "@/components/Newsletter/Newsletter.vue";
 export { default as Footer } from "@/components/Footer/Footer.vue";
+export { default as AnonleatherLocationStoreSection } from "@/components/Footer/AnonleatherLocationStoreSection.vue";
 export { default as ProductCard } from "@/components/Product/ProductCard.vue";
 export { default as CoreDeveloperProductCard } from "@/components/Product/CoreDeveloperProductCard.vue";
 export { default as ProductCardModal } from "@/components/Product/ProductCardModal.vue";
@@ -30,6 +31,7 @@ export { default as ProductImage } from "@/components/Product/ProductImage.vue";
 export { default as ProductDetails } from "@/components/Product/ProductDetails.vue";
 export { default as ProductVariation } from "@/components/Product/ProductVariation.vue";
 export { default as AnonleatherSectionProduct } from "@/components/Product/AnonleatherSectionProduct.vue";
+export { default as AnonleatherCampaignSection } from "@/components/Product/AnonleatherCampaignSection.vue";
 export { default as LoginFrom } from "@/components/LoginFrom/LoginFrom.vue";
 export { default as ChatIcon } from "@/components/ChatIcon/ChatIcon.vue";
 export { default as PremiumCollection } from "@/components/PremiumCollection/PremiumCollection.vue";

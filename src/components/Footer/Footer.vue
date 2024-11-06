@@ -111,7 +111,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <footer class="mt-5 pt-5 main-section-footer">
+    <footer class="pt-5 main-section-footer">
       <div class="container">
         <div class="row">
           <div class="col-sm-6 col-xl-3">

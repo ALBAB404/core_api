@@ -12,6 +12,8 @@ import {
   Banner,
   Brand,
   AnonleatherSectionProduct,
+  AnonleatherCampaignSection,
+  AnonleatherLocationStoreSection,
 } from "@/components";
 // product data fetch
 import { useProduct, useSection } from "@/stores";
@@ -49,20 +51,22 @@ onMounted(() => {
     <MobileMenu />
 
     <Banner />
+    
+    <AnonleatherCampaignSection /> 
 
     <AnonLeatherCategorySection />
 
     <AnonleatherSectionProduct /> 
-
-
+    
     <PremiumCollection />
-
+    
     <HomePageBanner />
-
+    
     <Brand />
-
+    
     <Blog />
-
+    
+    <AnonleatherLocationStoreSection /> 
   </div>
 </template>
 
