@@ -128,9 +128,9 @@ onMounted(() => {
     display:inline-block;
 }
 .navbar-section span a{
-    padding: 10px 20px; 
+    padding: 10px 15px !important; 
     display:inline-block;
-    font-size: 15px;
+    font-size: 19px !important;
     color: var(--white);
 }
 .navbar-section span a:hover{

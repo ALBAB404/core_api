@@ -22,6 +22,7 @@ import {
   CampaignProductList,
   CampaignProductDetails,
   Test,
+  LandingPage,
 } from "@/views/pages";
 import NProgress from "nprogress";
 import {useAuth, useCart} from '@/stores'
@@ -163,6 +164,12 @@ const routes = [
     name: "test",
     component: Test,
     meta: { title: "Glossit | Test Page" },
+  },
+  {
+    path: "/:slug",
+    name: "LandingPage",
+    component: LandingPage,
+    meta: { title: "Anon Leather | Landing Page" },
   },
 ];
 

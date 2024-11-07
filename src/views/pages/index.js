@@ -20,4 +20,5 @@ export { default as CampaignBanner } from "./Campaign/CampaignBanner.vue";
 export { default as CampaignProductList } from "./Campaign/CampaignProductList.vue";
 export { default as CampaignProductDetails } from "./Campaign/CampaignProductDetails.vue";
 export { default as Test } from "./Test.vue";
+export { default as LandingPage } from "./LandingPage/LandingPage.vue";
 

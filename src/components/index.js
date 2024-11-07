@@ -39,3 +39,14 @@ export { default as Header } from "@/components/Header/Header.vue";
 export { default as CoreDeveloperHeader } from "@/components/Header/CoreDeveloperHeader.vue";
 export { default as CoreDeveloperTopHeader } from "@/components/Header/CoreDeveloperTopHeader.vue";
 export { default as ShopSideBar } from "@/components/ShopSideBar/ShopSideBar.vue";
+
+// Landing page
+export { default as SizeChart } from "@/components/LandingPage/banner-section/SizeChart.vue";
+export { default as TopBanner } from "@/components/LandingPage/banner-section/TopBanner.vue";
+export { default as CardAwarness } from "@/components/LandingPage/card-section/CardAwarness.vue";
+export { default as ImageCampaign } from "@/components/LandingPage/demo-campaign/ImageCampaign.vue";
+export { default as OfferCampaign } from "@/components/LandingPage/demo-campaign/OfferCampaign.vue";
+export { default as VideoCampaign } from "@/components/LandingPage/demo-campaign/VideoCampaign.vue";
+export { default as OrderSection } from "@/components/LandingPage/order-section/OrderSection.vue";
+export { default as TopSlider } from "@/components/LandingPage/slider-section/TopSlider.vue";
+export { default as AnonLeatherLandingPageFooter } from "@/components/Footer/AnonLeatherLandingPageFooter.vue";
