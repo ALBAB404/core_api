@@ -55,11 +55,13 @@ const deliveryGatewayRef  = ref(null);
 const paymentGatewayRef   = ref(null);
 
 // payment getways details
-  const bkash               = ref('');
-  const nogod               = ref('');
-  const rocket              = ref('');
-  const cod                 = ref('');
-  const paymentGetwayName   = ref('');
+  const bkash                 = ref('');
+  const nogod                 = ref('');
+  const rocket                = ref('');
+  const cod                   = ref('');
+  const paymentGetwayName     = ref('');
+  const paymentSendNumber     = ref();
+  const paymentReceivedNumber = ref();
 
     const isOpenCoupon = () =>{
       isOpen.value = !isOpen.value;
@@ -116,18 +118,20 @@ const paymentGatewayRef   = ref(null);
 
     const orderSubmited = async () => {
      const res =   await order.storeOrder({
-          userToken          : userToken.value,
-          name               : name.value,
-          phoneNumber        : phoneNumber.value,
-          district           : district.value,
-          address            : address.value,
-          orderNote          : orderNote.value,
-          items              : cartItem.value,
-          coupon_id          : couponId.value,
-          totalPrice         : totalPrice.value,
-          payment_gateway_id : payment_gateway_id.value,
-          delivery_gateway_id: delivery_gateway_id.value == 0 ? null    : delivery_gateway_id.value,
-          deliverCharge      : deliverCharge.value ? deliverCharge.value: null,
+          userToken              : userToken.value,
+          name                   : name.value,
+          phoneNumber            : phoneNumber.value,
+          district               : district.value,
+          address                : address.value,
+          orderNote              : orderNote.value,
+          items                  : cartItem.value,
+          coupon_id              : couponId.value,
+          totalPrice             : totalPrice.value,
+          payment_gateway_id     : payment_gateway_id.value,
+          delivery_gateway_id    : delivery_gateway_id.value == 0 ? null    : delivery_gateway_id.value,
+          deliverCharge          : deliverCharge.value ? deliverCharge.value: null,
+          payment_send_number    : paymentSendNumber.value,
+          payment_received_number: paymentReceivedNumber.value,
           // campaign_id: campaignId.value,
         });
        if (res.status == 200) {
@@ -583,12 +587,12 @@ const checkScreenSize = () => {
                           <span class="text-danger font-weight-bold">"Upto 300 Taka Discount"</span><br>
                             <span class="text-danger">➞</span> BKash Agent Number : 01873 046 404 <br>
                             <div class="paymentgetway-customize-input-feilds">
-                              <span>bKash Number</span>
-                              <input type="email" class="form-control form-control-sm" placeholder="017XXXXXXXX">
+                              <span>bKash Send Number</span>
+                              <input type="email" class="form-control form-control-sm" placeholder="017XXXXXXXX" v-model="paymentSendNumber">
                             </div>
                             <div class="paymentgetway-customize-input-feilds">
-                              <span>bKash Transaction ID</span>
-                              <input type="email" class="form-control form-control-sm" placeholder="8N7A6D5EE7M">
+                              <span>bKash Received Number</span>
+                              <input type="email" class="form-control form-control-sm" placeholder="017XXXXXXXX" v-model="paymentReceivedNumber">
                             </div>
                           </span>
                       </div>
@@ -597,12 +601,12 @@ const checkScreenSize = () => {
                           <span class="text-danger font-weight-bold">"Upto 300 Taka Discount"</span><br>
                             <span class="text-danger">➞</span> Nagad Agent Number : 01894 689 206 <br>
                             <div class="paymentgetway-customize-input-feilds">
-                              <span>Nagad  Number</span>
-                              <input type="email" class="form-control form-control-sm" placeholder="017XXXXXXXX">
+                              <span>Nagad Send Number</span>
+                              <input type="email" class="form-control form-control-sm" placeholder="017XXXXXXXX" v-model="paymentSendNumber">
                             </div>
                             <div class="paymentgetway-customize-input-feilds">
-                              <span>Nagad  Transaction ID</span>
-                              <input type="email" class="form-control form-control-sm" placeholder="8N7A6D5EE7M">
+                              <span>Nagad Received Number</span>
+                              <input type="email" class="form-control form-control-sm" placeholder="017XXXXXXXX" v-model="paymentReceivedNumber">
                             </div>
                           </span>
                       </div>

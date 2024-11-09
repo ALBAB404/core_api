@@ -66,7 +66,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 @import "@/assets/css/landing-page.css";
 
 </style>
