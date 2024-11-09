@@ -23,15 +23,16 @@ export const useOrder = defineStore('order', {
         try {
           this.loading = true;
           const response = await axiosInstance.post('/orders',{
-            customer_name: orderInfo.name,
-            phone_number: orderInfo.phoneNumber,
-            address_details : orderInfo.address,
-            order_note : orderInfo.orderNote,
-            items: orderInfo.items,
+            user_token         : orderInfo.userToken,
+            customer_name      : orderInfo.name,
+            phone_number       : orderInfo.phoneNumber,
+            address_details    : orderInfo.address,
+            order_note         : orderInfo.orderNote,
+            items              : orderInfo.items,
             delivery_gateway_id: orderInfo.delivery_gateway_id,
-            payment_gateway_id: orderInfo.payment_gateway_id,
-            district: orderInfo.district,
-            coupon_id: orderInfo.coupon_id,
+            payment_gateway_id : orderInfo.payment_gateway_id,
+            district           : orderInfo.district,
+            coupon_id          : orderInfo.coupon_id,
           });
               if (response.status === 200) {
                   if (response.data.result) {

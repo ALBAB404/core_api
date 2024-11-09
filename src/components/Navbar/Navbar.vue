@@ -130,7 +130,7 @@ onMounted(() => {
 .navbar-section span a{
     padding: 10px 15px !important; 
     display:inline-block;
-    font-size: 19px !important;
+    font-size: 17px !important;
     color: var(--white);
 }
 .navbar-section span a:hover{

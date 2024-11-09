@@ -24,7 +24,7 @@ const isLoading                               = ref(false);
 const clickIsOrder                            = ref(true);
 const isFreeShippingChecking                  = ref();
 
-
+const userToken           = ref(localStorage.getItem('user_token'))
 const name                = ref(auth?.user?.user?.name);
 const phoneNumber         = ref(auth?.user?.user?.phone_number);
 const district            = ref("");
@@ -114,6 +114,7 @@ const paymentGatewayRef   = ref(null);
 
     const orderSubmited = async () => {
      const res =   await order.storeOrder({
+          userToken          : userToken.value,
           name               : name.value,
           phoneNumber        : phoneNumber.value,
           district           : district.value,
