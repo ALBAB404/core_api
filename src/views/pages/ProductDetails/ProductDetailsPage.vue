@@ -70,6 +70,7 @@ const productByid = async () => {
   singleProduct.value = await product.productById(route.params.slug);
   productVariations.value = singleProduct.value?.variations?.attributes;
   categoryId.value.push(singleProduct.value?.category.id);
+  console.log(route);
 };
 // get products end
 

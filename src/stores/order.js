@@ -34,6 +34,7 @@ export const useOrder = defineStore('order', {
             district           : orderInfo.district,
             coupon_id          : orderInfo.coupon_id,
           });
+
               if (response.status === 200) {
                   if (response.data.result) {
                       let url = response.data.result;
@@ -48,7 +49,7 @@ export const useOrder = defineStore('order', {
                 this.backendErrors = response.data.message
               }
             } catch (error) {
-                console.log(error);
+                return error.response.data.message;
             } finally {
                 this.loading = false
             }                 

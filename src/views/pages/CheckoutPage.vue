@@ -1,7 +1,7 @@
 <script setup>
 import { CartSideBar, MobileMenu, BannerPart, ProductView } from "@/components";
 import axiosInstance from "@/services/axiosService.js";
-import { useCart, useOrder, useAuth, useModal, useCommonIsToggleFunctionality } from "@/stores";
+import { useCart, useOrder, useAuth, useModal, useCommonIsToggleFunctionality, useNotification } from "@/stores";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, onUpdated, onBeforeUpdate, onUnmounted, computed, watch  } from "vue";
 import { useRouter } from "vue-router";
@@ -23,6 +23,8 @@ const { storeOrder, backendErrors, loading }  = storeToRefs(order);
 const isLoading                               = ref(false);
 const clickIsOrder                            = ref(true);
 const isFreeShippingChecking                  = ref();
+const blockSmsErrorMessage                    = ref();
+const notify                                  = useNotification();
 
 const userToken           = ref(localStorage.getItem('user_token'))
 const name                = ref(auth?.user?.user?.name);
@@ -130,7 +132,10 @@ const paymentGatewayRef   = ref(null);
         });
        if (res.status == 200) {
           clickIsOrder.value = false;
-       } 
+       }else{
+        blockSmsErrorMessage.value = res
+        notify.Error(`${res}`);      
+       }
       
     }
 
@@ -635,6 +640,7 @@ const checkScreenSize = () => {
                     <span v-if="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     <span v-else>Place Order</span>
                   </button>
+                  <span class="text-danger" v-if="blockSmsErrorMessage">{{ blockSmsErrorMessage }}</span>
               </Form>
             </div>
         </div>
