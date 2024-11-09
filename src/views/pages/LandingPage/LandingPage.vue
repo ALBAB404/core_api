@@ -1,6 +1,6 @@
 <script setup>
 import axiosInstance from "@/services/axiosService.js";
-import {TopBanner, VideoCampaign, TopSlider, CardAwarness, ImageCampaign, OfferCampaign, SizeChart, OrderSection, Footer } from "@/components";
+import {TopBanner, VideoCampaign, TopSlider, CardAwarness, ImageCampaign, OfferCampaign, SizeChart, OrderSection, AnonLeatherLandingPageFooter } from "@/components";
 import { ref, onMounted } from "vue";
 import { useRoute } from 'vue-router';
 
@@ -59,14 +59,14 @@ onMounted(() => {
         </span>
         
         <span v-if="landingPageData.layout.id == 10">
-          <Footer/>
+          <AnonLeatherLandingPageFooter />
         </span>
       </span>
     
   </div>
 </template>
 
-<style>
+<style scoped>
 @import "@/assets/css/landing-page.css";
 
 </style>

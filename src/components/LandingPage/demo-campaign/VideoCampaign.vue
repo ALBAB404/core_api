@@ -64,6 +64,9 @@ const getEmbedUrl = (watchUrl) => {
 
 
 <style scoped>
+
+@import "@/assets/css/landing-page.css";
+
 .list-section ul {
   list-style: none;
 }
@@ -125,5 +128,7 @@ const getEmbedUrl = (watchUrl) => {
   }
 
 }
+
+
 
 </style>

@@ -47,6 +47,8 @@ const props = defineProps({
 
 
 <style scoped>
+
+@import "@/assets/css/landing-page.css";
 .mySwiper {
   width: 100%;
   display: flex;

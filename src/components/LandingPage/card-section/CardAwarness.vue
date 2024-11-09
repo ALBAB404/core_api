@@ -37,5 +37,6 @@ const props = defineProps({
 
 
 <style scoped>
+@import "@/assets/css/landing-page.css";
 
 </style>

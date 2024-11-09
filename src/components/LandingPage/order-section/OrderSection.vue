@@ -41,13 +41,13 @@ const getDeliveryGateway = async () => {
     const res = await axiosInstance.get("/delivery-gateway");
     deliveryInfo.value = res.data.result;
 
-    if (cartItem.value.some((item) => item.free_shipping === 1)) {
-      delivery_gateway_id.value = 0;
-      deliveryCharge.value = 0;
-    } else {
-      delivery_gateway_id.value = res.data.result.data[0].id;
-      deliveryCharge.value = res.data.result.data[0].delivery_fee;
-    }
+    // if (cartItem.value.some((item) => item.free_shipping === 1)) {
+    //   delivery_gateway_id.value = 0;
+    //   deliveryCharge.value = 0;
+    // } else {
+    //   delivery_gateway_id.value = res.data.result.data[0].id;
+    //   deliveryCharge.value = res.data.result.data[0].delivery_fee;
+    // }
   } catch (error) {
     console.log(error);
   }
@@ -437,5 +437,5 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* আপনার প্রয়োজনীয় CSS কোড এখানে লিখুন */
+@import "@/assets/css/landing-page.css";
 </style>
