@@ -412,7 +412,7 @@ onMounted(() => {
                   <ProductSkeleton :dataAmount="20" :cols="3" />
                 </template>
                 <template v-else>
-                  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3">
+                  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4">
                     <div class="col" v-for="(product, index) in products.data" :key="index">
                       <ProductCard :product="product" />
                       <!-- <CoreDeveloperProductCard :product="product" /> -->

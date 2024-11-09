@@ -236,7 +236,7 @@ onMounted(() => {
         <div class="container">
             <div class="d-md-flex text-md-center text-center justify-content-between align-items-center">
                 <div>
-                    <p>get a free shipping buying two products......</p>
+                    <p class="header-left-text">get a free shipping buying two products......</p>
                 </div>
                 <div>
                     <div class="social-icons-Ntext d-md-flex d-none gap-2 align-items-center text-light">
@@ -424,6 +424,10 @@ onMounted(() => {
 </template>
 
 <style>
+
+.header-left-text{
+  text-transform: uppercase;
+}
 
 .header-cart-btn{
   line-height: 20px;

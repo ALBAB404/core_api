@@ -485,7 +485,7 @@ const checkScreenSize = () => {
                     <div class="line"></div>
                     <div class="d-flex justify-content-between my-2">
                       <p class="text-dark">Total</p>
-                      <p class="text-dark"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
+                      <p class="text-dark"><span class="flag-discount me-4">Amount</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
                     </div>
                   </div>
                   <div class="text-note mt-3" v-if="isDesktop">
@@ -622,7 +622,7 @@ const checkScreenSize = () => {
                       <div class="line"></div>
                       <div class="d-flex justify-content-between my-2">
                         <p class="text-danger">Total</p>
-                        <p class="text-danger"><span class="flag-discount me-4">30% Save</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
+                        <p class="text-danger"><span class="flag-discount me-4">Amount</span> {{ couponDiscountAmount ?  Number(deliverCharge) + couponDiscountAmount : cart.totalPrice + Number(deliverCharge) }}  <span class="font-weight-bold">TK</span></p>
                       </div>
                     </div>
                     <div class="text-note mt-3" v-if="!isDesktop">

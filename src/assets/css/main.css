@@ -4,7 +4,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
 :root {
   --h1size: 50px;
-  --h2size: 40px;
+  --h2size: 20px;
   --h3size: 24px;
   --h4size: 20px;
   --h5size: 18px;
@@ -219,7 +219,6 @@ button:focus {
 
 .section-btn-25 {
   text-align: center;
-  margin: 0px 0px 22px 0px;
 }
 
 @media (max-width: 1024px) {
@@ -393,10 +392,10 @@ button:focus {
 
 .btn {
   border: none;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   text-transform: uppercase;
-  padding: 14px 32px;
+  padding: 10px 25px;
   border-radius: 6px;
   border: 2px solid var(--primary);
 }
@@ -945,7 +944,7 @@ button:focus {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
-            flex-direction: column;
+        justify-content: space-around;
   }
   .nav-tabs li {
     padding: 5px;

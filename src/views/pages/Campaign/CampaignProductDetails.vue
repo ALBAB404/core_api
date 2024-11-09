@@ -240,7 +240,7 @@ onMounted(() => {
         <div class="row">
           <div class="col">
             <div class="section-heading">
-              <h2>Cross Sell Products</h2>
+              <h2>Special For You</h2>
             </div>
           </div>
         </div>

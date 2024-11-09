@@ -2,6 +2,19 @@
 import { useCategory } from "@/stores";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+// import required modules
+import { Pagination, Autoplay, Navigation } from "swiper/modules";
+
+// All Variable  Code Is Here.....................................................................................................
+const newSlide = ref([Navigation]);
+const modules = ref([Pagination, Autoplay]);
+
 const category = useCategory();
 const router = useRouter();
 const categories = ref("");
@@ -17,7 +30,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="container mt-4 mb-5">
+    <div class="container mt-5 mb-3">
       <div class="section-heading">
         <h2>
           <span class="section-header-text">Category Section</span>
@@ -25,27 +38,71 @@ onMounted(() => {
         <div class="heading-line"></div>
       </div>
       <div class="row">
-        <div
-          class="col-4 col-md-3  mb-4"
-          v-for="(category, index) in categories?.data"
-          :key="index"
-        >
-          <router-link
-            :to="{ name: 'shopPage', query: { category: category.id } }"
-          >
-            <img
-              :src="category.image"
-              alt=""
-              width="100%"
-            />
-          </router-link>
-        </div>
+        <swiper
+                :slidesPerView="4"
+                :sliderPerGroup="1"
+                :loop="true"
+                :autoplay="{
+                  delay: 2000,
+                }"
+                :breakpoints="{
+                  320: { slidesPerView: 1, spaceBetween: 40 },
+                  480: { slidesPerView: 3, spaceBetween: 30 },
+                  790: { slidesPerView: 4, spaceBetween: 20 }
+                }"
+                :navigation="true"
+                :modules="newSlide"
+                class="mySwiper"
+              >
+              <swiper-slide v-for="(category, index) in categories?.data" :key="index" >
+                <router-link :to="{ name: 'shopPage', query: { category: category.id } }" class="hover14 hover01">
+                  <figure>
+                    <img :src="category.image" alt="" width="100%" />
+                  </figure>
+                </router-link>        
+              </swiper-slide>
+        </swiper>  
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+
+/* Shine start*/
+.hover14 figure {
+	position: relative;
+	overflow: hidden; /* Add this to keep shine within bounds */
+}
+
+.hover14 figure::before {
+	position: absolute;
+	top: 0;
+	left: -75%;
+	z-index: 2;
+	display: block;
+	content: '';
+	width: 50%;
+	height: 100%;
+	background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+	transform: skewX(-25deg);
+	transition: left 0.75s ease;
+}
+
+.hover14 figure:hover::before {
+	left: 125%; /* Move shine effect smoothly */
+}
+
+/* Zoom In */
+.hover01 figure img {
+	transform: scale(1);
+	transition: transform .3s ease-in-out;
+}
+
+.hover01 figure:hover img {
+	transform: scale(1.1); /* Zoom effect */
+}
+
 
 .section-header-text {
   background-color: #f5f6f7;

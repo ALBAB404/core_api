@@ -62,8 +62,6 @@ onMounted(() => {
     
     <HomePageBanner />
     
-    <Brand />
-    
     <Blog />
     
     <AnonleatherLocationStoreSection /> 

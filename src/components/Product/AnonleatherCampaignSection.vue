@@ -176,8 +176,8 @@ onMounted(() => {
               <h2 class="text-light">best deals on items</h2>
             </div>
           </div>
-          <div class="col-lg-2"></div>
-          <div class="col-lg-6 ps-3">
+          <div class="col-lg-1"></div>
+          <div class="col-lg-7 ps-3">
             <div class="countdown deals-clock" data-countdown="2021/12/31">
               <span class="countdown-time"
                 ><span>00</span><small>days</small></span
@@ -482,7 +482,7 @@ onMounted(() => {
 
 .section {
   position: relative;
-  margin: 0px 0 50px 0;
+  margin: 0px 0 25px 0;
   z-index: 1; /* Ensure content stays above canvas */
 }
 
@@ -575,7 +575,7 @@ onMounted(() => {
       
       .section {
         position: relative;
-        margin: 0px 0 50px 0;
+        margin: 0px 0 25px 0;
         z-index: 1; /* Ensure content stays above canvas */
       }
     
@@ -583,21 +583,21 @@ onMounted(() => {
 
 @media (max-width: 1399px) {
     #birthday {
-        height: 80vh; 
+        height: 74vh; 
       }
     
 }
 
 @media (max-width: 1199px) {
     #birthday {
-        height: 73vh; 
+        height: 67vh; 
       }
     
 }
 
 @media (max-width: 1024px) {
     #birthday {
-        height: 73vh; 
+        height: 68vh; 
       }
     
 }

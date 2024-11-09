@@ -417,6 +417,7 @@ nextTick(() => {
 
 <template>
   <span v-if="productVariations" class="mb-5">
+    <p class="fw-bold text-dark mb-2">সাইজ সিলেক্ট করুনঃ</p>
     <div
       class="details-list-group"
       v-for="(attribute, key, index) in productVariations"
@@ -452,10 +453,9 @@ nextTick(() => {
 
 .reset-btn {
   cursor: pointer;
-  border: 1px solid red;
   padding: 5px 10px;
   border-radius: 5px;
-  background-color: red;
+  background-color: var(--primary);
   color: white;
 }
 

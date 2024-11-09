@@ -1,57 +1,52 @@
 <script setup>
 // All Import File  Code Is Here......................................................................................................
-import { ref,onMounted } from 'vue';
-import {HomeSliderSkeleton, CategorySkeleton} from '@/components/skeleton'
+import { ref, onMounted } from "vue";
+import { HomeSliderSkeleton, CategorySkeleton } from "@/components/skeleton";
 
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Swiper, SwiperSlide } from "swiper/vue";
 // Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
+import "swiper/css";
+import "swiper/css/pagination";
 // import required modules
-import { Pagination,Autoplay, Navigation } from 'swiper/modules'
+import { Pagination, Autoplay, Navigation } from "swiper/modules";
 
-// slider get data 
-import { storeToRefs } from 'pinia';
-// slider data fetch 
-import {useSlider, useCategory} from '@/stores'
-
+// slider get data
+import { storeToRefs } from "pinia";
+// slider data fetch
+import { useSlider, useCategory } from "@/stores";
 
 // All Variable  Code Is Here.....................................................................................................
 
-const modules = ref([Pagination,Autoplay, Navigation]);
+const modules = ref([Pagination, Autoplay, Navigation]);
 
-
-
-// slider data fetch 
+// slider data fetch
 const slider = useSlider();
-const sliders = ref('');
-// category data fetch 
+const sliders = ref("");
+// category data fetch
 const category = useCategory();
-const categories = ref('');
-
-
+const categories = ref("");
 
 // category part start
 
-const getCategory = async() => {
-  categories.value = await category.getCategories()
-}
+const getCategory = async () => {
+  categories.value = await category.getCategories();
+};
 
 // category part end
 
 // slider part start
 
-const getSlider = async() => {
-  sliders.value = await slider.getData()
-}
+const getSlider = async () => {
+  sliders.value = await slider.getData();
+};
 
 // slider part end
 
 onMounted(() => {
-    getCategory();
-    getSlider();
-})
+  getCategory();
+  getSlider();
+});
 
 // API Calling Code Is Here.....................................................................................................
 
@@ -61,41 +56,31 @@ onMounted(() => {
 <template>
   <div>
     <section class="banner-part">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="home-grid-slider slider-dots">
-                   <template v-if="!sliders.data">
-                      <HomeSliderSkeleton />
-                   </template>
-                   <template v-else>
-                   <swiper
-                      :slidesPerView="1"
-                      :sliderPerGroup="1"
-                      :loop="true"
-                      :pagination="{
-                        clickable: true,
-                      }"
-                      :navigation="true"
-                      :modules="modules"
-                      
-                      class="mySwiper"
-                    >
-                      <swiper-slide v-for="(slider, index) in sliders.data" :key="index">
-                        <div class="banner-image">
-                          <img :src="slider.image" alt="" />
-                        </div>
-                      </swiper-slide>
-                    </swiper>
-                  </template>
-                </div>
+      <div class="home-grid-slider slider-dots">
+        <template v-if="!sliders.data">
+          <HomeSliderSkeleton />
+        </template>
+        <template v-else>
+          <swiper
+            :slidesPerView="1"
+            :sliderPerGroup="1"
+            :loop="true"
+            :pagination="{
+              clickable: true,
+            }"
+            :navigation="true"
+            :modules="modules"
+            class="mySwiper"
+          >
+            <swiper-slide v-for="(slider, index) in sliders.data" :key="index">
+              <div class="banner-image">
+                <img :src="slider.image" alt="" />
               </div>
-            </div>
-          </div>
-        </div>
+            </swiper-slide>
+          </swiper>
+        </template>
+      </div>
     </section>
-
   </div>
 </template>
 
@@ -117,7 +102,6 @@ onMounted(() => {
   transition: transform 0.5s;
 }
 
-
 .home-grid-slider {
   margin-bottom: 0px !important;
 }
@@ -129,13 +113,11 @@ onMounted(() => {
 
 .banner-category-list {
   max-height: 315px;
-  overflow-y: auto; 
-  overflow-x: hidden; 
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-
-
-.banner-category-dropdown{
+.banner-category-dropdown {
   z-index: 999999 !important;
 }
 
@@ -143,9 +125,6 @@ onMounted(() => {
   width: 100%;
 }
 
-
 @media (max-width: 425px) {
-  
 }
-
 </style>

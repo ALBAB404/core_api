@@ -86,7 +86,7 @@ onMounted(() => {
               </ul>
             </div>
           </div> -->
-          <div class="col-xl-10">
+          <div class="col-xl-10 col-lg-8">
             <span class="navbar-section">
               <span>
                 <router-link :to="{ name: 'shopPage' }" :class="{ 'active-link': !route.query.category }">
@@ -100,7 +100,7 @@ onMounted(() => {
               </span>
             </span>
           </div>
-          <div class="col-xl-2 col-lg-2 text-center">
+          <div class="col-xl-2 col-lg-4 text-center">
             <router-link
               :to="{ name: 'CampaignBanner' }"
               class="main-order-btn mt-2"
